@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- The trip-logging foreground service and its wake lock are declared here
+         in M7. Note for that milestone: on API 34+ a Wi-Fi-only user who denied
+         Bluetooth will hit a SecurityException from startForeground unless
+         CHANGE_NETWORK_STATE / CHANGE_WIFI_STATE are declared. -->
+</manifest>

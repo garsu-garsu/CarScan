@@ -1,0 +1,113 @@
+[versions]
+# --- Toolchain -------------------------------------------------------------
+agp = "9.1.1"
+kotlin = "2.4.0"
+jvmToolchain = "17"
+
+# --- Android SDK -----------------------------------------------------------
+# compileSdk is 37 because Kable 0.44.0, Vico 2.5.2 and androidx.core 1.19.0 all
+# refuse to be consumed by a module compiled against 36. compileSdk only decides
+# which APIs are on the compile classpath; targetSdk (runtime behaviour) stays 36.
+compileSdk = "37"
+targetSdk = "36"
+minSdk = "26"
+
+# --- UI --------------------------------------------------------------------
+composeMultiplatform = "1.11.1"
+# JetBrains multiplatform ports of AndroidX (group org.jetbrains.androidx.*)
+jbLifecycle = "2.10.0"
+jbNavigation = "2.9.2"
+
+# --- AndroidX (:androidApp and :platform:* only) ---------------------------
+androidxActivityCompose = "1.13.0"
+androidxCoreKtx = "1.19.0"
+androidxDataStore = "1.2.1"
+androidxLifecycleViewmodel = "2.11.0"
+
+# --- Kotlinx ---------------------------------------------------------------
+coroutines = "1.11.0"
+serialization = "1.11.0"
+datetime = "0.8.0"
+
+# --- Libraries -------------------------------------------------------------
+ktor = "3.5.1"
+koin = "4.2.2"
+# 2.3.2 is the first release with full AGP 9 DSL support. 2.1.x hard-fails on
+# AGP 9 (BaseExtension removed) — see sqldelight issues #5940 / #6078.
+sqldelight = "2.3.2"
+kable = "0.44.0"
+# groupId is com.patrykandpatrick (…rick). The old com.patryk group still
+# resolves on Central to an ancient version — do not use it.
+vico = "2.5.2"
+
+# --- Test ------------------------------------------------------------------
+turbine = "1.2.1"
+kotest = "6.2.2"
+
+[libraries]
+# --- Kotlinx ---------------------------------------------------------------
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+
+# --- Ktor (Wi-Fi transport) ------------------------------------------------
+ktor-network = { module = "io.ktor:ktor-network", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
+# --- DI --------------------------------------------------------------------
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
+
+# --- Persistence -----------------------------------------------------------
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
+sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidxDataStore" }
+
+# --- Compose Multiplatform ecosystem ---------------------------------------
+jb-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "jbLifecycle" }
+jb-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jbLifecycle" }
+jb-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jbLifecycle" }
+jb-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "jbNavigation" }
+
+# --- Bluetooth Low Energy --------------------------------------------------
+kable-core = { module = "com.juul.kable:kable-core", version.ref = "kable" }
+
+# --- Charts (history / trip only — never the live strip) -------------------
+vico-multiplatform-m3 = { module = "com.patrykandpatrick.vico:multiplatform-m3", version.ref = "vico" }
+
+# --- AndroidX (:androidApp and :platform:* only) ---------------------------
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCoreKtx" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidxLifecycleViewmodel" }
+
+# --- Test ------------------------------------------------------------------
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+# --- Gradle plugin artifacts — for build-logic's classpath only ------------
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+android-kmp-library-gradlePlugin = { module = "com.android.kotlin.multiplatform.library:com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "agp" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-composeCompiler-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+compose-gradlePlugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeMultiplatform" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-kmp-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+# NOTE: there is deliberately no org.jetbrains.kotlin.android alias. AGP 9
+# compiles Kotlin itself and hard-fails if that plugin is applied.
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

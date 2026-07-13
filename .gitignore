@@ -1,0 +1,33 @@
+# --- Secrets. This repo is PUBLIC — nothing below may ever be committed. -----
+local.properties
+secrets.properties
+*.jks
+*.keystore
+google-services.json
+GoogleService-Info.plist
+
+# --- Gradle / build ----------------------------------------------------------
+.gradle/
+build/
+.kotlin/
+captures/
+*.hprof
+.externalNativeBuild
+.cxx
+
+# --- IDE ---------------------------------------------------------------------
+*.iml
+.idea/*
+!.idea/codeStyles/
+!.idea/codeStyles/**
+
+# --- Xcode / iOS -------------------------------------------------------------
+xcuserdata/
+*.xcuserstate
+iosApp/build/
+iosApp/Pods/
+iosApp/*.xcworkspace/xcuserdata/
+
+# --- OS ----------------------------------------------------------------------
+.DS_Store
+Thumbs.db

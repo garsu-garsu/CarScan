@@ -1,0 +1,21 @@
+CREATE TABLE vehicle (
+    id          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    vin         TEXT,
+    make        TEXT,
+    model       TEXT,
+    model_year  INTEGER,
+    signalset   TEXT,
+    created_at  INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX vehicle_vin ON vehicle(vin);
+
+selectAll:
+SELECT * FROM vehicle ORDER BY created_at DESC;
+
+selectByVin:
+SELECT * FROM vehicle WHERE vin = ?;
+
+insertVehicle:
+INSERT INTO vehicle(vin, make, model, model_year, signalset, created_at)
+VALUES (?, ?, ?, ?, ?, ?);

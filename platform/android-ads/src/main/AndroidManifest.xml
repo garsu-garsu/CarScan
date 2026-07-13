@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- AdMob app id and Play Billing wiring land here in M6. This module
+         exists because manifest merging is not supported by the AGP KMP
+         library plugin. -->
+</manifest>
