@@ -1,0 +1,30 @@
+{
+  "commands": [
+    {
+      "hdr": "7E0",
+      "rax": "7E8",
+      "cmd": { "22": "D001" },
+      "freq": 1,
+      "signals": [
+        {
+          "id": "TV_ONLY_IN_DEFAULT",
+          "name": "Present only in default.json",
+          "fmt": { "len": 8, "max": 255, "unit": "scalar" }
+        }
+      ]
+    },
+    {
+      "hdr": "7E0",
+      "rax": "7E8",
+      "cmd": { "22": "D002" },
+      "freq": 1,
+      "signals": [
+        {
+          "id": "TV_SHARED",
+          "name": "Defined by both files, with different scaling",
+          "fmt": { "len": 8, "max": 100, "div": 1, "unit": "percent" }
+        }
+      ]
+    }
+  ]
+}

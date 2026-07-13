@@ -1,0 +1,30 @@
+{
+  "commands": [
+    {
+      "hdr": "7E0",
+      "rax": "7E8",
+      "cmd": { "22": "D002" },
+      "freq": 1,
+      "signals": [
+        {
+          "id": "TV_SHARED",
+          "name": "Defined by both files, with different scaling",
+          "fmt": { "len": 8, "max": 100, "div": 2, "unit": "percent" }
+        }
+      ]
+    },
+    {
+      "hdr": "7E0",
+      "rax": "7E8",
+      "cmd": { "22": "D003" },
+      "freq": 1,
+      "signals": [
+        {
+          "id": "TV_ONLY_IN_2020_2024",
+          "name": "Present only in the narrow variant",
+          "fmt": { "len": 8, "max": 255, "unit": "scalar" }
+        }
+      ]
+    }
+  ]
+}

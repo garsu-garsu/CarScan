@@ -19,6 +19,21 @@ import kotlinx.coroutines.flow.Flow
 interface ObdTransport {
     suspend fun open()
 
+    /**
+     * Bytes from the adapter.
+     *
+     * **Cold, and single-consumer. No implementation may drop bytes because nobody was
+     * listening yet, and no implementation may fan out to two collectors.**
+     *
+     * This is a hard part of the contract, not a hint. A `SharedFlow`-backed implementation
+     * would silently discard anything that arrives before the collector subscribes — so the
+     * first response after [open] would go missing *sometimes*, on *one* transport, and the
+     * failure would surface far away as a decode error or a phantom timeout. Half-duplex
+     * makes it worse: one lost response desynchronizes the prompt stream for the rest of
+     * the session.
+     *
+     * Collect this before you [write]. Buffer, don't broadcast.
+     */
     val incoming: Flow<ByteArray>
 
     suspend fun write(bytes: ByteArray)
