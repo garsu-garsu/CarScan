@@ -1,10 +1,9 @@
 package com.bruni.carscan.core.designsystem.gauge
 
 import androidx.compose.runtime.Immutable
+import com.bruni.carscan.core.units.NumberFormatter
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.cos
-import kotlin.math.roundToLong
 import kotlin.math.sin
 
 /**
@@ -83,35 +82,20 @@ fun bandFraction(from: Float?, to: Float?, min: Float, max: Float): GaugeBand? {
 }
 
 /**
- * [value] rounded to [decimals] places.
+ * [value] rounded to [decimals] places and written the way [formatter]'s locale writes it.
  *
- * Hand-rolled because `commonMain` has no number formatter: `String.format` is `java.*` and
- * would not compile for iOS. `Float.toString()` is the other option and cannot honour
- * [GaugeSpec.decimals] at all — it has no way to render `13.8` as `"13.80"`, or `1726.4` as
- * `"1726"` — so it would break the frozen contract. Hence the rounding here.
+ * The rounding is the [formatter]'s — half-up, exactly [decimals] places, no grouping — so
+ * `13.8` at two places is still `"13.80"` and `1726.4` at zero places is still `"1726"`. That
+ * is the contract [GaugeSpec.decimals] rests on and it did not change; what changed is that
+ * the decimal separator is no longer a hard-coded `'.'`, which was wrong for six of the eight
+ * shipping locales (ru, de, pl, pt-BR, es, uk all write `13,8`).
  *
- * TODO(:core:units): the decimal separator is hard-coded `'.'`. Five of the eight shipping
- *  locales (ru, de, pl, pt-BR, es, uk) write `13,8`. Fixing it needs an expect/actual
- *  formatter (`NumberFormat` / `NSNumberFormatter`) that belongs in `:core:units`, not here;
- *  when it lands, this function should delegate to it and keep its rounding semantics.
+ * The [formatter] is passed in rather than looked up, because this is a pure function and the
+ * callers are composables that already have [com.bruni.carscan.core.designsystem.theme.LocalNumberFormatter].
  */
-fun formatGaugeValue(value: Float, decimals: Int): String {
+fun formatGaugeValue(value: Float, decimals: Int, formatter: NumberFormatter): String {
     if (!value.isFinite()) return NO_READING
-
-    val places = decimals.coerceIn(0, MAX_DECIMALS)
-    val factor = POWERS_OF_TEN[places]
-    val scaled = (value * factor).roundToLong()
-    val magnitude = abs(scaled)
-
-    return buildString {
-        if (scaled < 0L) append('-')
-        append(magnitude / factor)
-        if (places > 0) {
-            append('.')
-            append((magnitude % factor).toString().padStart(places, '0'))
-        }
-    }
+    return formatter.format(value.toDouble(), decimals.coerceIn(0, MAX_DECIMALS))
 }
 
 private const val MAX_DECIMALS = 3
-private val POWERS_OF_TEN = longArrayOf(1L, 10L, 100L, 1000L)

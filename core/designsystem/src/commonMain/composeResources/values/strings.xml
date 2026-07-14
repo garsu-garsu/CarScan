@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    English — the source of truth. Every other locale is measured against this file by
+    StringResourceParityTest; a key that exists here and nowhere else falls back to English
+    silently, which is the failure mode that makes half-translated apps.
+
+    Rules for anyone adding a key:
+      * a count in a sentence goes in <plurals>, never "%d items" in a <string>. Russian,
+        Polish and Ukrainian have few/many categories and "%d items" is visibly broken there.
+      * unit symbols are translated too. "rpm" is "об/мин" in Russian and "U/min" in German.
+      * no left/right in a key name or a value — we ship no RTL locale, but the words are also
+        just wrong on a gauge.
+-->
+<resources>
+
+    <string name="app_name">CarScan</string>
+
+    <!-- Shared -->
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_retry">Try again</string>
+    <string name="common_settings">Settings</string>
+    <!-- Shown where a gauge has never received a value. Never "0" and never "NaN". -->
+    <string name="common_no_reading">No reading</string>
+
+    <!-- TransportKind -->
+    <string name="adapter_kind_ble">Bluetooth LE</string>
+    <string name="adapter_kind_spp">Bluetooth Classic</string>
+    <string name="adapter_kind_wifi">Wi-Fi</string>
+    <string name="adapter_unnamed">Unnamed adapter</string>
+
+    <!-- ConnectionState -->
+    <string name="connection_state_disconnected">Not connected</string>
+    <string name="connection_state_connecting">Connecting…</string>
+    <string name="connection_state_connected">Connected</string>
+
+    <!-- Connect screen -->
+    <string name="connect_title">Connect an adapter</string>
+    <string name="connect_scan">Scan</string>
+    <string name="connect_scanning">Scanning…</string>
+    <string name="connect_stop">Stop</string>
+    <string name="connect_connect">Connect</string>
+    <string name="connect_disconnect">Disconnect</string>
+    <string name="connect_no_adapters">No adapters found</string>
+    <!--
+        The readout, and the reason this screen exists. It composes to
+            "Your adapter: 14 queries/sec — 6 gauges at 2 Hz."
+        from health_queries_per_second + dashboard_tiles + connect_budget. It tells the truth
+        about a €5 clone instead of letting the app look broken.
+
+        Positional args (%1$s, not %s): word order is not English word order.
+    -->
+    <string name="connect_budget">%1$s at %2$d Hz</string>
+    <string name="connect_protocol">Protocol: %1$s</string>
+    <string name="connect_genuine_stn">Genuine STN chip</string>
+    <!-- A fact, not an insult — most adapters in the wild are clones. -->
+    <string name="connect_clone">ELM327 clone — limited throughput</string>
+
+    <!-- ConnectFailure. Every one of these tells the user what to do, not what went wrong. -->
+    <string name="error_ignition_off">Turn the ignition on and try again.</string>
+    <string name="error_bluetooth_permission">CarScan needs Bluetooth permission to find your adapter.</string>
+    <string name="error_bluetooth_off">Bluetooth is off.</string>
+    <string name="error_spp_pairing_required">Pair the adapter in system settings first. The PIN is usually 1234 or 0000.</string>
+    <string name="error_wifi_not_joined">Join the adapter\'s Wi-Fi network first. Your phone has no mobile data while it is connected to it.</string>
+    <string name="error_adapter_unreachable">The adapter did not answer. Check that it is plugged in.</string>
+    <string name="error_init_failed">The adapter did not start up correctly.</string>
+
+    <!-- Runtime faults the driver can act on. -->
+    <string name="error_no_data">This car does not report that value.</string>
+    <string name="error_bus">Lost contact with the car.</string>
+    <string name="error_adapter_overrun">The adapter could not keep up.</string>
+    <string name="error_adapter_reset">The adapter restarted. Check the power at the OBD socket.</string>
+
+    <!--
+        Unit symbols. Translated: these are not universal — "rpm" is "об/мин" in Russian and
+        "U/min" in German.
+
+        Key names are :core:units' `UnitId.labelKey`, so the converter and the resource table
+        cannot drift apart.
+
+        The (US)/(UK) qualifier on gallons and mpg must survive translation. An imperial gallon
+        is ~20% larger than a US one, so a bare "mpg" on both is a wrong number, not a vague one.
+    -->
+    <string name="unit_rpm">rpm</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_km">km</string>
+    <string name="unit_miles">mi</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
+    <string name="unit_volts">V</string>
+    <string name="unit_kpa">kPa</string>
+    <string name="unit_bar">bar</string>
+    <string name="unit_psi">psi</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_litre">L</string>
+    <string name="unit_us_gallon">gal (US)</string>
+    <string name="unit_uk_gallon">gal (UK)</string>
+    <string name="unit_l_per_100km">L/100km</string>
+    <string name="unit_km_per_l">km/L</string>
+    <string name="unit_mpg_us">mpg (US)</string>
+    <string name="unit_mpg_uk">mpg (UK)</string>
+    <string name="unit_kwh_per_100km">kWh/100km</string>
+    <string name="unit_mi_per_kwh">mi/kWh</string>
+    <string name="unit_kw">kW</string>
+    <string name="unit_hp">hp</string>
+    <string name="unit_ps">PS</string>
+    <string name="unit_nm">N·m</string>
+    <string name="unit_lb_ft">lb-ft</string>
+    <string name="unit_liters_per_hour">L/h</string>
+    <string name="unit_grams_per_second">g/s</string>
+    <string name="unit_seconds">s</string>
+    <string name="unit_degrees">°</string>
+    <string name="unit_amps">A</string>
+    <string name="unit_milliamps">mA</string>
+    <string name="unit_watts">W</string>
+    <string name="unit_kilowatt_hours">kWh</string>
+    <string name="unit_ampere_hours">Ah</string>
+    <string name="unit_hertz">Hz</string>
+    <string name="unit_kiloohms">kΩ</string>
+    <string name="unit_millimeters">mm</string>
+    <string name="unit_minutes">min</string>
+    <string name="unit_hours">h</string>
+    <string name="unit_milliseconds">ms</string>
+    <string name="unit_kilograms_per_hour">kg/h</string>
+    <string name="unit_meters_per_second_squared">m/s²</string>
+    <string name="unit_milligrams_per_stroke">mg/stroke</string>
+
+    <!-- Gauge labels for the metrics every car reports. Short: they sit inside a tile. -->
+    <string name="gauge_engine_speed">Engine speed</string>
+    <string name="gauge_vehicle_speed">Speed</string>
+    <string name="gauge_coolant_temp">Coolant</string>
+    <string name="gauge_intake_air_temp">Intake air</string>
+    <string name="gauge_engine_load">Engine load</string>
+    <string name="gauge_throttle_position">Throttle</string>
+    <string name="gauge_battery_voltage">Battery</string>
+    <string name="gauge_fuel_level">Fuel level</string>
+    <string name="gauge_boost_pressure">Boost</string>
+    <string name="gauge_mass_air_flow">Air flow</string>
+    <string name="gauge_state_of_charge">Charge</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_empty">No gauges yet. Add one to get started.</string>
+    <string name="dashboard_add_tile">Add gauge</string>
+
+    <!-- Live chart -->
+    <string name="live_title">Live</string>
+    <string name="live_pause">Pause</string>
+    <string name="live_resume">Resume</string>
+    <string name="live_clear">Clear</string>
+
+    <!-- The governor telling the truth about a cheap adapter, rather than looking broken. -->
+    <string name="health_slowed_down">Too many gauges for this adapter — they are refreshing more slowly.</string>
+
+    <plurals name="health_queries_per_second">
+        <item quantity="one">Your adapter: %d query/sec</item>
+        <item quantity="other">Your adapter: %d queries/sec</item>
+    </plurals>
+
+    <plurals name="connect_adapters_found">
+        <item quantity="one">%d adapter found</item>
+        <item quantity="other">%d adapters found</item>
+    </plurals>
+
+    <plurals name="dashboard_tiles">
+        <item quantity="one">%d gauge</item>
+        <item quantity="other">%d gauges</item>
+    </plurals>
+
+    <plurals name="live_window_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+
+</resources>

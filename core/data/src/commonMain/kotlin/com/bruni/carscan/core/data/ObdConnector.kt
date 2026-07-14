@@ -43,6 +43,24 @@ sealed interface ConnectOutcome {
 }
 
 /**
+ * A scan failed for a reason the user can do something about. Thrown into [ObdConnector.discover]'s
+ * flow, so the discovery path has the same typed failure channel [ConnectOutcome.Failed] gives the
+ * connect path.
+ *
+ * Without this, the most common first-run failure in the app is reported as the wrong thing. A user
+ * taps Deny on the Bluetooth permission; Kable throws a bare `SecurityException`, which common code
+ * cannot name (it is a JVM type, as are :core:transport's SPP exceptions); the ViewModel can only
+ * guess from the transport kind, guesses `ADAPTER_UNREACHABLE`, and the screen says *"the adapter
+ * did not answer — check that it is plugged in."*
+ *
+ * So we send them to fiddle with their hardware, when the actual fix is the settings deep-link we
+ * already have — and `BLUETOOTH_PERMISSION` is the one failure with a working remedy attached.
+ * The classification has to happen where the platform exceptions are visible, and what crosses into
+ * common code is this.
+ */
+class ConnectException(val reason: ConnectFailure) : Exception(reason.name)
+
+/**
  * Why a connection failed, as data.
  *
  * The concrete exceptions this is derived from ([SppPermissionDenied] and friends) live in

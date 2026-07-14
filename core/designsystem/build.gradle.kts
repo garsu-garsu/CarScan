@@ -4,6 +4,15 @@ plugins {
     id("carscan.kmp.compose")
 }
 
+// Every string in the app lives here, in one composeResources tree, so a translator sees one
+// file per locale rather than seven. That only works if the feature modules can actually reach
+// the generated accessors — and they are internal unless asked otherwise.
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.bruni.carscan.core.designsystem.generated.resources"
+    generateResClass = always
+}
+
 kotlin {
     // Headless Skiko, so runComposeUiTest works on any host. Without it there is no way to
     // execute a Compose test on Windows at all: androidHostTest is a plain JVM Android unit

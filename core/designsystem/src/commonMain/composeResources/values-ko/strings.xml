@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Korean. A decimal dot, and no plural at all: Korean has only the CLDR "other" category,
+     so every <plurals> here declares exactly one item. That is correct, not incomplete. -->
+<resources>
+
+    <string name="app_name">CarScan</string>
+
+    <string name="common_ok">확인</string>
+    <string name="common_cancel">취소</string>
+    <string name="common_retry">다시 시도</string>
+    <string name="common_settings">설정</string>
+    <string name="common_no_reading">값 없음</string>
+
+    <string name="adapter_kind_ble">블루투스 LE</string>
+    <string name="adapter_kind_spp">블루투스 클래식</string>
+    <string name="adapter_kind_wifi">Wi-Fi</string>
+    <string name="adapter_unnamed">이름 없는 어댑터</string>
+
+    <string name="connection_state_disconnected">연결 안 됨</string>
+    <string name="connection_state_connecting">연결 중…</string>
+    <string name="connection_state_connected">연결됨</string>
+
+    <string name="connect_title">어댑터 연결</string>
+    <string name="connect_scan">검색</string>
+    <string name="connect_scanning">검색 중…</string>
+    <string name="connect_stop">중지</string>
+    <string name="connect_connect">연결</string>
+    <string name="connect_disconnect">연결 해제</string>
+    <string name="connect_no_adapters">어댑터를 찾지 못했습니다</string>
+    <string name="connect_budget">%2$d Hz로 %1$s</string>
+    <string name="connect_protocol">프로토콜: %1$s</string>
+    <string name="connect_genuine_stn">정품 STN 칩</string>
+    <string name="connect_clone">ELM327 복제품 — 처리 속도 제한</string>
+
+    <string name="error_ignition_off">시동을 켠 뒤 다시 시도하세요.</string>
+    <string name="error_bluetooth_permission">어댑터를 찾으려면 블루투스 권한이 필요합니다.</string>
+    <string name="error_bluetooth_off">블루투스가 꺼져 있습니다.</string>
+    <string name="error_spp_pairing_required">시스템 설정에서 어댑터를 먼저 페어링하세요. PIN은 보통 1234 또는 0000입니다.</string>
+    <string name="error_wifi_not_joined">어댑터의 Wi-Fi 네트워크에 먼저 연결하세요. 연결되어 있는 동안에는 모바일 데이터를 쓸 수 없습니다.</string>
+    <string name="error_adapter_unreachable">어댑터가 응답하지 않습니다. 제대로 꽂혀 있는지 확인하세요.</string>
+    <string name="error_init_failed">어댑터가 정상적으로 시작되지 않았습니다.</string>
+
+    <string name="error_no_data">이 차량은 해당 값을 제공하지 않습니다.</string>
+    <string name="error_bus">차량과의 통신이 끊겼습니다.</string>
+    <string name="error_adapter_overrun">어댑터가 요청 속도를 따라가지 못합니다.</string>
+    <string name="error_adapter_reset">어댑터가 다시 시작되었습니다. OBD 단자의 전원을 확인하세요.</string>
+
+    <string name="unit_rpm">rpm</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_km">km</string>
+    <string name="unit_miles">mi</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
+    <string name="unit_volts">V</string>
+    <string name="unit_kpa">kPa</string>
+    <string name="unit_bar">bar</string>
+    <string name="unit_psi">psi</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_litre">L</string>
+    <string name="unit_us_gallon">gal(US)</string>
+    <string name="unit_uk_gallon">gal(UK)</string>
+    <string name="unit_l_per_100km">L/100km</string>
+    <string name="unit_km_per_l">km/L</string>
+    <string name="unit_mpg_us">mpg(US)</string>
+    <string name="unit_mpg_uk">mpg(UK)</string>
+    <string name="unit_kwh_per_100km">kWh/100km</string>
+    <string name="unit_mi_per_kwh">mi/kWh</string>
+    <string name="unit_kw">kW</string>
+    <string name="unit_hp">hp</string>
+    <string name="unit_ps">마력</string>
+    <string name="unit_nm">N·m</string>
+    <string name="unit_lb_ft">lb-ft</string>
+    <string name="unit_liters_per_hour">L/h</string>
+    <string name="unit_grams_per_second">g/s</string>
+    <string name="unit_seconds">초</string>
+    <string name="unit_degrees">°</string>
+    <string name="unit_amps">A</string>
+    <string name="unit_milliamps">mA</string>
+    <string name="unit_watts">W</string>
+    <string name="unit_kilowatt_hours">kWh</string>
+    <string name="unit_ampere_hours">Ah</string>
+    <string name="unit_hertz">Hz</string>
+    <string name="unit_kiloohms">kΩ</string>
+    <string name="unit_millimeters">mm</string>
+    <string name="unit_minutes">분</string>
+    <string name="unit_hours">시간</string>
+    <string name="unit_milliseconds">ms</string>
+    <string name="unit_kilograms_per_hour">kg/h</string>
+    <string name="unit_meters_per_second_squared">m/s²</string>
+    <string name="unit_milligrams_per_stroke">mg/행정</string>
+
+    <string name="gauge_engine_speed">엔진 회전수</string>
+    <string name="gauge_vehicle_speed">속도</string>
+    <string name="gauge_coolant_temp">냉각수</string>
+    <string name="gauge_intake_air_temp">흡기</string>
+    <string name="gauge_engine_load">엔진 부하</string>
+    <string name="gauge_throttle_position">스로틀</string>
+    <string name="gauge_battery_voltage">배터리</string>
+    <string name="gauge_fuel_level">연료량</string>
+    <string name="gauge_boost_pressure">부스트 압력</string>
+    <string name="gauge_mass_air_flow">공기 유량</string>
+    <string name="gauge_state_of_charge">충전량</string>
+
+    <string name="dashboard_title">대시보드</string>
+    <string name="dashboard_empty">게이지가 아직 없습니다. 하나 추가해 보세요.</string>
+    <string name="dashboard_add_tile">게이지 추가</string>
+
+    <string name="live_title">실시간</string>
+    <string name="live_pause">일시정지</string>
+    <string name="live_resume">계속</string>
+    <string name="live_clear">지우기</string>
+
+    <string name="health_slowed_down">이 어댑터에 비해 게이지가 너무 많아 갱신이 느려집니다.</string>
+
+    <plurals name="health_queries_per_second">
+        <item quantity="other">내 어댑터: 초당 %d회 조회</item>
+    </plurals>
+
+    <plurals name="connect_adapters_found">
+        <item quantity="other">어댑터 %d개를 찾았습니다</item>
+    </plurals>
+
+    <plurals name="dashboard_tiles">
+        <item quantity="other">게이지 %d개</item>
+    </plurals>
+
+    <plurals name="live_window_seconds">
+        <item quantity="other">%d초</item>
+    </plurals>
+
+</resources>

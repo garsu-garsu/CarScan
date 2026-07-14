@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- German. Decimal comma, and thousands are grouped with a dot — which is why the gauge
+     formatter never groups: "1.726" rpm would read as 1.7. -->
+<resources>
+
+    <string name="app_name">CarScan</string>
+
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Abbrechen</string>
+    <string name="common_retry">Erneut versuchen</string>
+    <string name="common_settings">Einstellungen</string>
+    <string name="common_no_reading">Kein Messwert</string>
+
+    <string name="adapter_kind_ble">Bluetooth LE</string>
+    <string name="adapter_kind_spp">Bluetooth Classic</string>
+    <string name="adapter_kind_wifi">WLAN</string>
+    <string name="adapter_unnamed">Unbenannter Adapter</string>
+
+    <string name="connection_state_disconnected">Nicht verbunden</string>
+    <string name="connection_state_connecting">Verbindung wird hergestellt…</string>
+    <string name="connection_state_connected">Verbunden</string>
+
+    <string name="connect_title">Adapter verbinden</string>
+    <string name="connect_scan">Suchen</string>
+    <string name="connect_scanning">Suche läuft…</string>
+    <string name="connect_stop">Stopp</string>
+    <string name="connect_connect">Verbinden</string>
+    <string name="connect_disconnect">Trennen</string>
+    <string name="connect_no_adapters">Keine Adapter gefunden</string>
+    <string name="connect_budget">%1$s mit %2$d Hz</string>
+    <string name="connect_protocol">Protokoll: %1$s</string>
+    <string name="connect_genuine_stn">Echter STN-Chip</string>
+    <string name="connect_clone">ELM327-Klon — begrenzter Durchsatz</string>
+
+    <string name="error_ignition_off">Zündung einschalten und erneut versuchen.</string>
+    <string name="error_bluetooth_permission">CarScan benötigt die Bluetooth-Berechtigung, um den Adapter zu finden.</string>
+    <string name="error_bluetooth_off">Bluetooth ist ausgeschaltet.</string>
+    <string name="error_spp_pairing_required">Koppeln Sie den Adapter zuerst in den Systemeinstellungen. Die PIN ist meist 1234 oder 0000.</string>
+    <string name="error_wifi_not_joined">Verbinden Sie sich zuerst mit dem WLAN des Adapters. Solange diese Verbindung besteht, hat das Telefon keine mobilen Daten.</string>
+    <string name="error_adapter_unreachable">Der Adapter antwortet nicht. Prüfen Sie, ob er eingesteckt ist.</string>
+    <string name="error_init_failed">Der Adapter ist nicht korrekt gestartet.</string>
+
+    <string name="error_no_data">Dieses Fahrzeug liefert diesen Wert nicht.</string>
+    <string name="error_bus">Verbindung zum Fahrzeug verloren.</string>
+    <string name="error_adapter_overrun">Der Adapter kommt nicht hinterher.</string>
+    <string name="error_adapter_reset">Der Adapter wurde neu gestartet. Prüfen Sie die Stromversorgung der OBD-Buchse.</string>
+
+    <string name="unit_rpm">U/min</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_km">km</string>
+    <string name="unit_miles">mi</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
+    <string name="unit_volts">V</string>
+    <string name="unit_kpa">kPa</string>
+    <string name="unit_bar">bar</string>
+    <string name="unit_psi">psi</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_litre">l</string>
+    <string name="unit_us_gallon">gal (US)</string>
+    <string name="unit_uk_gallon">gal (GB)</string>
+    <string name="unit_l_per_100km">l/100 km</string>
+    <string name="unit_km_per_l">km/l</string>
+    <string name="unit_mpg_us">mpg (US)</string>
+    <string name="unit_mpg_uk">mpg (GB)</string>
+    <string name="unit_kwh_per_100km">kWh/100 km</string>
+    <string name="unit_mi_per_kwh">mi/kWh</string>
+    <string name="unit_kw">kW</string>
+    <string name="unit_hp">hp</string>
+    <string name="unit_ps">PS</string>
+    <string name="unit_nm">N·m</string>
+    <string name="unit_lb_ft">lb-ft</string>
+    <string name="unit_liters_per_hour">l/h</string>
+    <string name="unit_grams_per_second">g/s</string>
+    <string name="unit_seconds">s</string>
+    <string name="unit_degrees">°</string>
+    <string name="unit_amps">A</string>
+    <string name="unit_milliamps">mA</string>
+    <string name="unit_watts">W</string>
+    <string name="unit_kilowatt_hours">kWh</string>
+    <string name="unit_ampere_hours">Ah</string>
+    <string name="unit_hertz">Hz</string>
+    <string name="unit_kiloohms">kΩ</string>
+    <string name="unit_millimeters">mm</string>
+    <string name="unit_minutes">Min.</string>
+    <string name="unit_hours">Std.</string>
+    <string name="unit_milliseconds">ms</string>
+    <string name="unit_kilograms_per_hour">kg/h</string>
+    <string name="unit_meters_per_second_squared">m/s²</string>
+    <string name="unit_milligrams_per_stroke">mg/Hub</string>
+
+    <string name="gauge_engine_speed">Motordrehzahl</string>
+    <string name="gauge_vehicle_speed">Geschwindigkeit</string>
+    <string name="gauge_coolant_temp">Kühlmittel</string>
+    <string name="gauge_intake_air_temp">Ansaugluft</string>
+    <string name="gauge_engine_load">Motorlast</string>
+    <string name="gauge_throttle_position">Drosselklappe</string>
+    <string name="gauge_battery_voltage">Batterie</string>
+    <string name="gauge_fuel_level">Tankfüllstand</string>
+    <string name="gauge_boost_pressure">Ladedruck</string>
+    <string name="gauge_mass_air_flow">Luftmasse</string>
+    <string name="gauge_state_of_charge">Ladung</string>
+
+    <string name="dashboard_title">Übersicht</string>
+    <string name="dashboard_empty">Noch keine Anzeigen. Fügen Sie die erste hinzu.</string>
+    <string name="dashboard_add_tile">Anzeige hinzufügen</string>
+
+    <string name="live_title">Live</string>
+    <string name="live_pause">Pause</string>
+    <string name="live_resume">Fortsetzen</string>
+    <string name="live_clear">Löschen</string>
+
+    <string name="health_slowed_down">Zu viele Anzeigen für diesen Adapter — sie werden langsamer aktualisiert.</string>
+
+    <plurals name="health_queries_per_second">
+        <item quantity="one">Ihr Adapter: %d Abfrage/s</item>
+        <item quantity="other">Ihr Adapter: %d Abfragen/s</item>
+    </plurals>
+
+    <plurals name="connect_adapters_found">
+        <item quantity="one">%d Adapter gefunden</item>
+        <item quantity="other">%d Adapter gefunden</item>
+    </plurals>
+
+    <plurals name="dashboard_tiles">
+        <item quantity="one">%d Anzeige</item>
+        <item quantity="other">%d Anzeigen</item>
+    </plurals>
+
+    <plurals name="live_window_seconds">
+        <item quantity="one">%d Sekunde</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
+
+</resources>

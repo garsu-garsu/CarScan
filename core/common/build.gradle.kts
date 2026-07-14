@@ -8,4 +8,11 @@ kotlin {
     // and into Android-only source — and these renderers must behave identically on iOS,
     // so their tests belong where iOS can run them too.
     jvm()
+
+    sourceSets {
+        commonMain.dependencies {
+            // api: MviViewModel extends this, so every feature module sees it.
+            api(libs.jb.lifecycle.viewmodel)
+        }
+    }
 }

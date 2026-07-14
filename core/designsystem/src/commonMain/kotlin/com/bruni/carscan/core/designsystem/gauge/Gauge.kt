@@ -12,6 +12,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
+import com.bruni.carscan.core.designsystem.theme.LocalNumberFormatter
 
 /** Test tags for the numerals a user actually reads off the tile. */
 object GaugeTestTags {
@@ -62,6 +63,7 @@ internal fun GaugeReadout(
     // Stale text is drawn in the stale colour, so a tile with no reading is dim as well as
     // dashed — the same signal the renderer paints on the dial itself.
     val supportingColor = if (spec.isStale) theme.stale else theme.text
+    val formatter = LocalNumberFormatter.current
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         BasicText(
@@ -74,7 +76,11 @@ internal fun GaugeReadout(
             ),
         )
         BasicText(
-            text = if (spec.isStale) NO_READING else formatGaugeValue(spec.value, spec.decimals),
+            text = if (spec.isStale) {
+                NO_READING
+            } else {
+                formatGaugeValue(spec.value, spec.decimals, formatter)
+            },
             modifier = Modifier.testTag(GaugeTestTags.VALUE),
             style = TextStyle(
                 color = supportingColor,

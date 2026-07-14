@@ -1,5 +1,6 @@
 package com.bruni.carscan.core.designsystem.gauge
 
+import com.bruni.carscan.core.units.NumberFormatter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -178,36 +179,51 @@ class GaugeMathTest {
 
     // --- formatGaugeValue --------------------------------------------------
 
+    private val en = NumberFormatter("en")
+
     @Test
     fun formatsWithTheRequestedNumberOfDecimals() {
-        assertEquals("1726", formatGaugeValue(1726.4f, decimals = 0))
-        assertEquals("1726.4", formatGaugeValue(1726.42f, decimals = 1))
-        assertEquals("13.80", formatGaugeValue(13.8f, decimals = 2))
+        assertEquals("1726", formatGaugeValue(1726.4f, decimals = 0, formatter = en))
+        assertEquals("1726.4", formatGaugeValue(1726.42f, decimals = 1, formatter = en))
+        assertEquals("13.80", formatGaugeValue(13.8f, decimals = 2, formatter = en))
     }
 
     @Test
     fun roundsRatherThanTruncates() {
-        assertEquals("2", formatGaugeValue(1.6f, decimals = 0))
-        assertEquals("0.3", formatGaugeValue(0.25f, decimals = 1))
+        assertEquals("2", formatGaugeValue(1.6f, decimals = 0, formatter = en))
+        assertEquals("0.3", formatGaugeValue(0.25f, decimals = 1, formatter = en))
     }
 
     @Test
     fun keepsTheSignOnNegativeValues() {
         // Intake air temperature goes below zero, and "-" must not be lost to the rounding.
-        assertEquals("-7", formatGaugeValue(-7.2f, decimals = 0))
-        assertEquals("-0.5", formatGaugeValue(-0.5f, decimals = 1))
+        assertEquals("-7", formatGaugeValue(-7.2f, decimals = 0, formatter = en))
+        assertEquals("-0.5", formatGaugeValue(-0.5f, decimals = 1, formatter = en))
     }
 
     @Test
     fun padsTheFractionalPart() {
-        assertEquals("5.00", formatGaugeValue(5f, decimals = 2))
-        assertEquals("5.05", formatGaugeValue(5.05f, decimals = 2))
+        assertEquals("5.00", formatGaugeValue(5f, decimals = 2, formatter = en))
+        assertEquals("5.05", formatGaugeValue(5.05f, decimals = 2, formatter = en))
     }
 
     @Test
     fun aNonFiniteValueShowsTheNoReadingPlaceholderRatherThanNaN() {
         // "NaN" on a dashboard reads as a crash. A dash reads as "no reading".
-        assertEquals(NO_READING, formatGaugeValue(Float.NaN, decimals = 0))
-        assertEquals(NO_READING, formatGaugeValue(Float.POSITIVE_INFINITY, decimals = 1))
+        assertEquals(NO_READING, formatGaugeValue(Float.NaN, decimals = 0, formatter = en))
+        assertEquals(
+            NO_READING,
+            formatGaugeValue(Float.POSITIVE_INFINITY, decimals = 1, formatter = en),
+        )
+    }
+
+    @Test
+    fun writesTheNumberTheWayTheLocaleWritesIt() {
+        // The separator used to be a hard-coded '.', which is wrong in six of the eight
+        // locales we ship. The rounding contract above is unchanged; only the writing is.
+        assertEquals("13,80", formatGaugeValue(13.8f, decimals = 2, formatter = NumberFormatter("de")))
+        assertEquals("1726,4", formatGaugeValue(1726.42f, decimals = 1, formatter = NumberFormatter("ru")))
+        // ...and grouping stays off, or German 1726 rpm would read "1.726".
+        assertEquals("1726", formatGaugeValue(1726.4f, decimals = 0, formatter = NumberFormatter("de")))
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.IntOffset
+import com.bruni.carscan.core.designsystem.theme.LocalNumberFormatter
 import kotlin.math.roundToInt
 
 /**
@@ -189,6 +190,7 @@ class ClassicAnalogGauge : GaugeRenderer {
     override fun Overlay(spec: GaugeSpec, theme: GaugeTheme) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
             val density = LocalDensity.current
+            val formatter = LocalNumberFormatter.current
             val extent = minOf(constraints.maxWidth, constraints.maxHeight).toFloat()
             val labelRadius = extent / 2f * SCALE_LABEL_RADIUS_FRACTION
             val span = spec.max - spec.min
@@ -200,7 +202,7 @@ class ClassicAnalogGauge : GaugeRenderer {
                     val dx = polarX(angle, labelRadius)
                     val dy = polarY(angle, labelRadius)
                     BasicText(
-                        text = formatGaugeValue(spec.min + fraction * span, decimals = 0),
+                        text = formatGaugeValue(spec.min + fraction * span, 0, formatter),
                         // Centred, then pushed out to the tick: the label's own centre lands on
                         // the point, so it never has to be measured.
                         modifier = Modifier

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Spanish. Decimal comma. -->
+<resources>
+
+    <string name="app_name">CarScan</string>
+
+    <string name="common_ok">Aceptar</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_retry">Reintentar</string>
+    <string name="common_settings">Ajustes</string>
+    <string name="common_no_reading">Sin lectura</string>
+
+    <string name="adapter_kind_ble">Bluetooth LE</string>
+    <string name="adapter_kind_spp">Bluetooth Classic</string>
+    <string name="adapter_kind_wifi">Wi-Fi</string>
+    <string name="adapter_unnamed">Adaptador sin nombre</string>
+
+    <string name="connection_state_disconnected">Sin conexión</string>
+    <string name="connection_state_connecting">Conectando…</string>
+    <string name="connection_state_connected">Conectado</string>
+
+    <string name="connect_title">Conectar un adaptador</string>
+    <string name="connect_scan">Buscar</string>
+    <string name="connect_scanning">Buscando…</string>
+    <string name="connect_stop">Detener</string>
+    <string name="connect_connect">Conectar</string>
+    <string name="connect_disconnect">Desconectar</string>
+    <string name="connect_no_adapters">No se encontró ningún adaptador</string>
+    <string name="connect_budget">%1$s a %2$d Hz</string>
+    <string name="connect_protocol">Protocolo: %1$s</string>
+    <string name="connect_genuine_stn">Chip STN original</string>
+    <string name="connect_clone">Clon de ELM327: rendimiento limitado</string>
+
+    <string name="error_ignition_off">Pon el contacto y vuelve a intentarlo.</string>
+    <string name="error_bluetooth_permission">CarScan necesita permiso de Bluetooth para encontrar el adaptador.</string>
+    <string name="error_bluetooth_off">El Bluetooth está apagado.</string>
+    <string name="error_spp_pairing_required">Empareja primero el adaptador en los ajustes del sistema. El PIN suele ser 1234 o 0000.</string>
+    <string name="error_wifi_not_joined">Conéctate primero a la red Wi-Fi del adaptador. Mientras el teléfono esté en ella, no tendrá datos móviles.</string>
+    <string name="error_adapter_unreachable">El adaptador no responde. Comprueba que esté enchufado.</string>
+    <string name="error_init_failed">El adaptador no se inició correctamente.</string>
+
+    <string name="error_no_data">Este coche no facilita ese valor.</string>
+    <string name="error_bus">Se perdió la comunicación con el coche.</string>
+    <string name="error_adapter_overrun">El adaptador no da abasto.</string>
+    <string name="error_adapter_reset">El adaptador se reinició. Comprueba la alimentación del conector OBD.</string>
+
+    <string name="unit_rpm">rpm</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="unit_km">km</string>
+    <string name="unit_miles">mi</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
+    <string name="unit_volts">V</string>
+    <string name="unit_kpa">kPa</string>
+    <string name="unit_bar">bar</string>
+    <string name="unit_psi">psi</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_litre">L</string>
+    <string name="unit_us_gallon">gal (EE. UU.)</string>
+    <string name="unit_uk_gallon">gal (RU)</string>
+    <string name="unit_l_per_100km">L/100 km</string>
+    <string name="unit_km_per_l">km/L</string>
+    <string name="unit_mpg_us">mpg (EE. UU.)</string>
+    <string name="unit_mpg_uk">mpg (RU)</string>
+    <string name="unit_kwh_per_100km">kWh/100 km</string>
+    <string name="unit_mi_per_kwh">mi/kWh</string>
+    <string name="unit_kw">kW</string>
+    <string name="unit_hp">hp</string>
+    <string name="unit_ps">CV</string>
+    <string name="unit_nm">N·m</string>
+    <string name="unit_lb_ft">lb-ft</string>
+    <string name="unit_liters_per_hour">L/h</string>
+    <string name="unit_grams_per_second">g/s</string>
+    <string name="unit_seconds">s</string>
+    <string name="unit_degrees">°</string>
+    <string name="unit_amps">A</string>
+    <string name="unit_milliamps">mA</string>
+    <string name="unit_watts">W</string>
+    <string name="unit_kilowatt_hours">kWh</string>
+    <string name="unit_ampere_hours">Ah</string>
+    <string name="unit_hertz">Hz</string>
+    <string name="unit_kiloohms">kΩ</string>
+    <string name="unit_millimeters">mm</string>
+    <string name="unit_minutes">min</string>
+    <string name="unit_hours">h</string>
+    <string name="unit_milliseconds">ms</string>
+    <string name="unit_kilograms_per_hour">kg/h</string>
+    <string name="unit_meters_per_second_squared">m/s²</string>
+    <string name="unit_milligrams_per_stroke">mg/carrera</string>
+
+    <string name="gauge_engine_speed">Régimen del motor</string>
+    <string name="gauge_vehicle_speed">Velocidad</string>
+    <string name="gauge_coolant_temp">Refrigerante</string>
+    <string name="gauge_intake_air_temp">Aire de admisión</string>
+    <string name="gauge_engine_load">Carga del motor</string>
+    <string name="gauge_throttle_position">Acelerador</string>
+    <string name="gauge_battery_voltage">Batería</string>
+    <string name="gauge_fuel_level">Nivel de combustible</string>
+    <string name="gauge_boost_pressure">Presión de turbo</string>
+    <string name="gauge_mass_air_flow">Flujo de aire</string>
+    <string name="gauge_state_of_charge">Carga</string>
+
+    <string name="dashboard_title">Panel</string>
+    <string name="dashboard_empty">Aún no hay indicadores. Añade el primero.</string>
+    <string name="dashboard_add_tile">Añadir indicador</string>
+
+    <string name="live_title">En directo</string>
+    <string name="live_pause">Pausar</string>
+    <string name="live_resume">Reanudar</string>
+    <string name="live_clear">Borrar</string>
+
+    <string name="health_slowed_down">Demasiados indicadores para este adaptador: se actualizan más despacio.</string>
+
+    <plurals name="health_queries_per_second">
+        <item quantity="one">Tu adaptador: %d consulta/s</item>
+        <item quantity="other">Tu adaptador: %d consultas/s</item>
+    </plurals>
+
+    <plurals name="connect_adapters_found">
+        <item quantity="one">%d adaptador encontrado</item>
+        <item quantity="other">%d adaptadores encontrados</item>
+    </plurals>
+
+    <plurals name="dashboard_tiles">
+        <item quantity="one">%d indicador</item>
+        <item quantity="other">%d indicadores</item>
+    </plurals>
+
+    <plurals name="live_window_seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+
+</resources>

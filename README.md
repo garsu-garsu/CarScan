@@ -55,7 +55,7 @@ Clean-ish layering over a Kotlin Multiplatform module graph. UI is Compose Multi
 
 **Ads and billing physically cannot reach iOS.** They live in `:platform:*` behind interfaces declared in `:core:monetization`, so the iOS klib path never sees them. This is enforced by the module graph, not by discipline.
 
-**`ObdTransport` and `ElmSession` are `internal` to `:core:obd`.** Features see only a repository. The half-duplex invariant cannot leak into UI code, because UI code cannot reach the socket.
+**No feature module depends on `:core:obd`.** Screens talk to ports declared in `:core:data` — `SampleSource`, `ActiveVehicle`, `VisibleSignals`, `ObdConnector` — which the OBD stack satisfies and `:composeApp` binds. The dependency points inward, so nothing above `:core:data` can construct an `ElmSession`, and therefore nothing above it can break half-duplex. It also means the ELM327 emulator drops in behind the same ports, which is how the UI was built without a car.
 
 ### The protocol stack
 
