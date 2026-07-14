@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
  */
 class PollLatenessTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     @Test
     fun `a five second stall does not become five catch-up rounds`() = runTest {

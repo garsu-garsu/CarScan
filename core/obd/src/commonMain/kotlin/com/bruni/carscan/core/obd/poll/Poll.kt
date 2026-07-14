@@ -3,6 +3,7 @@ package com.bruni.carscan.core.obd.poll
 import com.bruni.carscan.core.model.MetricKey
 import com.bruni.carscan.core.model.obdb.ObdbCommand
 import kotlin.math.roundToLong
+import kotlin.time.Clock
 import kotlin.time.TimeSource
 
 /**
@@ -79,14 +80,39 @@ data class AdapterCapabilities(
     val expectedFrames: Boolean = true,
 )
 
-/** Where the scheduler gets "now" from. A parameter, so tests run on virtual time. */
-fun interface PollClock {
+/**
+ * Where the scheduler gets "now" from. A parameter, so tests run on virtual time.
+ *
+ * **Two clocks, deliberately, because one clock cannot do both jobs.**
+ *
+ * [nowMs] is monotonic — it only ever moves forward, at a constant rate, regardless of what the
+ * user or an NTP sync does to the system clock. Poll due-times and round-trip measurements are
+ * built on it, because a wall clock that jumps backwards mid-drive would make every command
+ * overdue at once.
+ *
+ * [epochMs] is wall time. It is what a [SensorSample] is stamped with, because a sample is
+ * *persisted* and *shown to a human*: a trip's timeline, its playback, and its position in the
+ * history list are all wall-clock facts. Milliseconds-since-the-scheduler-started is meaningless
+ * the moment it leaves the process.
+ *
+ * Conflating them is not a style question. It was a real bug here: samples were stamped with the
+ * monotonic value and [SampleWriter] subtracted an epoch trip-start from it, producing a large
+ * negative offset that its own `if (secondsIn < 0) return` guard then discarded — so **every
+ * sample was silently dropped and no trip recorded anything.** Both modules were individually
+ * correct and both test suites were green, because each test supplied one consistent fake clock.
+ */
+interface PollClock {
+    /** Monotonic milliseconds. For scheduling arithmetic only. Never persist this. */
     fun nowMs(): Long
 
+    /** Milliseconds since the Unix epoch. For stamping samples. */
+    fun epochMs(): Long
+
     companion object {
-        fun monotonic(): PollClock {
-            val start = TimeSource.Monotonic.markNow()
-            return PollClock { start.elapsedNow().inWholeMilliseconds }
+        fun system(): PollClock = object : PollClock {
+            private val start = TimeSource.Monotonic.markNow()
+            override fun nowMs(): Long = start.elapsedNow().inWholeMilliseconds
+            override fun epochMs(): Long = Clock.System.now().toEpochMilliseconds()
         }
     }
 }

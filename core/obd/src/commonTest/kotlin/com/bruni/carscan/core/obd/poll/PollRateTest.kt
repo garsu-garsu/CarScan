@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 /** What `freq` means, and that meeting a fast command does not starve a slow one. */
 class PollRateTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     @Test
     fun `freq is seconds between requests, not hertz`() = runTest {

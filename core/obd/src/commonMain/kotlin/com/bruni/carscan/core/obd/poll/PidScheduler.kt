@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class PidScheduler(
     private val exchanger: Exchanger,
     private val cache: AtStateCache,
-    private val clock: PollClock = PollClock.monotonic(),
+    private val clock: PollClock = PollClock.system(),
     private val config: PollConfig = PollConfig(),
 ) {
 
@@ -254,7 +254,7 @@ class PidScheduler(
                 servedCycles++
                 observeRtt(response.roundTrip.inWholeMilliseconds)
 
-                decoder.decode(scheduled.command, response.lines, clock.nowMs())
+                decoder.decode(scheduled.command, response.lines, clock.epochMs())
                     .forEach { _samples.tryEmit(it) }
 
                 // The frame count is only knowable from an answer that arrived. Guessing it low

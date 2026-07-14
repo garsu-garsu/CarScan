@@ -21,7 +21,7 @@ import kotlin.test.Test
  */
 class PollAffinityTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     /** The requests up to and including the [n]-th OBD request — i.e. one full round. */
     private fun List<ElmRequest>.round(n: Int): List<ElmRequest> {

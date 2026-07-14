@@ -20,7 +20,7 @@ import kotlin.test.assertTrue
  */
 class PollIdleTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     @Test
     fun `an idle scheduler keeps the link warm with ATRV at about 0,2 Hz`() = runTest {

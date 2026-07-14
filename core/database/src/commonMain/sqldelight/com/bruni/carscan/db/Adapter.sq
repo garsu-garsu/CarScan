@@ -17,6 +17,13 @@ CREATE TABLE adapter (
     supports_expected_frames INTEGER NOT NULL DEFAULT 0,
     echo_suppression_needed  INTEGER NOT NULL DEFAULT 0,
     max_write_chunk          INTEGER NOT NULL DEFAULT 20,
+    -- What ATDPN reported: the protocol the adapter actually negotiated with this car.
+    --
+    -- This is the column that earns the table. Cold, the initializer sends ATSP0 and then a real
+    -- 0100 and waits out a protocol search -- seconds, on a cold bus. Warm, it seeds
+    -- AtStateCache.protocol from here and sends one ATSP6. Every other field in this table saves
+    -- a round trip; this one saves the wait.
+    protocol_num             INTEGER,
     -- Exponentially weighted mean round-trip time. Seeds the scheduler's governor
     -- so the very first poll cycle is already paced for this adapter.
     ewma_rtt_ms              REAL,
@@ -31,8 +38,8 @@ SELECT * FROM adapter WHERE address = ?;
 
 -- Safe as REPLACE: nothing references adapter, so there is no cascade to trip over.
 upsert:
-INSERT OR REPLACE INTO adapter(address, kind, name, gatt_service, gatt_write, gatt_notify, is_stn, supports_expected_frames, echo_suppression_needed, max_write_chunk, ewma_rtt_ms, last_used_ms)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO adapter(address, kind, name, gatt_service, gatt_write, gatt_notify, is_stn, supports_expected_frames, echo_suppression_needed, max_write_chunk, protocol_num, ewma_rtt_ms, last_used_ms)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 updateRtt:
 UPDATE adapter SET ewma_rtt_ms = :ewma_rtt_ms, last_used_ms = :last_used_ms WHERE address = :address;

@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 class PollEmulatorTest {
 
-    private fun TestScope.pollClock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.pollClock() = testPollClock()
 
     @Test
     fun `five gauges at 10 Hz on a 15 q per s clone - honest health, bounded backlog, live samples`() = runTest {

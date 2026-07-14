@@ -33,6 +33,7 @@ class AdapterRepositoryTest {
         supportsExpectedFrames = true,
         echoSuppressionNeeded = false,
         maxWriteChunk = 20,
+        protocolNum = 6,
         ewmaRttMs = 42.5,
         lastUsedMs = 1_000,
     )
@@ -97,9 +98,19 @@ class AdapterRepositoryTest {
             name = "ELM327 WiFi",
             gattService = null, gattWrite = null, gattNotify = null,
             isStn = false, supportsExpectedFrames = false, echoSuppressionNeeded = true,
-            maxWriteChunk = 512, ewmaRttMs = null, lastUsedMs = null,
+            maxWriteChunk = 512, protocolNum = null, ewmaRttMs = null, lastUsedMs = null,
         )
         repo.remember(tcp)
         assertEquals(tcp, repo.recall(tcp.address))
+    }
+
+    @Test
+    fun `the negotiated protocol survives a round trip`() = runTest {
+        // The column that earns this table. Without it, a reconnect re-runs the ATSP0 protocol
+        // search — seconds on a cold bus — and the "second connect is faster" promise is empty.
+        // Every other quirk here saves a round trip; this one saves the wait.
+        repo.remember(vgate)
+
+        assertEquals(6L, repo.recall(vgate.address)?.protocolNum)
     }
 }

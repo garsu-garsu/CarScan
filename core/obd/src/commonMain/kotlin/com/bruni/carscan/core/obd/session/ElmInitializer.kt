@@ -1,11 +1,24 @@
 package com.bruni.carscan.core.obd.session
 
+import com.bruni.carscan.core.obd.ElmErrorKind
 import com.bruni.carscan.core.obd.ElmRequest
 import com.bruni.carscan.core.obd.ElmResponse
 import kotlinx.coroutines.delay
 
-/** The adapter never got far enough to be usable. */
-class ElmInitFailure(message: String) : Exception(message)
+/**
+ * The adapter never got far enough to be usable.
+ *
+ * [kind] carries the reason as data, not as prose. Callers have to act on it — `UNABLE_TO_CONNECT`
+ * during init almost always means the ignition is off, which is a thing a user can fix, while the
+ * rest are not. Folding it into [message] would force the connect screen to parse an enum name back
+ * out of an English sentence, and that breaks the first time someone rewords the message.
+ *
+ * Null when the failure was not an adapter error response (e.g. the adapter simply never answered).
+ */
+class ElmInitFailure(
+    val kind: ElmErrorKind?,
+    message: String,
+) : Exception(message)
 
 /**
  * The session's own door into itself.
@@ -89,7 +102,7 @@ internal class ElmInitializer(
             ElmRequest(command, timeout = config.resetTimeout, retries = RESET_RETRIES),
         )
         if (response is ElmResponse.Err) {
-            throw ElmInitFailure("the adapter did not answer $command: ${response.kind}")
+            throw ElmInitFailure(response.kind, "the adapter did not answer $command: ${response.kind}")
         }
         // It answers before it has finished booting. A command written into that window is
         // swallowed without a trace, and the session starts one response behind — which is

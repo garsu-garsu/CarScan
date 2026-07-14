@@ -25,7 +25,13 @@ const val LIVE_PLOT_DEFAULT_CAPACITY: Int = 600
 @Stable
 class LivePlotState(val capacity: Int = LIVE_PLOT_DEFAULT_CAPACITY) {
 
-    internal val samples = FloatRingBuffer(capacity)
+    /**
+     * The window, readable so that a consumer can assert on what actually survived eviction.
+     * [FloatRingBuffer]'s only mutators are `push` and `clear`, so exposing it for reads gives a
+     * caller no way to corrupt the plot — and a feature that cannot see the window cannot test
+     * that its ViewModel feeds a bounded one.
+     */
+    val samples = FloatRingBuffer(capacity)
 
     /** Samples pushed since the last frame. Deliberately NOT snapshot state. */
     private var pending = 0

@@ -21,7 +21,7 @@ import kotlin.test.assertTrue
  */
 class PollGovernorTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     /** ~15 queries per second, the way a real one is: every round trip costs 66 ms. */
     private fun cloneAdapter() = FakeExchanger(obdLatencyMs = 66, atLatencyMs = 2)

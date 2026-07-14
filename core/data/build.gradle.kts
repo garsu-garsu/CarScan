@@ -13,6 +13,9 @@ kotlin {
             // emulator is a drop-in), keeps the half-duplex machinery out of reach of anything
             // above it, and means a broken protocol layer cannot turn the repository's tests red
             // for reasons that have nothing to do with the repository.
+            // :core:transport, but NOT :core:obd. TransportKind / DiscoveredAdapter are inert
+            // data that the connect screen must name; ElmSession is machinery it must not reach.
+            api(project(":core:transport"))
             api(project(":core:vehicle"))
             api(project(":core:database"))
             api(project(":core:units"))

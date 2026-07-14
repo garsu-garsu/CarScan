@@ -20,7 +20,7 @@ import kotlin.test.assertTrue
  */
 class PollExpectedFramesTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     private val socCommand = command(
         hdr = "7E4",

@@ -10,6 +10,7 @@ import com.bruni.carscan.core.obd.ElmRequest
 import com.bruni.carscan.core.obd.ElmResponse
 import com.bruni.carscan.core.obd.Exchanger
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.TestScope
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -114,3 +115,18 @@ const val RPM_FRAME = "7E8 04 41 0C 1A F8"
 
 /** `7E8 03 41 0D 50` — 80 km/h. */
 const val SPEED_FRAME = "7E8 03 41 0D 50"
+
+/**
+ * A virtual clock whose two readings are deliberately far apart.
+ *
+ * [PollClock.nowMs] follows the test scheduler's virtual time (starting at 0); [PollClock.epochMs]
+ * is a real-looking wall-clock value. Any code that confuses the two now produces an absurd number
+ * instead of a plausible one — which is the whole point. The original single-clock fake returned
+ * the same value for both, so a module that stamped samples with monotonic time and a module that
+ * subtracted an epoch from them were each green in isolation and broken together.
+ */
+fun TestScope.testPollClock(epochBase: Long = 1_700_000_000_000L): PollClock =
+    object : PollClock {
+        override fun nowMs(): Long = testScheduler.currentTime
+        override fun epochMs(): Long = epochBase + testScheduler.currentTime
+    }

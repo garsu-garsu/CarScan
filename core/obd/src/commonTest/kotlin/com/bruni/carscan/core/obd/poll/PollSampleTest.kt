@@ -19,7 +19,7 @@ import kotlin.test.assertTrue
 /** What comes out of the scheduler: decoded samples, in the unit the car reports them in. */
 class PollSampleTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     @Test
     fun `samples carry the native unit, the metric key and the answering ECU`() = runTest {

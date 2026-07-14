@@ -21,7 +21,7 @@ import kotlin.test.assertTrue
  */
 class PollFailureMemoryTest {
 
-    private fun TestScope.clock() = PollClock { testScheduler.currentTime }
+    private fun TestScope.clock() = testPollClock()
 
     @Test
     fun `five consecutive NO_DATA drops the command permanently and reports it`() = runTest {

@@ -24,6 +24,14 @@ data class AdapterQuirks(
     val supportsExpectedFrames: Boolean,
     val echoSuppressionNeeded: Boolean,
     val maxWriteChunk: Long,
+    /**
+     * The protocol ATDPN reported, e.g. 6 for ISO 15765-4 11-bit.
+     *
+     * The one field here that saves *seconds* rather than round trips: seeded back into the
+     * session before connect(), the initializer sends a single ATSP{n} instead of running a
+     * protocol search on a cold bus.
+     */
+    val protocolNum: Long?,
     /** Exponentially weighted mean round-trip time; seeds the scheduler's governor. */
     val ewmaRttMs: Double?,
     val lastUsedMs: Long?,
@@ -51,6 +59,7 @@ class DefaultAdapterRepository(private val db: CarScanDb) : AdapterRepository {
             supports_expected_frames = quirks.supportsExpectedFrames.toLong(),
             echo_suppression_needed = quirks.echoSuppressionNeeded.toLong(),
             max_write_chunk = quirks.maxWriteChunk,
+            protocol_num = quirks.protocolNum,
             ewma_rtt_ms = quirks.ewmaRttMs,
             last_used_ms = quirks.lastUsedMs,
         )
@@ -85,6 +94,7 @@ private fun Adapter.toQuirks() = AdapterQuirks(
     supportsExpectedFrames = supports_expected_frames != 0L,
     echoSuppressionNeeded = echo_suppression_needed != 0L,
     maxWriteChunk = max_write_chunk,
+    protocolNum = protocol_num,
     ewmaRttMs = ewma_rtt_ms,
     lastUsedMs = last_used_ms,
 )
