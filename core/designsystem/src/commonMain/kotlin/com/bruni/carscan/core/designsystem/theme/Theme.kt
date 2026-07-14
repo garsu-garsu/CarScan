@@ -36,7 +36,14 @@ val LocalGaugeTheme = staticCompositionLocalOf { GaugeThemes.ModernDark }
  * separator is a cosmetic bug, while a crash on a dashboard is not. [CarScanTheme] replaces it
  * with the device's locale.
  */
-val LocalNumberFormatter = staticCompositionLocalOf { NumberFormatter("en") }
+val LocalNumberFormatter = staticCompositionLocalOf<NumberFormatter> {
+    // Fails loudly rather than defaulting to NumberFormatter("en"), which is what this used to do.
+    // A silent English fallback is the worst possible default here: it renders 13.8 where six of
+    // our eight locales expect 13,8, it does so only on whatever screen forgot the theme, and it
+    // looks completely fine to anyone reading the code or the tests. LocalGaugeRenderer already
+    // fails this way; there is no reason for the number formatter to be the quiet one.
+    error("No NumberFormatter provided — wrap the content in a CarScanTheme")
+}
 
 /**
  * Material colours, typography and shapes, plus the two things Material knows nothing about:

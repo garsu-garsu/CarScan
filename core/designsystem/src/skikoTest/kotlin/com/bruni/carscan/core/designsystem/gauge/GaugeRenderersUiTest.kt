@@ -2,6 +2,9 @@ package com.bruni.carscan.core.designsystem.gauge
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import com.bruni.carscan.core.designsystem.theme.LocalNumberFormatter
+import com.bruni.carscan.core.units.NumberFormatter
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -76,6 +79,9 @@ class GaugeRenderersUiTest {
         var spec by mutableStateOf(rpm(0f))
 
         setContent {
+            // The gauge reads LocalNumberFormatter, which now fails loudly outside a theme
+            // rather than defaulting silently to English. Provide it explicitly.
+            CompositionLocalProvider(LocalNumberFormatter provides NumberFormatter("en")) {
             Gauge(
                 spec = spec,
                 theme = theme,
@@ -83,6 +89,7 @@ class GaugeRenderersUiTest {
                 renderer = renderer,
                 modifier = Modifier.size(200.dp),
             )
+                    }
         }
 
         val hostile = listOf(
@@ -127,6 +134,9 @@ class GaugeRenderersUiTest {
             optimalTo = 5f,
         )
         setContent {
+            // The gauge reads LocalNumberFormatter, which now fails loudly outside a theme
+            // rather than defaulting silently to English. Provide it explicitly.
+            CompositionLocalProvider(LocalNumberFormatter provides NumberFormatter("en")) {
             Gauge(degenerate, theme, ModernArcGauge(), Modifier.size(120.dp))
             Gauge(
                 degenerate.copy(min = 100f, max = 0f),   // inverted
@@ -134,13 +144,18 @@ class GaugeRenderersUiTest {
                 ClassicAnalogGauge(),
                 Modifier.size(120.dp),
             )
+                    }
         }
         waitForIdle()
     }
 
     private fun overlayShowsTheReading(renderer: GaugeRenderer) = runComposeUiTest {
         setContent {
+            // The gauge reads LocalNumberFormatter, which now fails loudly outside a theme
+            // rather than defaulting silently to English. Provide it explicitly.
+            CompositionLocalProvider(LocalNumberFormatter provides NumberFormatter("en")) {
             Gauge(rpm(1726f), theme, renderer, Modifier.size(200.dp))
+                    }
         }
 
         onNodeWithTag(GaugeTestTags.VALUE).assertTextEquals("1726")
@@ -157,6 +172,9 @@ class GaugeRenderersUiTest {
     @Test
     fun overlayHonoursTheDecimalsOfTheSpec() = runComposeUiTest {
         setContent {
+            // The gauge reads LocalNumberFormatter, which now fails loudly outside a theme
+            // rather than defaulting silently to English. Provide it explicitly.
+            CompositionLocalProvider(LocalNumberFormatter provides NumberFormatter("en")) {
             Gauge(
                 spec = GaugeSpec(
                     label = "Battery",
@@ -170,6 +188,7 @@ class GaugeRenderersUiTest {
                 renderer = ModernArcGauge(),
                 modifier = Modifier.size(200.dp),
             )
+                    }
         }
 
         onNodeWithTag(GaugeTestTags.VALUE).assertTextEquals("13.8")
@@ -180,7 +199,11 @@ class GaugeRenderersUiTest {
         // The whole point of isStale: a tachometer that never got a value must not look like
         // an engine idling at 0 rpm.
         setContent {
+            // The gauge reads LocalNumberFormatter, which now fails loudly outside a theme
+            // rather than defaulting silently to English. Provide it explicitly.
+            CompositionLocalProvider(LocalNumberFormatter provides NumberFormatter("en")) {
             Gauge(rpm(0f, isStale = true), theme, ModernArcGauge(), Modifier.size(200.dp))
+                    }
         }
 
         onNodeWithTag(GaugeTestTags.VALUE).assertTextEquals(NO_READING)

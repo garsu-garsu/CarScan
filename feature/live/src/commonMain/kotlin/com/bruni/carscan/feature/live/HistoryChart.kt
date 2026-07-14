@@ -100,4 +100,4 @@ internal fun formatElapsed(seconds: Double): String {
     return if (h > 0) "$h:${m.pad()}:${s.pad()}" else "$m:${s.pad()}"
 }
 
-private fun Long.pad(): String = toString()  // MUTATED
+private fun Long.pad(): String = toString().padStart(2, '0')

@@ -27,6 +27,7 @@ import com.bruni.carscan.core.designsystem.chart.LivePlot
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.allStringResources
 import com.bruni.carscan.core.designsystem.generated.resources.common_no_reading
+import com.bruni.carscan.core.designsystem.generated.resources.live_no_series_selected
 import com.bruni.carscan.core.designsystem.theme.LocalNumberFormatter
 import com.bruni.carscan.core.units.Readout
 import com.bruni.carscan.core.units.UnitReadout
@@ -57,6 +58,16 @@ internal fun LiveScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         SeriesPicker(state, onIntent)
+
+        // Nothing charted yet. The chips above are populated from the vehicle's signalset, so this
+        // is a prompt rather than an error — there is nothing wrong, the user just has not picked.
+        if (state.charted.isEmpty()) {
+            Text(
+                text = stringResource(Res.string.live_no_series_selected),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
 
         // Keyed on the MetricKey, so selecting a second series does not tear down the first one's
         // plot and throw away the 30 s of trace it is holding.
