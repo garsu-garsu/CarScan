@@ -109,6 +109,7 @@
     <string name="live_pause">Pausar</string>
     <string name="live_resume">Reanudar</string>
     <string name="live_clear">Borrar</string>
+    <string name="live_no_series_selected">Elige una señal para el gráfico</string>
 
     <string name="health_slowed_down">Demasiados indicadores para este adaptador: se actualizan más despacio.</string>
 

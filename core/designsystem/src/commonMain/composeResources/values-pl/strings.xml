@@ -109,6 +109,7 @@
     <string name="live_pause">Wstrzymaj</string>
     <string name="live_resume">Wznów</string>
     <string name="live_clear">Wyczyść</string>
+    <string name="live_no_series_selected">Wybierz sygnał do wykresu</string>
 
     <string name="health_slowed_down">Zbyt wiele wskaźników jak na ten adapter — odświeżają się wolniej.</string>
 

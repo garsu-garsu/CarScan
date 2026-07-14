@@ -1,5 +1,8 @@
 package com.bruni.carscan.core.designsystem.i18n
 
+import com.bruni.carscan.core.model.ObdUnit
+import com.bruni.carscan.core.units.UnitId
+import com.bruni.carscan.core.units.asIsLabelKey
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.test.Test
@@ -151,6 +154,32 @@ class StringResourceParityTest {
                 }
             }
         }
+    }
+
+    @Test
+    fun everyUnitLabelKeyThatCoreUnitsCanEmitIsAStringWeActuallyShip() {
+        // :core:units addresses a label by NAME — `UnitId.labelKey` is the string "unit_mph",
+        // not a symbol — and the UI resolves it through `Res.allStringResources[key]` at
+        // runtime. So a labelKey naming a key that does not exist is not a compile error in
+        // any module: it is a crash, or a blank suffix, on the one gauge that uses that unit.
+        //
+        // Nothing else in the build can see both sides of that contract. :core:units has no
+        // resources, and the features have no UnitId table. This module has both, so the
+        // check lands here.
+        val shipped = keys(source, "string")
+
+        val missing = UnitId.entries
+            .map { it.labelKey }
+            .filter { it !in shipped }
+        assertTrue(missing.isEmpty(), "UnitId.labelKey names strings we do not ship: $missing")
+
+        val missingNative = ObdUnit.entries
+            .mapNotNull { it.asIsLabelKey }
+            .filter { it !in shipped }
+        assertTrue(
+            missingNative.isEmpty(),
+            "ObdUnit.asIsLabelKey names strings we do not ship: $missingNative",
+        )
     }
 
     // --- the XML, read exactly as Compose Resources reads it -------------------

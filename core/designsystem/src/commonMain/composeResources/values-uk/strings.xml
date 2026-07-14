@@ -109,6 +109,7 @@
     <string name="live_pause">Пауза</string>
     <string name="live_resume">Продовжити</string>
     <string name="live_clear">Очистити</string>
+    <string name="live_no_series_selected">Виберіть сигнал для графіка</string>
 
     <string name="health_slowed_down">Забагато датчиків для цього адаптера — вони оновлюються повільніше.</string>
 

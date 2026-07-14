@@ -149,6 +149,7 @@
     <string name="live_pause">Pause</string>
     <string name="live_resume">Resume</string>
     <string name="live_clear">Clear</string>
+    <string name="live_no_series_selected">Pick a signal to chart</string>
 
     <!-- The governor telling the truth about a cheap adapter, rather than looking broken. -->
     <string name="health_slowed_down">Too many gauges for this adapter — they are refreshing more slowly.</string>

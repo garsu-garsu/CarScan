@@ -110,6 +110,7 @@
     <string name="live_pause">Pause</string>
     <string name="live_resume">Fortsetzen</string>
     <string name="live_clear">Löschen</string>
+    <string name="live_no_series_selected">Signal für das Diagramm wählen</string>
 
     <string name="health_slowed_down">Zu viele Anzeigen für diesen Adapter — sie werden langsamer aktualisiert.</string>
 
