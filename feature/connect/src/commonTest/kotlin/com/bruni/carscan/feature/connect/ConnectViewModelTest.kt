@@ -166,6 +166,61 @@ class ConnectViewModelTest {
     }
 
     /**
+     * The one that matters most, and the one we got wrong until the port carried a reason.
+     *
+     * A refused Bluetooth permission is the single most common first-run failure there is. Told
+     * only "the scan on BLE blew up", the honest guess is `ADAPTER_UNREACHABLE` — which puts
+     * *"The adapter did not answer. Check that it is plugged in."* on screen and sends the user
+     * out to their car to jiggle a dongle. The fix was a button already on the screen, and they
+     * will never find it.
+     *
+     * So the reason has to survive the trip, and `ADAPTER_UNREACHABLE` here is a failing test,
+     * not a near miss.
+     */
+    @Test
+    fun `a refused scan asks for the permission — it does not blame the adapter`() = runTest(dispatcher) {
+        val connector = FakeObdConnector.readyWith(summary())
+        connector.discoveryFailsOn = TransportKind.BLE
+        connector.discoveryFailsWith = ConnectFailure.BLUETOOTH_PERMISSION
+        val vm = viewModel(connector = connector)
+
+        vm.onIntent(ConnectIntent.Scan)
+        advanceUntilIdle()
+
+        vm.state.value.failure shouldBe ConnectFailure.BLUETOOTH_PERMISSION
+
+        // ...and that is the failure with a remedy attached, so the deep-link is live.
+        vm.effect.test {
+            vm.onIntent(ConnectIntent.OpenSettings)
+            awaitItem() shouldBe ConnectEffect.OpenAppSettings
+        }
+    }
+
+    /**
+     * An unclassified failure admits it, rather than inventing a plausible cause.
+     *
+     * The tempting alternative is to guess from the transport — BLE failed, so say
+     * `ADAPTER_UNREACHABLE`. It reads as reasonable and it is a trap: nothing can tell that guess
+     * apart from a live path, so it survives forever, and the day the connector meets an exception
+     * it has never seen, a denied permission silently becomes *"check that it is plugged in"* again.
+     *
+     * `INIT_FAILED` is unhelpful and harmless. The guess is confident and costs us the user.
+     */
+    @Test
+    fun `an unclassified scan failure admits it — it does not invent a cause from the transport`() =
+        runTest(dispatcher) {
+            val connector = FakeObdConnector.readyWith(summary())
+            connector.discoveryFailsOn = TransportKind.BLE
+            connector.discoveryFailsWith = null // a bare Throwable, carrying no reason
+            val vm = viewModel(connector = connector)
+
+            vm.onIntent(ConnectIntent.Scan)
+            advanceUntilIdle()
+
+            vm.state.value.failure shouldBe ConnectFailure.INIT_FAILED
+        }
+
+    /**
      * One dead radio must not take the scan down with it. A user whose Bluetooth is off should
      * still be offered the Wi-Fi adapter that is sitting there working.
      */

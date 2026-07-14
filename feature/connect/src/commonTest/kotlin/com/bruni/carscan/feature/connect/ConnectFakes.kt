@@ -3,6 +3,7 @@ package com.bruni.carscan.feature.connect
 import com.bruni.carscan.core.data.AdapterQuirks
 import com.bruni.carscan.core.data.AdapterRepository
 import com.bruni.carscan.core.data.AdapterSummary
+import com.bruni.carscan.core.data.ConnectException
 import com.bruni.carscan.core.data.ConnectFailure
 import com.bruni.carscan.core.data.ConnectOutcome
 import com.bruni.carscan.core.data.ObdConnector
@@ -41,9 +42,19 @@ class FakeObdConnector(
     /** Set to make a scan of this transport blow up, the way a refused permission does. */
     var discoveryFailsOn: TransportKind? = null
 
+    /**
+     * The reason the scan failed. `null` models a failure the real connector could not classify —
+     * it throws a bare `Throwable` carrying nothing common code can read.
+     */
+    var discoveryFailsWith: ConnectFailure? = ConnectFailure.BLUETOOTH_PERMISSION
+
     override fun discover(kind: TransportKind): Flow<DiscoveredAdapter> =
         if (kind == discoveryFailsOn) {
-            flow { throw IllegalStateException("scan refused") }
+            flow {
+                throw discoveryFailsWith
+                    ?.let { ConnectException(it) }
+                    ?: IllegalStateException("scan refused, reason unknown")
+            }
         } else {
             transports.discover(kind)
         }

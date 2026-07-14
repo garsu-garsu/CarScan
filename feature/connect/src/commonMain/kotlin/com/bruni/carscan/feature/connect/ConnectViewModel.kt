@@ -2,6 +2,7 @@ package com.bruni.carscan.feature.connect
 
 import com.bruni.carscan.core.common.mvi.MviViewModel
 import com.bruni.carscan.core.data.AdapterRepository
+import com.bruni.carscan.core.data.ConnectException
 import com.bruni.carscan.core.data.ConnectFailure
 import com.bruni.carscan.core.data.ConnectOutcome
 import com.bruni.carscan.core.data.ObdConnector
@@ -75,7 +76,7 @@ class ConnectViewModel(
                     connector.discover(section.kind)
                         // A radio that is off, or a permission that was refused, kills one
                         // transport — not the scan. The other two still have something to find.
-                        .catch { setState { copy(failure = section.kind.scanFailure()) } }
+                        .catch { thrown -> setState { copy(failure = thrown.asConnectFailure()) } }
                 }
                 .merge()
                 .collect { found -> setState { copy(sections = sections.plus(found)) } }
@@ -131,25 +132,29 @@ private fun List<AdapterSection>.plus(found: DiscoveredAdapter): List<AdapterSec
 }
 
 /**
- * What it means when a *scan* — as opposed to a connect — fails on this transport.
+ * Why a *scan* — as opposed to a connect — failed.
  *
- * Coarse on purpose, and not good enough. [ObdConnector.discover] returns a bare
- * `Flow<DiscoveredAdapter>`, so a failure arrives as an untyped `Throwable` that common code
- * cannot inspect — `SppPermissionDeniedException` is a `java.io.IOException` declared in
- * :core:transport's androidMain and cannot be named here. The *connect* path is classified
- * properly, through [ConnectOutcome.Failed]; the *discover* path has no such channel, so the
- * best this can do is answer from the transport alone.
+ * [ConnectException] is the whole point. The exceptions worth telling a user about
+ * (`SppPermissionDeniedException`, and the bare `SecurityException` Kable throws on a refused
+ * `BLUETOOTH_SCAN`) are platform types that common code cannot name, so `ObdConnector` classifies
+ * them at the edge and the *reason* is what crosses over. Read it, and do not second-guess it.
  *
- * The cost is real: a refused `BLUETOOTH_SCAN` — the most common first-run failure there is —
- * reads as [ConnectFailure.ADAPTER_UNREACHABLE] and sends the user to check their hardware
- * instead of granting a permission. Closing this needs a typed failure on the port.
+ * **The `else` deliberately does not guess from the transport.** Answering
+ * [ConnectFailure.ADAPTER_UNREACHABLE] for an unclassified BLE failure would look reasonable and
+ * would be a trap: it puts *"the adapter did not answer, check that it is plugged in"* in front of
+ * a user who simply tapped Deny, sending them out to their car instead of to the settings button
+ * already on the screen. A fallback like that survives forever, because nothing can tell it apart
+ * from a live path — so the day the connector meets an exception it has never seen, the bug comes
+ * back silently.
+ *
+ * [ConnectFailure.INIT_FAILED] exists for exactly this. Saying "it failed and we cannot explain
+ * why" is unhelpful and harmless; guessing wrong is confident and costs us the user. `discover()`
+ * wraps everything, so reaching this branch at all is a bug in the connector, not a case to paper
+ * over here.
  */
-private fun TransportKind.scanFailure(): ConnectFailure = when (this) {
-    // The adapter is its own access point, so "cannot reach it" nearly always means the phone
-    // is still on some other network.
-    TransportKind.WIFI -> ConnectFailure.WIFI_NOT_JOINED
-    TransportKind.SPP -> ConnectFailure.SPP_PAIRING_REQUIRED
-    TransportKind.BLE -> ConnectFailure.ADAPTER_UNREACHABLE
+private fun Throwable.asConnectFailure(): ConnectFailure = when (this) {
+    is ConnectException -> reason
+    else -> ConnectFailure.INIT_FAILED
 }
 
 /**
