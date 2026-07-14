@@ -77,6 +77,26 @@ val ObdUnit.asIsLabelKey: String?
             ObdUnit.SECONDS -> "unit_seconds"
             ObdUnit.GRAMS_PER_SECOND -> "unit_grams_per_second"
             ObdUnit.LITERS_PER_HOUR -> "unit_liters_per_hour"
+
+            // An **angle** — ignition timing advance, steering angle. A bare `°`, and emphatically
+            // not `°C`: the two are one keystroke apart here and both look plausible on a gauge.
+            ObdUnit.DEGREES -> "unit_degrees"
+
+            ObdUnit.AMPS -> "unit_amps"
+            ObdUnit.MILLIAMPS -> "unit_milliamps"
+            ObdUnit.WATTS -> "unit_watts"
+            ObdUnit.KILOWATT_HOURS -> "unit_kilowatt_hours"
+            ObdUnit.AMPERE_HOURS -> "unit_ampere_hours"
+            ObdUnit.HERTZ -> "unit_hertz"
+            ObdUnit.KILOOHMS -> "unit_kiloohms"
+            ObdUnit.MILLIMETERS -> "unit_millimeters"
+            ObdUnit.MINUTES -> "unit_minutes"
+            ObdUnit.HOURS -> "unit_hours"
+            ObdUnit.MILLISECONDS -> "unit_milliseconds"
+            ObdUnit.KILOGRAMS_PER_HOUR -> "unit_kilograms_per_hour"
+            ObdUnit.METERS_PER_SECOND_SQUARED -> "unit_meters_per_second_squared"
+            ObdUnit.MILLIGRAMS_PER_STROKE -> "unit_milligrams_per_stroke"
+
             else -> null
         }
     }

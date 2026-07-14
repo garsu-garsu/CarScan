@@ -8,10 +8,21 @@ package com.bruni.carscan.core.units
  * of 18 °F. Handing a ΔT to [convert] is a real bug that ships, so the two cases are different
  * functions and the compiler makes you say which one you meant.
  *
- * Both functions return a bare [Double], which is **not a displayable value.** Calling
- * `toString()` on it hard-codes a `'.'` decimal separator, and six of the eight shipping locales
- * write `13,8`. To put a converted number on screen, go through [UnitReadout], which converts and
- * formats in one step precisely so the two cannot drift apart.
+ * Both functions return a bare [Double]. **Never `toString()` it** — that hard-codes a `'.'`
+ * decimal separator, and six of the eight shipping locales write `13,8`. A converted number
+ * becomes text in exactly one of two ways:
+ * - [UnitReadout], which converts and formats in one step — for axis labels, lists, anything whose
+ *   output really is a string;
+ * - a renderer that formats it itself. `:core:designsystem`'s gauges take a numeric `GaugeSpec` and
+ *   format through `LocalNumberFormatter` at draw time, so a `Double` is exactly what they want —
+ *   the needle angle and arc sweep are geometry, not text.
+ *
+ * The rule is about `toString()`, not about `Double`.
+ *
+ * One trap when feeding a gauge: convert the value **and its bounds together**. `GaugeSpec.min`
+ * and `max` are what the dial's tick labels are drawn from, so converting the value while leaving
+ * the bounds in the native unit puts the needle at the wrong angle *and* prints a dial in the
+ * wrong unit — a gauge that is wrong in a way that looks entirely plausible.
  */
 interface UnitConverter {
 
