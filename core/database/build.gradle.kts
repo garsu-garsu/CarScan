@@ -25,5 +25,11 @@ kotlin {
         findByName("iosMain")?.dependencies {
             implementation(libs.sqldelight.native.driver)
         }
+        // Host tests run on the JVM, where android.database.sqlite is a stub that throws.
+        // The JDBC driver is the same SQLite engine and honours the PRAGMAs, so the schema
+        // and the write path are exercised for real rather than mocked.
+        getByName("androidHostTest").dependencies {
+            implementation(libs.sqldelight.sqlite.driver)
+        }
     }
 }

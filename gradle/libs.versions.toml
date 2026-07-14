@@ -69,6 +69,10 @@ sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sq
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+# Host tests only. commonTest runs as androidHostTest — a plain JVM test — where
+# android.database.sqlite is a stub that throws on every call. Without a JDBC driver
+# there is no way to open a database in a test at all.
+sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidxDataStore" }
 
 # --- Compose Multiplatform ecosystem ---------------------------------------
