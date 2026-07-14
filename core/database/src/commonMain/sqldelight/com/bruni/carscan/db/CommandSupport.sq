@@ -1,0 +1,40 @@
+-- Which commands this particular car actually answers.
+--
+-- A signalset describes a model range, not the car in the driveway: trim levels
+-- and options mean a good third of the commands return NO DATA. Probing costs a
+-- full round trip on an adapter that can only do 10-20 per second, so once a
+-- command has been shown to be unsupported it must never be probed again.
+CREATE TABLE command_support (
+    vehicle_id TEXT    NOT NULL REFERENCES vehicle(id) ON DELETE CASCADE,
+    command_id TEXT    NOT NULL,
+    supported  INTEGER NOT NULL,
+    -- Kept even when supported = 1: an intermittent command is a different
+    -- problem from an absent one, and only the count tells them apart.
+    fail_count INTEGER NOT NULL DEFAULT 0,
+    probed_ms  INTEGER NOT NULL,
+    PRIMARY KEY (vehicle_id, command_id)
+);
+
+selectForVehicle:
+SELECT * FROM command_support WHERE vehicle_id = ?;
+
+selectUnsupportedForVehicle:
+SELECT * FROM command_support WHERE vehicle_id = ? AND supported = 0;
+
+selectOne:
+SELECT * FROM command_support WHERE vehicle_id = ? AND command_id = ?;
+
+upsert:
+INSERT OR REPLACE INTO command_support(vehicle_id, command_id, supported, fail_count, probed_ms)
+VALUES (?, ?, ?, ?, ?);
+
+recordFailure:
+UPDATE command_support
+SET fail_count = fail_count + 1, probed_ms = :probed_ms
+WHERE vehicle_id = :vehicle_id AND command_id = :command_id;
+
+deleteForVehicle:
+DELETE FROM command_support WHERE vehicle_id = ?;
+
+countAll:
+SELECT count(*) FROM command_support;

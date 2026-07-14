@@ -1,0 +1,30 @@
+-- The OBDb signalset, cached verbatim.
+--
+-- `json` is an OPAQUE TEXT BLOB and stays that way. OBDb data is CC BY-SA 4.0;
+-- code-generating it into .kt would make the generated source an adaptation of
+-- BY-SA data and encumber the app's own source. It is parsed at runtime, never
+-- compiled in. `etag` lets us revalidate without re-downloading.
+CREATE TABLE signalset (
+    repo       TEXT    NOT NULL,
+    variant    TEXT    NOT NULL,
+    etag       TEXT,
+    fetched_ms INTEGER NOT NULL,
+    json       TEXT    NOT NULL,
+    PRIMARY KEY (repo, variant)
+);
+
+selectByRepoVariant:
+SELECT * FROM signalset WHERE repo = ? AND variant = ?;
+
+selectVariantsForRepo:
+SELECT * FROM signalset WHERE repo = ?;
+
+upsert:
+INSERT OR REPLACE INTO signalset(repo, variant, etag, fetched_ms, json)
+VALUES (?, ?, ?, ?, ?);
+
+deleteByRepo:
+DELETE FROM signalset WHERE repo = ?;
+
+countAll:
+SELECT count(*) FROM signalset;

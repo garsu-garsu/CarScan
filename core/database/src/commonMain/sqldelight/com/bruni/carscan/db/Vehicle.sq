@@ -1,21 +1,59 @@
+-- Vehicles the user has connected to.
+--
+-- `id` is a UUID string, not an autoincrement integer. Backups are restored onto
+-- other devices; autoincrement primary keys collide by construction, so importing
+-- a backup could never be idempotent.
 CREATE TABLE vehicle (
-    id          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    vin         TEXT,
-    make        TEXT,
-    model       TEXT,
-    model_year  INTEGER,
-    signalset   TEXT,
-    created_at  INTEGER NOT NULL
+    id                TEXT    NOT NULL PRIMARY KEY,
+    vin               TEXT,
+    make              TEXT,
+    model             TEXT,
+    model_year        INTEGER,
+    obdb_repo         TEXT,
+    display_name      TEXT,
+    protocol_num      INTEGER,
+    last_connected_ms INTEGER,
+    created_ms        INTEGER NOT NULL
 );
 
-CREATE UNIQUE INDEX vehicle_vin ON vehicle(vin);
+-- Partial: a vehicle whose VIN we could not read is still a vehicle, and there
+-- may be several of them.
+CREATE UNIQUE INDEX vehicle_vin ON vehicle(vin) WHERE vin IS NOT NULL;
 
 selectAll:
-SELECT * FROM vehicle ORDER BY created_at DESC;
+SELECT * FROM vehicle ORDER BY last_connected_ms DESC, created_ms DESC;
+
+selectById:
+SELECT * FROM vehicle WHERE id = ?;
 
 selectByVin:
 SELECT * FROM vehicle WHERE vin = ?;
 
-insertVehicle:
-INSERT INTO vehicle(vin, make, model, model_year, signalset, created_at)
-VALUES (?, ?, ?, ?, ?, ?);
+-- Upsert is INSERT OR IGNORE + UPDATE, never INSERT OR REPLACE: REPLACE deletes
+-- the conflicting row first, and the ON DELETE CASCADE on trip/dtc_event would
+-- take the vehicle's entire history with it. It is also not ON CONFLICT DO
+-- UPDATE, because SQLite UPSERT needs 3.24 and minSdk 26 ships SQLite 3.18.
+insertOrIgnore:
+INSERT OR IGNORE INTO vehicle(id, vin, make, model, model_year, obdb_repo, display_name, protocol_num, last_connected_ms, created_ms)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+update:
+UPDATE vehicle
+SET vin = :vin,
+    make = :make,
+    model = :model,
+    model_year = :model_year,
+    obdb_repo = :obdb_repo,
+    display_name = :display_name,
+    protocol_num = :protocol_num,
+    last_connected_ms = :last_connected_ms
+WHERE id = :id;
+
+touchLastConnected:
+UPDATE vehicle SET last_connected_ms = ? WHERE id = ?;
+
+deleteById:
+DELETE FROM vehicle WHERE id = ?;
+
+countAll:
+SELECT count(*) FROM vehicle;

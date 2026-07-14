@@ -1,0 +1,44 @@
+-- The learned-quirks table.
+--
+-- The first connection to an ELM327 clone is slow because we have to discover
+-- what it actually is: which GATT characteristics carry the serial stream, whether
+-- it echoes, whether it is an STN chip that understands expected-frame counts, how
+-- many bytes it will accept in one write. None of that is discoverable from the
+-- advertisement. Writing it down here is what makes the *second* connection fast.
+CREATE TABLE adapter (
+    address                  TEXT    NOT NULL PRIMARY KEY,
+    -- TransportKind: BLE / SPP / TCP.
+    kind                     TEXT    NOT NULL,
+    name                     TEXT,
+    gatt_service             TEXT,
+    gatt_write               TEXT,
+    gatt_notify              TEXT,
+    is_stn                   INTEGER NOT NULL DEFAULT 0,
+    supports_expected_frames INTEGER NOT NULL DEFAULT 0,
+    echo_suppression_needed  INTEGER NOT NULL DEFAULT 0,
+    max_write_chunk          INTEGER NOT NULL DEFAULT 20,
+    -- Exponentially weighted mean round-trip time. Seeds the scheduler's governor
+    -- so the very first poll cycle is already paced for this adapter.
+    ewma_rtt_ms              REAL,
+    last_used_ms             INTEGER
+);
+
+selectAll:
+SELECT * FROM adapter ORDER BY last_used_ms DESC;
+
+selectByAddress:
+SELECT * FROM adapter WHERE address = ?;
+
+-- Safe as REPLACE: nothing references adapter, so there is no cascade to trip over.
+upsert:
+INSERT OR REPLACE INTO adapter(address, kind, name, gatt_service, gatt_write, gatt_notify, is_stn, supports_expected_frames, echo_suppression_needed, max_write_chunk, ewma_rtt_ms, last_used_ms)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateRtt:
+UPDATE adapter SET ewma_rtt_ms = :ewma_rtt_ms, last_used_ms = :last_used_ms WHERE address = :address;
+
+deleteByAddress:
+DELETE FROM adapter WHERE address = ?;
+
+countAll:
+SELECT count(*) FROM adapter;

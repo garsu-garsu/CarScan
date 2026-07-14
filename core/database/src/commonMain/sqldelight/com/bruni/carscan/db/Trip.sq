@@ -1,0 +1,55 @@
+-- One recorded drive. Totals are maintained incrementally by SampleWriter, in the
+-- same transaction as the chunk that produced them, so a trip's summary can never
+-- disagree with its series.
+--
+-- Every column is in the native/SI unit the sample arrived in — metres, millilitres,
+-- watt-hours, km/h. Display conversion happens once, at the presentation edge.
+CREATE TABLE trip (
+    id            TEXT    NOT NULL PRIMARY KEY,
+    vehicle_id    TEXT    NOT NULL REFERENCES vehicle(id) ON DELETE CASCADE,
+    started_ms    INTEGER NOT NULL,
+    ended_ms      INTEGER,
+    distance_m    REAL    NOT NULL DEFAULT 0.0,
+    fuel_ml       REAL    NOT NULL DEFAULT 0.0,
+    energy_wh     REAL    NOT NULL DEFAULT 0.0,
+    max_speed_kmh REAL    NOT NULL DEFAULT 0.0,
+    idle_ms       INTEGER NOT NULL DEFAULT 0,
+    sample_count  INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX trip_vehicle ON trip(vehicle_id, started_ms DESC);
+
+-- OR IGNORE, not OR REPLACE: re-importing a backup must land on the existing row
+-- rather than delete it, because ON DELETE CASCADE would take trip_series and
+-- trip_gps with it. This is what makes import idempotent.
+insertOrIgnore:
+INSERT OR IGNORE INTO trip(id, vehicle_id, started_ms, ended_ms, distance_m, fuel_ml, energy_wh, max_speed_kmh, idle_ms, sample_count)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectById:
+SELECT * FROM trip WHERE id = ?;
+
+selectForVehicle:
+SELECT * FROM trip WHERE vehicle_id = ? ORDER BY started_ms DESC;
+
+selectAll:
+SELECT * FROM trip ORDER BY started_ms DESC;
+
+updateTotals:
+UPDATE trip
+SET distance_m = :distance_m,
+    fuel_ml = :fuel_ml,
+    energy_wh = :energy_wh,
+    max_speed_kmh = :max_speed_kmh,
+    idle_ms = :idle_ms,
+    sample_count = :sample_count
+WHERE id = :id;
+
+finish:
+UPDATE trip SET ended_ms = :ended_ms WHERE id = :id;
+
+deleteById:
+DELETE FROM trip WHERE id = ?;
+
+countAll:
+SELECT count(*) FROM trip;

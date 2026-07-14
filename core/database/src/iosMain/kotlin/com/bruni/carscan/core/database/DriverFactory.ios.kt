@@ -6,5 +6,5 @@ import com.bruni.carscan.db.CarScanDb
 
 actual class DriverFactory {
     actual fun createDriver(): SqlDriver =
-        NativeSqliteDriver(CarScanDb.Schema, "carscan.db")
+        NativeSqliteDriver(CarScanDb.Schema, "carscan.db").also(::applyCarScanPragmas)
 }

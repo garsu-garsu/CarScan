@@ -1,0 +1,37 @@
+import kotlin.DoubleArray;
+import kotlin.FloatArray;
+
+-- Route playback. Same columnar shape as trip_series: one row per 10-minute chunk,
+-- one packed array per field, element i = second (t0_s + i).
+--
+-- lat/lon are DoubleArray, not FloatArray. A float32 holds ~7 significant decimal
+-- digits, and a latitude like 37.5665 spends six of them before the decimal point's
+-- worth of precision is used up — the residual error lands around a metre, which is
+-- visible as a route that snakes off the road on a zoomed-in map. Altitude, speed
+-- and bearing have no such problem and stay float32.
+CREATE TABLE trip_gps (
+    trip_id     TEXT    NOT NULL REFERENCES trip(id) ON DELETE CASCADE,
+    chunk_index INTEGER NOT NULL,
+    t0_s        INTEGER NOT NULL,
+    n           INTEGER NOT NULL,
+    lat         BLOB AS kotlin.DoubleArray NOT NULL,
+    lon         BLOB AS kotlin.DoubleArray NOT NULL,
+    -- metres, km/h, degrees
+    alt         BLOB AS kotlin.FloatArray  NOT NULL,
+    speed       BLOB AS kotlin.FloatArray  NOT NULL,
+    bearing     BLOB AS kotlin.FloatArray  NOT NULL,
+    PRIMARY KEY (trip_id, chunk_index)
+);
+
+upsert:
+INSERT OR REPLACE INTO trip_gps(trip_id, chunk_index, t0_s, n, lat, lon, alt, speed, bearing)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectTrip:
+SELECT * FROM trip_gps WHERE trip_id = ? ORDER BY chunk_index;
+
+deleteForTrip:
+DELETE FROM trip_gps WHERE trip_id = ?;
+
+countAll:
+SELECT count(*) FROM trip_gps;

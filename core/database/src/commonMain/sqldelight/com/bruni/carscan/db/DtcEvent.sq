@@ -1,0 +1,51 @@
+-- Diagnostic trouble codes, as *events* rather than as current state: a code that
+-- came back three times after being cleared is a different story from one that
+-- appeared yesterday, and only a history can tell them apart.
+--
+-- `ecu` is NOT NULL with an '' default on purpose. It is genuinely unknown for some
+-- adapters, but SQLite treats NULLs as distinct in a UNIQUE index, so a nullable ecu
+-- would let the same open code be inserted over and over — the exact duplication the
+-- index exists to prevent.
+CREATE TABLE dtc_event (
+    id            TEXT    NOT NULL PRIMARY KEY,
+    vehicle_id    TEXT    NOT NULL REFERENCES vehicle(id) ON DELETE CASCADE,
+    code          TEXT    NOT NULL,
+    -- stored / pending / permanent
+    status        TEXT    NOT NULL,
+    ecu           TEXT    NOT NULL DEFAULT '',
+    first_seen_ms INTEGER NOT NULL,
+    last_seen_ms  INTEGER NOT NULL,
+    cleared_ms    INTEGER,
+    freeze_frame  TEXT
+);
+
+-- One OPEN dtc per (vehicle, code, ecu). Cleared ones are history and may repeat.
+CREATE UNIQUE INDEX dtc_event_open ON dtc_event(vehicle_id, code, ecu) WHERE cleared_ms IS NULL;
+
+CREATE INDEX dtc_event_vehicle ON dtc_event(vehicle_id, last_seen_ms DESC);
+
+insertOrIgnore:
+INSERT OR IGNORE INTO dtc_event(id, vehicle_id, code, status, ecu, first_seen_ms, last_seen_ms, cleared_ms, freeze_frame)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+-- Re-seeing an already-open code moves last_seen_ms; it does not create a row.
+touchOpen:
+UPDATE dtc_event
+SET last_seen_ms = :last_seen_ms, status = :status
+WHERE vehicle_id = :vehicle_id AND code = :code AND ecu = :ecu AND cleared_ms IS NULL;
+
+selectOpenForVehicle:
+SELECT * FROM dtc_event WHERE vehicle_id = ? AND cleared_ms IS NULL ORDER BY last_seen_ms DESC;
+
+selectAllForVehicle:
+SELECT * FROM dtc_event WHERE vehicle_id = ? ORDER BY last_seen_ms DESC;
+
+selectOpen:
+SELECT * FROM dtc_event
+WHERE vehicle_id = ? AND code = ? AND ecu = ? AND cleared_ms IS NULL;
+
+clearAllForVehicle:
+UPDATE dtc_event SET cleared_ms = :cleared_ms WHERE vehicle_id = :vehicle_id AND cleared_ms IS NULL;
+
+countAll:
+SELECT count(*) FROM dtc_event;

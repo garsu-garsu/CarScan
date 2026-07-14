@@ -1,0 +1,56 @@
+import kotlin.FloatArray;
+
+-- The columnar 1 Hz store. This is the central storage decision of the app.
+--
+-- One row per sample would be 54,000 rows/hour for 15 signals, and scrubbing a
+-- trip timeline would become a query storm. Instead one row holds a packed
+-- FloatArray for (trip, signal, 10-minute chunk): ~220 KB/hour instead of ~1.6 MB,
+-- and an entire trip loads into memory in a handful of reads, so playback
+-- scrubbing is instant.
+--
+-- `series` is one float per second. Element i is the second (t0_s + i) since the
+-- trip started, so position *is* the timestamp and no per-sample time column is
+-- needed. A second in which the signal produced no sample is NaN — an honest gap
+-- rather than a fabricated carry-forward.
+--
+-- Nothing above 1 Hz is ever written. The 20 Hz live chart reads an in-memory ring
+-- buffer; drawing 30 seconds on screen needs no disk at all.
+CREATE TABLE trip_series (
+    trip_id     TEXT    NOT NULL REFERENCES trip(id) ON DELETE CASCADE,
+    signal_id   TEXT    NOT NULL,
+    chunk_index INTEGER NOT NULL,
+    -- Seconds since trip start for element 0 of `series` (= chunk_index * 600).
+    t0_s        INTEGER NOT NULL,
+    -- Number of 1-second slots in `series`, i.e. series.size.
+    n           INTEGER NOT NULL,
+    series      BLOB AS kotlin.FloatArray NOT NULL,
+    -- Chunk aggregates over the non-NaN slots of `series`. NULL when the chunk is
+    -- all gaps. Precomputed so the trip list does not have to unpack every BLOB.
+    min_v       REAL,
+    max_v       REAL,
+    avg_v       REAL,
+    PRIMARY KEY (trip_id, signal_id, chunk_index)
+);
+
+-- Safe as REPLACE: no table references trip_series, so there is no cascade.
+upsert:
+INSERT OR REPLACE INTO trip_series(trip_id, signal_id, chunk_index, t0_s, n, series, min_v, max_v, avg_v)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectChunk:
+SELECT * FROM trip_series WHERE trip_id = ? AND signal_id = ? AND chunk_index = ?;
+
+selectSignal:
+SELECT * FROM trip_series WHERE trip_id = ? AND signal_id = ? ORDER BY chunk_index;
+
+selectTrip:
+SELECT * FROM trip_series WHERE trip_id = ? ORDER BY signal_id, chunk_index;
+
+selectSignalIds:
+SELECT DISTINCT signal_id FROM trip_series WHERE trip_id = ? ORDER BY signal_id;
+
+deleteForTrip:
+DELETE FROM trip_series WHERE trip_id = ?;
+
+countAll:
+SELECT count(*) FROM trip_series;

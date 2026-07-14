@@ -1,0 +1,54 @@
+-- A saved dashboard. `vehicle_id` is nullable: a NULL layout is a global one that
+-- applies to any car, which is what a user gets before they have paired anything.
+-- The FK is not violated by NULL, so the ON DELETE CASCADE only reaps the layouts
+-- that were actually bound to the deleted vehicle.
+--
+-- `layout_json` is opaque here on purpose. Tile geometry and gauge styling belong
+-- to the presentation layer, and the schema should not have to migrate every time
+-- a new gauge type ships.
+CREATE TABLE dashboard_layout (
+    id          TEXT    NOT NULL PRIMARY KEY,
+    vehicle_id  TEXT    REFERENCES vehicle(id) ON DELETE CASCADE,
+    name        TEXT    NOT NULL,
+    is_active   INTEGER NOT NULL DEFAULT 0,
+    layout_json TEXT    NOT NULL
+);
+
+CREATE INDEX dashboard_layout_vehicle ON dashboard_layout(vehicle_id);
+
+insertOrIgnore:
+INSERT OR IGNORE INTO dashboard_layout(id, vehicle_id, name, is_active, layout_json)
+VALUES (?, ?, ?, ?, ?);
+
+update:
+UPDATE dashboard_layout
+SET vehicle_id = :vehicle_id, name = :name, is_active = :is_active, layout_json = :layout_json
+WHERE id = :id;
+
+selectById:
+SELECT * FROM dashboard_layout WHERE id = ?;
+
+selectAll:
+SELECT * FROM dashboard_layout ORDER BY name;
+
+-- The layouts usable with this vehicle: its own, plus the global ones.
+selectForVehicle:
+SELECT * FROM dashboard_layout WHERE vehicle_id = ? OR vehicle_id IS NULL ORDER BY name;
+
+selectActiveForVehicle:
+SELECT * FROM dashboard_layout
+WHERE is_active = 1 AND (vehicle_id = ? OR vehicle_id IS NULL)
+ORDER BY vehicle_id IS NULL
+LIMIT 1;
+
+deactivateForVehicle:
+UPDATE dashboard_layout SET is_active = 0 WHERE vehicle_id = :vehicle_id OR vehicle_id IS NULL;
+
+activate:
+UPDATE dashboard_layout SET is_active = 1 WHERE id = ?;
+
+deleteById:
+DELETE FROM dashboard_layout WHERE id = ?;
+
+countAll:
+SELECT count(*) FROM dashboard_layout;
