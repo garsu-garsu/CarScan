@@ -21,8 +21,26 @@ kotlin {
         commonTest.dependencies {
             implementation(compose.uiTest)
         }
-        getByName("jvmTest").dependencies {
-            implementation(compose.desktop.currentOs)   // Skiko natives for the headless renderer
+
+        // Compose UI tests cannot live in commonTest, because androidHostTest compiles and runs
+        // commonTest too — and there they die on a null android.os.Build.FINGERPRINT, since a
+        // plain JVM unit test has no device, no Activity and no Looper.
+        //
+        // So they go in a source set shared by exactly the targets that CAN host a Compose test:
+        // the JVM (headless Skiko) and iOS. Android is excluded by construction rather than by
+        // remembering not to put things there.
+        val skikoTest by creating { dependsOn(commonTest.get()) }
+
+        getByName("jvmTest") {
+            dependsOn(skikoTest)
+            dependencies {
+                implementation(compose.desktop.currentOs)   // Skiko natives for the headless renderer
+            }
+        }
+
+        // Apple targets only exist on a macOS host.
+        listOf("iosX64Test", "iosArm64Test", "iosSimulatorArm64Test").forEach { name ->
+            findByName(name)?.dependsOn(skikoTest)
         }
     }
 }
