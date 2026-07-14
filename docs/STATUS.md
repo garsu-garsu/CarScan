@@ -4,7 +4,7 @@
 > 세션이 끊기거나(토큰 한도 등) 새 세션에서 재개할 때의 단일 진실 공급원.
 > 전체 설계는 `C:\Users\Mureung\.claude\plans\lucky-forging-pascal.md`.
 
-**마지막 갱신**: 2026-07-13 / M2 진행 중
+**마지막 갱신**: 2026-07-14 / **M0~M4 완료**, M5(대시보드·라이브 화면 = MVP) 대기
 
 ---
 
@@ -35,21 +35,28 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 
 ## 진행 상황
 
-| 마일스톤 | 상태 | 비고 |
+| 마일스톤 | 상태 | 테스트 |
 |---|---|---|
-| **M0** 빌드 스켈레톤 | ✅ 완료·푸시 (`bf0491b`) | AGP 9 폴백 없이 통과 |
-| **프리즈** 모델·트랜스포트 계약 | ✅ 완료·푸시 (`45ec13d`) | |
-| **M1-B** `:core:vehicle` | ✅ 검수 통과, **커밋 대기** | 테스트 31개 초록, RED 증명 확인 |
-| **M1-A** `:core:obd` 디코더 | 🔄 진행 중 (`m1-decoder`) | |
-| **M2-D** BLE (Kable) | 🔄 진행 중 (`m2-ble`) | |
-| **M2-E** SPP (Android) | 🔄 진행 중 (`m2-spp`) | |
-| **M2-F** TCP + Fake + ELM 에뮬레이터 | 🔄 진행 중 (`m2-emulator`) | |
-| M3 세션·폴러·DB | ⬜ 대기 | M1+M2 필요 |
-| M4 디자인시스템·게이지 | ⬜ 대기 | M0+M2 에뮬레이터만 있으면 병렬 가능 |
-| M5 대시보드·그래프 = MVP | ⬜ 대기 | |
+| **M0** 빌드 스켈레톤 | ✅ `bf0491b` | AGP 9 폴백 없이 통과 |
+| **프리즈** 모델·트랜스포트 | ✅ `45ec13d` | |
+| **M1** 디코더 + 시그널셋 | ✅ `f7a1e8a`, `429a6fb` | obd 140 · vehicle 31 |
+| **M2** 트랜스포트 3종 + 에뮬레이터 | ✅ `429a6fb` | transport 95 |
+| **M3** 세션·폴러 | ✅ `d333ed7` | (obd 140에 포함) |
+| **M3** DB·리포지토리 | ✅ `0a3064f` | database 34 · data 37 |
+| **M4** 게이지·라이브차트 | ✅ `1550029`, `2eea7f9` | designsystem 102 |
+| **M5** 대시보드 + 라이브 화면 = **MVP** | ⬜ 다음 | |
+| M6 설정·i18n·라이선스·수익화 | ⬜ | |
+
+**총 439개 테스트, 실패 0.**
+
+### 남은 기술 부채 (M5/M6에서 처리)
+- **로케일 인식 숫자 포매터가 없다.** `commonMain`에 없고 `String.format`은 `java.*`라 iOS에서 안 된다. 지금 게이지 숫자의 소수점은 `.` 하드코딩. **8개 로케일 중 6개(ru/de/pl/pt-BR/es/uk)가 쉼표를 쓴다.** `:core:units`에 expect/actual 포매터 필요. 반드시 반올림 의미론을 유지할 것.
+- `dout`(진단 세션 복원) 미구현 — OBDb에 쓰는 차종이 있는지 확인 필요.
+- `:core:obd`의 `PollerHealth` → `:core:data`의 `SessionHealth` 매핑을 `:composeApp` Koin 모듈에서 바인딩해야 함 (M5).
+- iOS는 여전히 **한 번도 컴파일된 적 없음**.
 
 ### 지금 막힌 것
-`core/transport/src/commonMain/.../fake/ScriptedPipe.kt:87` 컴파일 에러(`Unit?` 추론)로 `:core:transport` 가 깨져 있고, `:core:obd` 가 api-의존이라 `m1-decoder` 까지 연쇄로 막힌다. 파일 주인은 `m2-emulator`. 다른 에이전트가 남의 파일을 고치지 않는 것은 **의도된 계약**이다.
+없음.
 
 ---
 
@@ -67,7 +74,18 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 
 1. **테스트를 독립 실행**한다 (`./gradlew :core:xxx:allTests`).
 2. **RED를 재현한다** — 프로덕션 코드를 일부러 망가뜨렸을 때 테스트가 실제로 실패하는지 확인. 안 터지면 그 테스트는 아무것도 지키지 못하므로 반려.
-   실제 사례: `YearFilter.matches` 의 역구간 분기를 순진한 교집합으로 바꾸자 `:core:vehicle` 테스트 3개가 정확히 실패 → 유효한 테스트임이 증명됨.
+
+   **⚠️ 변이 테스트에는 반드시 `--rerun-tasks` 를 붙일 것.** Kotlin 증분 컴파일이 낡은 클래스를 물고 있으면, 변이를 넣었는데 *예전의 올바른* 클래스로 테스트가 돌아 **통과해버린다.** 그러면 "이 테스트는 아무것도 안 지킨다"고 오판해서 **멀쩡한 테스트를 지우게 된다.** 이건 실제로 한 번 발생했다(`m4-gauges` 보고).
+
+   **또한 컴파일 통과 ≠ 검증.** `compileKotlinJvm` 이 초록이어도 실행 시 죽을 수 있다 — Compose UI 테스트가 `androidHostTest` 에서 `Build.FINGERPRINT` null 로 죽는 걸 컴파일만으로는 절대 볼 수 없다. **반드시 테스트를 *실행*할 것.**
+
+   지금까지 재현된 변이 (전부 정확히 RED):
+   - `YearFilter.matches` 역구간 → 순진한 교집합: vehicle 테스트 3개 실패
+   - `IsoTpReassembler` 시퀀스 검사 제거 (= OBDb 레퍼런스와 동일 동작): obd 테스트 2개 실패
+   - `ElmSession` 뮤텍스 제거: `200 exchanges from 20 coroutines never cross their answers` 실패
+   - `PidScheduler` AT 어피니티 제거: `six commands across two headers cost exactly two ATSH per round` 실패
+   - `LivePlot` revision 읽기를 draw→composition 으로 한 줄 이동: `"차트가 600번 리컴포즈됨"` 실패
+   - `SampleWriter` 배치 트랜잭션 제거: `200 samples/sec for 10s costs 10 transactions, not 2000` 실패
 3. **라이선스**: OBDb 데이터를 가져왔다면 `SOURCE.md` 에 저장소 + 커밋 SHA + CC BY-SA 4.0 고지·링크·수정 여부가 있어야 한다.
 4. **스테이징 주의**: `git add <디렉터리>` 는 아직 작업 중인 다른 에이전트의 미완성 파일까지 쓸어담는다. **파일을 명시해서** add 할 것.
 
