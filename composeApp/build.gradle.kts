@@ -57,12 +57,24 @@ kotlin {
             // down: a literal would go stale silently and a signalset filtered to the wrong year
             // drops commands without an error.
             implementation(libs.kotlinx.datetime)
+
+            // HTTP for downloading OBDb signalsets on demand (the engine is per-platform, below).
+            // This is a plain HTTPS GET to raw.githubusercontent.com — nothing to do with the
+            // ktor-network raw TCP the Wi-Fi ELM327 transport uses.
+            implementation(libs.ktor.client.core)
         }
 
         androidMain.dependencies {
             // androidContext() — the platform bindings need a Context for the SQLite driver, the
             // preferences file, the SPP radio and the settings deep-link.
             implementation(libs.koin.android)
+            implementation(libs.ktor.client.okhttp)
+        }
+
+        // The iOS engine only where the Apple targets are registered (macOS host); on Windows the
+        // iosMain source set does not exist, so this is a no-op rather than a configuration error.
+        findByName("iosMain")?.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
 
         getByName("androidHostTest").dependencies {
