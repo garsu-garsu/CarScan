@@ -35,6 +35,7 @@ kotlin {
             implementation(project(":feature:hud"))
             implementation(project(":feature:trip"))
             implementation(project(":feature:settings"))
+            implementation(project(":feature:garage"))
 
             implementation(koinBom)
             implementation(libs.koin.core)

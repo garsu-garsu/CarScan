@@ -51,6 +51,7 @@ include(":feature:dtc")
 include(":feature:hud")
 include(":feature:trip")
 include(":feature:settings")
+include(":feature:garage")
 
 // Android-only platform modules (the only ones allowed to use com.android.library)
 include(":platform:android-ads")
