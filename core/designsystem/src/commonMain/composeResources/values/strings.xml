@@ -211,4 +211,9 @@
     <string name="about_obdb_no_changes">The data was used unchanged.</string>
     <string name="about_licenses_heading">Open-source licenses</string>
 
+    <!-- Garage: the vehicle picker -->
+    <string name="garage_title">Garage</string>
+    <string name="garage_instruction">Choose your vehicle</string>
+    <string name="garage_empty">No vehicles available yet.</string>
+
 </resources>

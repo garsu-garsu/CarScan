@@ -168,4 +168,8 @@
     <string name="about_obdb_no_changes">Дані використано без змін.</string>
     <string name="about_licenses_heading">Ліцензії відкритого коду</string>
 
+    <string name="garage_title">Гараж</string>
+    <string name="garage_instruction">Виберіть свій автомобіль</string>
+    <string name="garage_empty">Поки немає доступних автомобілів.</string>
+
 </resources>
