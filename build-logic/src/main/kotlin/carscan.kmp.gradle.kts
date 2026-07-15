@@ -20,6 +20,15 @@ kotlin {
         compileSdk = libs.findVersion("compileSdk").get().requiredVersion.toInt()
         minSdk = libs.findVersion("minSdk").get().requiredVersion.toInt()
 
+        // Without this, Compose Multiplatform resources (composeResources/*.cvr — every string,
+        // every bundled OBDb asset) are generated but NEVER copied into the APK's assets under
+        // AGP 9's com.android.kotlin.multiplatform.library plugin, and the app dies at first
+        // string with MissingResourceException. See JetBrains CMP-9547. Found the hard way on the
+        // first real-device run: a Korean-locale tablet crashed on the connect screen loading
+        // values-ko. Host tests never caught it — they read resources off the JVM classpath, not
+        // the packaged APK.
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+
         // JVM host tests — this is what actually runs commonTest on Windows.
         withHostTestBuilder {}.configure {}
 
