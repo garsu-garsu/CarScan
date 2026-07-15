@@ -81,6 +81,45 @@ class ConnectViewModelTest {
         }
     }
 
+    // --- the scan list has to hold still to be usable -----------------------------------
+
+    @Test
+    fun `a peripheral re-advertising keeps its place in the list instead of churning`() =
+        runTest(dispatcher) {
+            // A real BLE scan re-emits the same address several times a second. If each sighting
+            // sent the row to the bottom, the list would reorder under the user's finger and a tap
+            // would never land — which is exactly what a device reported.
+            val first = DiscoveredAdapter(TransportKind.BLE, "AA:BB:CC:DD:EE:01", "OBDII", rssi = -55)
+            val second = DiscoveredAdapter(TransportKind.BLE, "AA:BB:CC:DD:EE:02", "Vgate", rssi = -60)
+            val connector = FakeObdConnector.readyWith(summary())
+            connector.discovered = listOf(first, second, first.copy(rssi = -50)) // first re-advertises last
+
+            val vm = viewModel(connector = connector)
+            vm.onIntent(ConnectIntent.Scan)
+            advanceUntilIdle()
+
+            val ble = vm.state.value.sections.single { it.kind == TransportKind.BLE }.adapters
+            ble.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01", "AA:BB:CC:DD:EE:02")
+            // refreshed in place — not duplicated, not moved to the end.
+            ble.first().rssi shouldBe -50
+        }
+
+    @Test
+    fun `a device with no advertised name never enters the list`() = runTest(dispatcher) {
+        val named = DiscoveredAdapter(TransportKind.BLE, "AA:BB:CC:DD:EE:01", "OBDII", rssi = -55)
+        val nameless = DiscoveredAdapter(TransportKind.BLE, "11:22:33:44:55:66", name = null, rssi = -40)
+        val blank = DiscoveredAdapter(TransportKind.BLE, "77:88:99:AA:BB:CC", name = "  ", rssi = -40)
+        val connector = FakeObdConnector.readyWith(summary())
+        connector.discovered = listOf(nameless, named, blank)
+
+        val vm = viewModel(connector = connector)
+        vm.onIntent(ConnectIntent.Scan)
+        advanceUntilIdle()
+
+        val ble = vm.state.value.sections.single { it.kind == TransportKind.BLE }.adapters
+        ble.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01")
+    }
+
     // --- the capability rule ------------------------------------------------------------
 
     @Test

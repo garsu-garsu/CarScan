@@ -48,6 +48,13 @@ class FakeObdConnector(
      */
     var discoveryFailsWith: ConnectFailure? = ConnectFailure.BLUETOOTH_PERMISSION
 
+    /**
+     * A scripted sequence a scan emits, in order — set to model what a real BLE scan does that the
+     * default fixtures do not: the same peripheral re-advertising, and nameless nearby devices.
+     * Null means delegate to [FakeTransportFactory]'s default one-shot fixtures.
+     */
+    var discovered: List<DiscoveredAdapter>? = null
+
     override fun discover(kind: TransportKind): Flow<DiscoveredAdapter> =
         if (kind == discoveryFailsOn) {
             flow {
@@ -56,7 +63,9 @@ class FakeObdConnector(
                     ?: IllegalStateException("scan refused, reason unknown")
             }
         } else {
-            transports.discover(kind)
+            discovered?.let { scripted ->
+                flow { scripted.filter { it.kind == kind }.forEach { emit(it) } }
+            } ?: transports.discover(kind)
         }
 
     override suspend fun connect(target: DiscoveredAdapter, remembered: AdapterQuirks?): ConnectOutcome {
