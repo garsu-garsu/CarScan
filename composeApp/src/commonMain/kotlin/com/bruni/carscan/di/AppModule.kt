@@ -7,11 +7,14 @@ import com.bruni.carscan.core.data.DefaultAdapterRepository
 import com.bruni.carscan.core.data.DefaultDashboardLayoutRepository
 import com.bruni.carscan.core.data.DefaultSettingsRepository
 import com.bruni.carscan.core.data.DefaultTripRepository
+import com.bruni.carscan.core.data.DefaultVehicleRepository
 import com.bruni.carscan.core.data.DefaultVehicleSessionRepository
 import com.bruni.carscan.core.data.ObdConnector
 import com.bruni.carscan.core.data.SampleSource
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.TripRepository
+import com.bruni.carscan.core.data.VehicleCatalog
+import com.bruni.carscan.core.data.VehicleRepository
 import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.data.VisibleSignals
 import com.bruni.carscan.core.database.createDatabase
@@ -22,6 +25,7 @@ import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.liveModule
 import com.bruni.carscan.feature.settings.settingsModule
 import com.bruni.carscan.obd.BundledSignalsetSource
+import com.bruni.carscan.obd.BundledVehicleCatalog
 import com.bruni.carscan.obd.ElmObdConnector
 import com.bruni.carscan.obd.SignalsetSource
 import com.bruni.carscan.obd.TripRecorder
@@ -59,8 +63,12 @@ fun appModule(): Module = module {
     single<SettingsRepository> { DefaultSettingsRepository(get()) }
     single<DashboardLayoutRepository> { DefaultDashboardLayoutRepository(get()) }
     single<TripRepository> { DefaultTripRepository(get(), get()) }
+    single<VehicleRepository> { DefaultVehicleRepository(get()) }
+    single<VehicleCatalog> { BundledVehicleCatalog() }
 
-    single<SignalsetSource> { BundledSignalsetSource(modelYear = currentYear()) }
+    single<SignalsetSource> {
+        BundledSignalsetSource(modelYear = currentYear(), settings = get(), vehicles = get())
+    }
     single { VehicleRows(get()) }
 
     // One instance, four ports. See the KDoc above.
