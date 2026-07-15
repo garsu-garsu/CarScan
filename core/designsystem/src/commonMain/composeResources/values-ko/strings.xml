@@ -157,4 +157,8 @@
     <string name="about_obdb_no_changes">데이터는 수정 없이 그대로 사용되었습니다.</string>
     <string name="about_licenses_heading">오픈소스 라이선스</string>
 
+    <string name="garage_title">차고</string>
+    <string name="garage_instruction">차량을 선택하세요</string>
+    <string name="garage_empty">아직 선택 가능한 차량이 없습니다.</string>
+
 </resources>

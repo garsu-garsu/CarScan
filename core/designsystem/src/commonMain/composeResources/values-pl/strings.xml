@@ -168,4 +168,8 @@
     <string name="about_obdb_no_changes">Dane zostały użyte bez zmian.</string>
     <string name="about_licenses_heading">Licencje open source</string>
 
+    <string name="garage_title">Garaż</string>
+    <string name="garage_instruction">Wybierz swój pojazd</string>
+    <string name="garage_empty">Brak dostępnych pojazdów.</string>
+
 </resources>
