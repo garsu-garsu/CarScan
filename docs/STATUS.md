@@ -4,7 +4,7 @@
 > 세션이 끊기거나(토큰 한도 등) 새 세션에서 재개할 때의 단일 진실 공급원.
 > 전체 설계는 `C:\Users\Mureung\.claude\plans\lucky-forging-pascal.md`.
 
-**마지막 갱신**: 2026-07-15 / **M0~M5 완료 + M6 대부분 + M7 차량 선택·신호셋 다운로드 계층 완료**. 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 + 온디맨드 다운로드·ETag 캐시까지 됨. 남은 것: 실제 광고·결제 배선(스토어 계정 필요), HUD, 실기기 검증.
+**마지막 갱신**: 2026-07-15 / **M0~M5 완료 + M6 대부분 + M7 차량 선택·신호셋 다운로드·HUD 완료**. 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 + 온디맨드 다운로드·ETag 캐시 + 앞유리 HUD까지 됨. 남은 것: 실제 광고·결제 배선(스토어 계정 필요), 실기기 검증.
 
 ---
 
@@ -48,7 +48,8 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 | **M6** 실제 광고·결제 배선 + Play 내부 테스트 | ⬜ 보류(스토어 계정 필요) | |
 | **M7** 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 | ✅ | garage · composeApp 신호셋 로딩 |
 | **M7** 신호셋 다운로드 계층(번들+온디맨드 캐시) | ✅ | cache 5 · downloader/provider 11 · garage 5 |
-| **M7** HUD · 실기기 검증 | ⬜ 다음 | DTC·안드로이드 오토는 **제외** |
+| **M7** HUD(앞유리 게이지) | ✅ | hud 6 |
+| **M7** 실기기 검증 | ⬜ 다음 | DTC·안드로이드 오토는 **제외** |
 
 **총 700개 이상 테스트, 실패 0. 재현된 변이 40건 이상.**
 
@@ -57,7 +58,8 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 - **DTC 조회/삭제는 제외** — 표준 OBD는 배출가스 DTC만, 나머지는 제조사 UDS(우리도 OBDb도 없음). 체크엔진 조회/삭제만 저비용 독립 기능으로 나중에 붙일 여지는 있음.
 - **안드로이드 오토 제외** — 템플릿이 커스텀 게이지 렌더링 불가 + OBD 미승인 카테고리. 차 안 게이지는 **HUD**로.
 - **신호셋 다운로드 계층 완료**: `SignalsetProvider`(번들→캐시→다운로드 우선순위), `SignalsetCache`(signalset 테이블 위 리포지토리), `KtorSignalsetDownloader`(raw.githubusercontent OBDb, 조건부 GET+ETag→304 재검증). **다운로드는 차량 선택 시점(온라인)에, 연결 시점(어댑터 Wi-Fi=오프라인)엔 캐시/번들만** — Wi-Fi 어댑터 시나리오 대응. 다운로드 전용 카탈로그 7종 추가(RAV4·Civic·Model3·Golf·Mach-E·Niro·Kona, 전부 OBDb 실재 확인). 저장 테이블은 M3에 이미 있던 것 그대로 활용.
-- **다음**: HUD(차 안 게이지 정석 경로 — 안드로이드 오토 대체), 실기기 검증.
+- **HUD 완료**: `:feature:hud` — 속도(크게)+RPM을 우리 게이지(`Gauge`+`GaugeThemes.Hud` 고대비 팔레트, 검은 배경) 재사용해 그림. **좌우 반전**(`graphicsLayer scaleX=-1`, 앞유리 반사용), 밝기 최대·화면 켜둠·가로 고정은 플랫폼 expect/actual(android=Activity window 플래그, ios=밝기+idleTimer, jvm=no-op). **라이브러리 안 씀** — Compose/KMP용 HUD 라이브러리가 없고, 있는 건 안드로이드 View 위젯이라 게이지처럼 직접 조합. 폴러 굶김 방지 `visibility.setVisible` 호출. 대시보드 "HUD" 액션으로 진입(탭 아님=전체화면). 죽어있던 `keepScreenOn` 설정의 첫 소비자.
+- **다음**: 실기기 검증.
 - **아직 없는 것(후속)**: 전체 OBDb 카탈로그 인덱스(742종 열거), 카탈로그의 호스팅 갱신(현재 카탈로그는 소스 하드코딩), 연식별 신호셋 variant 선택(현재 default.json만).
 - **번역**: de·es·pt-BR·ru·uk 양호, ko·pl 원어민 검수 권장(garage_* · garage_download_* 새 용어).
 
