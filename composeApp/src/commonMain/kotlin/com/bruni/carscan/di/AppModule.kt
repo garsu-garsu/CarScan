@@ -20,6 +20,7 @@ import com.bruni.carscan.core.data.VisibleSignals
 import com.bruni.carscan.core.database.createDatabase
 import com.bruni.carscan.db.CarScanDb
 import com.bruni.carscan.feature.connect.connectModule
+import com.bruni.carscan.feature.garage.garageModule
 import com.bruni.carscan.feature.dashboard.DashboardClock
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.liveModule
@@ -106,6 +107,7 @@ fun carScanModules(): List<Module> = listOf(
     connectModule,
     liveModule,
     settingsModule,
+    garageModule,
 )
 
 /**

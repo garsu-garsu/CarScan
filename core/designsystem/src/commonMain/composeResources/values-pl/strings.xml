@@ -161,6 +161,7 @@
     <string name="settings_keep_screen_on">Nie wygaszaj ekranu</string>
     <string name="settings_record_trips">Zapisuj podróże</string>
     <string name="settings_about">Informacje i licencje</string>
+    <string name="settings_vehicle">Pojazd</string>
 
     <string name="about_version">Wersja %1$s</string>
     <string name="about_obdb_attribution">Definicje sygnałów pojazdu pochodzą z OBDb (%1$s) i są objęte licencją %2$s.</string>

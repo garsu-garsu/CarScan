@@ -42,4 +42,8 @@ sealed interface Route {
 
     @Serializable
     data object About : Route
+
+    /** The garage / vehicle picker. Reached from Settings; picking a vehicle pops back. */
+    @Serializable
+    data object Garage : Route
 }

@@ -153,6 +153,7 @@
     <string name="settings_keep_screen_on">Manter a tela ligada</string>
     <string name="settings_record_trips">Registrar viagens</string>
     <string name="settings_about">Sobre e licenças</string>
+    <string name="settings_vehicle">Veículo</string>
 
     <string name="about_version">Versão %1$s</string>
     <string name="about_obdb_attribution">Definições de sinais do veículo fornecidas pela OBDb (%1$s), licenciadas sob %2$s.</string>

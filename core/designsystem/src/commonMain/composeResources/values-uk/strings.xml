@@ -161,6 +161,7 @@
     <string name="settings_keep_screen_on">Не вимикати екран</string>
     <string name="settings_record_trips">Записувати поїздки</string>
     <string name="settings_about">Про застосунок і ліцензії</string>
+    <string name="settings_vehicle">Автомобіль</string>
 
     <string name="about_version">Версія %1$s</string>
     <string name="about_obdb_attribution">Визначення сигналів автомобіля надані OBDb (%1$s) за ліцензією %2$s.</string>

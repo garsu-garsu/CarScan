@@ -107,4 +107,14 @@ class SettingsViewModelTest {
             awaitItem() shouldBe SettingsEffect.OpenAbout
         }
     }
+
+    @Test
+    fun `the Vehicle row emits OpenGarage rather than navigating itself`() = runTest(dispatcher) {
+        val vm = SettingsViewModel(FakeSettingsRepository())
+
+        vm.effect.test {
+            vm.onIntent(SettingsIntent.OpenVehicle)
+            awaitItem() shouldBe SettingsEffect.OpenGarage
+        }
+    }
 }

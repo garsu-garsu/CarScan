@@ -195,6 +195,7 @@
     <string name="settings_keep_screen_on">Keep screen on</string>
     <string name="settings_record_trips">Record trips</string>
     <string name="settings_about">About &amp; Licenses</string>
+    <string name="settings_vehicle">Vehicle</string>
 
     <!--
         About & Licenses. A hard legal gate before any store upload: SAEJ1979.json ships in the

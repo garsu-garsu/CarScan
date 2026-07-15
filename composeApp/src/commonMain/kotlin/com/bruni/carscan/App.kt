@@ -33,6 +33,9 @@ import com.bruni.carscan.feature.dashboard.DashboardEffect
 import com.bruni.carscan.feature.dashboard.DashboardScreen
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.dtc.DtcScreen
+import com.bruni.carscan.feature.garage.GarageEffect
+import com.bruni.carscan.feature.garage.GarageScreen
+import com.bruni.carscan.feature.garage.GarageViewModel
 import com.bruni.carscan.feature.hud.HudScreen
 import com.bruni.carscan.feature.live.LiveIntent
 import com.bruni.carscan.feature.live.LiveScreen
@@ -168,6 +171,7 @@ private fun CarScanNavHost(navController: NavHostController) {
                 viewModel.effect.collect { effect ->
                     when (effect) {
                         SettingsEffect.OpenAbout -> navController.navigate(Route.About)
+                        SettingsEffect.OpenGarage -> navController.navigate(Route.Garage)
                     }
                 }
             }
@@ -176,6 +180,22 @@ private fun CarScanNavHost(navController: NavHostController) {
         }
 
         composable<Route.About> { AboutScreen() }
+
+        composable<Route.Garage> {
+            val viewModel: GarageViewModel = koinViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            LaunchedEffect(viewModel) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        // Picked from Settings, so returning there is the least-surprising landing.
+                        GarageEffect.Selected -> navController.popBackStack()
+                    }
+                }
+            }
+
+            GarageScreen(state, viewModel::onIntent)
+        }
     }
 }
 

@@ -39,6 +39,7 @@ import com.bruni.carscan.core.designsystem.generated.resources.settings_theme_da
 import com.bruni.carscan.core.designsystem.generated.resources.settings_theme_light
 import com.bruni.carscan.core.designsystem.generated.resources.settings_theme_system
 import com.bruni.carscan.core.designsystem.generated.resources.settings_title
+import com.bruni.carscan.core.designsystem.generated.resources.settings_vehicle
 import com.bruni.carscan.core.units.Quantity
 import com.bruni.carscan.core.units.UnitId
 import org.jetbrains.compose.resources.StringResource
@@ -124,6 +125,17 @@ fun SettingsScreen(
                 label = stringResource(Res.string.settings_record_trips),
                 checked = state.recordTrips,
                 onCheckedChange = { onIntent(SettingsIntent.SetRecordTrips(it)) },
+            )
+        }
+
+        item {
+            Text(
+                text = stringResource(Res.string.settings_vehicle),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onIntent(SettingsIntent.OpenVehicle) }
+                    .padding(vertical = 12.dp),
             )
         }
 

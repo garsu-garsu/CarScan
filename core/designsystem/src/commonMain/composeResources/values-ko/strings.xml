@@ -150,6 +150,7 @@
     <string name="settings_keep_screen_on">화면 켜짐 유지</string>
     <string name="settings_record_trips">주행 기록 저장</string>
     <string name="settings_about">정보 및 라이선스</string>
+    <string name="settings_vehicle">차량</string>
 
     <string name="about_version">버전 %1$s</string>
     <string name="about_obdb_attribution">차량 신호 정의는 OBDb(%1$s)에서 제공하며, %2$s 라이선스를 따릅니다.</string>

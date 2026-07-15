@@ -36,6 +36,7 @@ class SettingsViewModel(
         is SettingsIntent.SetKeepScreenOn -> setKeepScreenOn(intent.enabled)
         is SettingsIntent.SetRecordTrips -> setRecordTrips(intent.enabled)
         SettingsIntent.OpenAbout -> emitEffect(SettingsEffect.OpenAbout)
+        SettingsIntent.OpenVehicle -> emitEffect(SettingsEffect.OpenGarage)
     }
 
     private fun setUnit(quantity: Quantity, unit: UnitId) {

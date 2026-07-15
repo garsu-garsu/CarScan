@@ -24,8 +24,12 @@ sealed interface SettingsIntent {
 
     /** The About & Licenses row. Features never navigate themselves — see [SettingsEffect]. */
     data object OpenAbout : SettingsIntent
+
+    /** The Vehicle row — opens the garage / vehicle picker. */
+    data object OpenVehicle : SettingsIntent
 }
 
 sealed interface SettingsEffect {
     data object OpenAbout : SettingsEffect
+    data object OpenGarage : SettingsEffect
 }

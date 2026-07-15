@@ -161,6 +161,7 @@
     <string name="settings_keep_screen_on">Не выключать экран</string>
     <string name="settings_record_trips">Записывать поездки</string>
     <string name="settings_about">О приложении и лицензии</string>
+    <string name="settings_vehicle">Автомобиль</string>
 
     <string name="about_version">Версия %1$s</string>
     <string name="about_obdb_attribution">Определения сигналов автомобиля предоставлены OBDb (%1$s) по лицензии %2$s.</string>

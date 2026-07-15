@@ -154,6 +154,7 @@
     <string name="settings_keep_screen_on">Bildschirm an lassen</string>
     <string name="settings_record_trips">Fahrten aufzeichnen</string>
     <string name="settings_about">Über &amp; Lizenzen</string>
+    <string name="settings_vehicle">Fahrzeug</string>
 
     <string name="about_version">Version %1$s</string>
     <string name="about_obdb_attribution">Fahrzeugsignaldefinitionen von OBDb (%1$s), lizenziert unter %2$s.</string>

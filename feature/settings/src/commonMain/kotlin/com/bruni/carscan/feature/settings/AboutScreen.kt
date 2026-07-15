@@ -22,12 +22,14 @@ import org.jetbrains.compose.resources.stringResource
 /**
  * The legal gate before any store upload.
  *
- * `SAEJ1979.json` ships in the APK under CC BY-SA 4.0 — see
- * `composeApp/src/commonMain/composeResources/files/obdb/SOURCE.md` — and BY-SA's distribution
- * obligation is exactly the three lines below: attribution, a link to the license, and a
- * statement of whether the data was changed (it was not). The URL and "CC BY-SA 4.0" are passed
- * in as format arguments rather than written into the translated sentence, so no translation can
- * touch either.
+ * Several OBDb signalsets ship in the APK under CC BY-SA 4.0 — `SAEJ1979.json` plus the curated
+ * per-vehicle sets (Kia EV6, Ioniq 5, Elantra, F-150); see
+ * `composeApp/src/commonMain/composeResources/files/obdb/SOURCE.md`. The attribution below names
+ * the OBDb project as a whole rather than any one file, so it covers every bundled set, and BY-SA's
+ * distribution obligation is exactly the three lines below: attribution, a link to the license, and
+ * a statement of whether the data was changed (it was not — all are verbatim copies). The URL and
+ * "CC BY-SA 4.0" are passed in as format arguments rather than written into the translated
+ * sentence, so no translation can touch either.
  */
 @Composable
 fun AboutScreen(modifier: Modifier = Modifier) {
