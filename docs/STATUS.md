@@ -68,8 +68,12 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 - **보류(사용자 입력 필요)**: 실제 AdMob/Play Billing 배선은 실 앱 ID·Play Console 상품·서명 키가 필요하고 **공개 레포에 커밋 불가**. `:platform:android-ads` 는 컴파일되는 no-op 스텁까지만. DI에도 아직 연결 안 함(소비자 없음). 스토어 계정 준비되면 진행.
 - **번역 품질**: de·es 자신 있음, pt-BR·pl 양호, ru·uk·ko 는 새로 만든 기술 용어에 원어민 검수 권장.
 
-### ⚠️ 아직 실물과 한 번도 만나지 않았다
-모든 테스트가 ELM327 에뮬레이터를 구동한다. 트랜스포트·BLE GATT 해석·안드로이드 블루투스 표면 전체가 페이크로만 검증됐다. **첫 실기기 실행이 아직 남아 있다.** iOS는 여전히 한 번도 컴파일된 적 없다.
+### 실기기 실행 — 첫 성공 (2026-07-15)
+**앱이 처음으로 실기기에서 돌았다** — 삼성 갤럭시 탭 A9(`SM-X135F`, 한국어 로케일). 실행되고, 한국어 UI가 정상 렌더되고, **실제 BLE 스캔이 동작해 주변 블루투스 기기를 나열**한다.
+
+이 첫 실행이 곧바로 치명 버그를 잡았다: **Compose 리소스(모든 문자열·번들 OBDb 에셋)가 APK에 하나도 안 들어가** 첫 문자열에서 `MissingResourceException`으로 죽었다(JetBrains **CMP-9547** — AGP 9 `com.android.kotlin.multiplatform.library` + Compose 리소스). 호스트/에뮬레이터 테스트는 JVM 클래스패스에서 리소스를 읽어 이걸 구조적으로 못 잡았다. `carscan.kmp` 에 `enableAndroidResources` 플래그를 켜서 수정(커밋 8f62873). **교훈: 호스트 테스트 초록불이 "설치·실행 가능"을 증명하지 않는다** — `adb install` + 실행 + `unzip -l <apk> | grep -c composeResources` 로 검증할 것.
+
+**아직 남은 실물 검증**: 실제 ELM327 어댑터 연결·실차 신호 수신은 아직. iOS는 여전히 한 번도 컴파일된 적 없다(macOS 필요).
 
 ### 남은 기술 부채 (M5/M6에서 처리)
 - **로케일 인식 숫자 포매터가 없다.** `commonMain`에 없고 `String.format`은 `java.*`라 iOS에서 안 된다. 지금 게이지 숫자의 소수점은 `.` 하드코딩. **8개 로케일 중 6개(ru/de/pl/pt-BR/es/uk)가 쉼표를 쓴다.** `:core:units`에 expect/actual 포매터 필요. 반드시 반올림 의미론을 유지할 것.
