@@ -12,7 +12,7 @@ import kotlin.time.Clock
  * an optional parameter later would fail at runtime, where Koin failures live.
  *
  * `VehicleCatalog` is bound in :composeApp, the only place that knows the bundled assets — same
- * seam as `ObdConnector`/`ActiveVehicle`.
+ * seam as `ObdConnector`/`ActiveVehicle`/`SignalsetProvider`.
  */
 val garageModule: Module = module {
     viewModel {
@@ -20,6 +20,7 @@ val garageModule: Module = module {
             catalog = get(),
             vehicles = get(),
             settings = get(),
+            signalsets = get(),
             now = { Clock.System.now().toEpochMilliseconds() },
             newId = { newUuid() },
         )

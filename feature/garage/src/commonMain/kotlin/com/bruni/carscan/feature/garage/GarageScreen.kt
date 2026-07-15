@@ -12,8 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bruni.carscan.core.designsystem.generated.resources.Res
+import com.bruni.carscan.core.designsystem.generated.resources.garage_download_failed
+import com.bruni.carscan.core.designsystem.generated.resources.garage_downloading
 import com.bruni.carscan.core.designsystem.generated.resources.garage_empty
 import com.bruni.carscan.core.designsystem.generated.resources.garage_instruction
+import com.bruni.carscan.core.designsystem.generated.resources.garage_offline
 import com.bruni.carscan.core.designsystem.generated.resources.garage_title
 import org.jetbrains.compose.resources.stringResource
 
@@ -29,6 +32,23 @@ fun GarageScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item { Text(stringResource(Res.string.garage_title), style = MaterialTheme.typography.headlineSmall) }
+
+        if (state.downloading != null) {
+            item { Text(stringResource(Res.string.garage_downloading), style = MaterialTheme.typography.bodyMedium) }
+        }
+        state.message?.let { message ->
+            item {
+                Text(
+                    text = stringResource(
+                        when (message) {
+                            DownloadMessage.Offline -> Res.string.garage_offline
+                            DownloadMessage.Failed -> Res.string.garage_download_failed
+                        },
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        }
 
         if (state.entries.isEmpty()) {
             item { Text(stringResource(Res.string.garage_empty)) }

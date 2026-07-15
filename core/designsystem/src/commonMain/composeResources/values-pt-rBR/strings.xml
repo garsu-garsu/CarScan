@@ -164,5 +164,8 @@
     <string name="garage_title">Garagem</string>
     <string name="garage_instruction">Escolha seu veículo</string>
     <string name="garage_empty">Ainda não há veículos disponíveis.</string>
+    <string name="garage_downloading">Baixando dados do veículo…</string>
+    <string name="garage_offline">Conecte-se à internet para baixar os dados deste veículo. Os PIDs padrão funcionarão offline.</string>
+    <string name="garage_download_failed">Não foi possível baixar os dados deste veículo. Os PIDs padrão funcionarão por enquanto.</string>
 
 </resources>
