@@ -1,56 +1,79 @@
 package com.bruni.carscan.obd
 
 import carscan.composeapp.generated.resources.Res
+import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.VehicleRepository
 import com.bruni.carscan.core.model.obdb.Signalset
 import com.bruni.carscan.core.vehicle.EffectiveSignalset
 import com.bruni.carscan.core.vehicle.SignalsetParser
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.flow.first
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 /**
- * The signals every OBD-II car answers, read out of the APK.
+ * The signals every OBD-II car answers, read out of the APK, unioned with the signalset of
+ * whichever vehicle the user has picked in the garage.
  *
- * **A vehicle's OBDb repository does not contain these.** Ford-F-150 ships 116 commands and not
- * one of them is mode 01 — the standard SAE J1979 PIDs (engine RPM, vehicle speed, coolant) live
- * in a repository of their own. So without this asset the app can connect to a car and then have
- * nothing it knows how to ask it, and every gauge is unaddressable.
+ * **A vehicle's OBDb repository does not contain the standard half.** Ford-F-150 ships 116
+ * commands and not one of them is mode 01 — the standard SAE J1979 PIDs (engine RPM, vehicle
+ * speed, coolant) live in a repository of their own. So without that asset the app can connect to
+ * a car and then have nothing it knows how to ask it, and every gauge is unaddressable.
  *
  * The JSON is an **opaque runtime asset** and stays one: it is CC BY-SA 4.0, and code-generating
  * it into `.kt` would make the generated file an adaptation of BY-SA data and put the app's own
  * source under ShareAlike. See `composeResources/files/obdb/SOURCE.md`, which also carries the
- * attribution the About screen owes a user, because this copy is *distributed*.
+ * attribution the About screen owes a user, because these copies are *distributed*.
  *
- * The vehicle half of the union is empty until there is somewhere to choose a car from — there is
- * no vehicle picker yet, and guessing a manufacturer's signalset produces gauges that are
- * confidently mislabelled. Standard PIDs on every car beats OEM PIDs on the wrong one.
+ * The vehicle half of the union comes from [SettingsRepository.settings]`.activeVehicleId` →
+ * [VehicleRepository.byId] → `Vehicle.obdbRepo` → `files/obdb/<obdbRepo>.json`. No active vehicle,
+ * no `obdbRepo`, or a repo with no bundled asset all fall back to standard-only — a signalset
+ * guessed wrong produces gauges that are confidently mislabelled, which is worse than no gauges.
  */
 class BundledSignalsetSource(
     /**
-     * Inert today and deliberately kept: SAE J1979 declares no year filters, so every one of its
-     * commands matches every year. It starts mattering the moment a vehicle's own signalset joins
-     * the union, and a `YearFilter` with `from >= to` is an *inverted* range — read as an
-     * intersection, half of a Ford F-150's commands vanish without an error.
+     * The model year assumed when the active vehicle (if any) does not say one. SAE J1979
+     * declares no year filters, so every one of its commands matches every year regardless — this
+     * only starts mattering for the vehicle half of the union, where a `YearFilter` with
+     * `from >= to` is an *inverted* range and half of a Ford F-150's commands vanish without an
+     * error.
      */
     private val modelYear: Int,
+    private val settings: SettingsRepository,
+    private val vehicles: VehicleRepository,
+    /**
+     * Reads a bundled asset by its `composeResources`-relative path. Injected so a test can supply
+     * fake JSON without compose resources on the test classpath; production uses [readComposeAsset].
+     */
+    private val readAsset: suspend (path: String) -> String = ::readComposeAsset,
 ) : SignalsetSource {
 
-    private val gate = Mutex()
-    private var cached: EffectiveSignalset? = null
+    /**
+     * No cache. `load()` is called once per connect, which is cheap, and the alternative — a
+     * cache that outlives a vehicle change — is the bug this project keeps producing: a user picks
+     * a different car, reconnects, and a forever-cache hands back the OLD union. Every call reads
+     * the CURRENT active vehicle.
+     */
+    override suspend fun load(): EffectiveSignalset {
+        val standard = SignalsetParser.parse(readAsset(SAE_J1979))
 
-    @OptIn(ExperimentalResourceApi::class)
-    override suspend fun load(): EffectiveSignalset = gate.withLock {
-        cached ?: run {
-            val json = Res.readBytes(SAE_J1979).decodeToString()
-            EffectiveSignalset.of(
-                standard = SignalsetParser.parse(json),
-                vehicle = Signalset(commands = emptyList()),
-                modelYear = modelYear,
-            ).also { cached = it }
+        val activeVehicleId = settings.settings.first().activeVehicleId
+        val vehicle = activeVehicleId?.let { vehicles.byId(it) }
+        val obdbRepo = vehicle?.obdbRepo
+
+        val vehicleSignalset = obdbRepo?.let { repo ->
+            runCatching { SignalsetParser.parse(readAsset("files/obdb/$repo.json")) }.getOrNull()
         }
+
+        return EffectiveSignalset.of(
+            standard = standard,
+            vehicle = vehicleSignalset ?: Signalset(commands = emptyList()),
+            modelYear = vehicleSignalset?.let { vehicle.modelYear?.toInt() } ?: modelYear,
+        )
     }
 
     private companion object {
         const val SAE_J1979 = "files/obdb/SAEJ1979.json"
     }
 }
+
+@OptIn(ExperimentalResourceApi::class)
+private suspend fun readComposeAsset(path: String): String = Res.readBytes(path).decodeToString()
