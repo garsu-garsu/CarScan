@@ -6,6 +6,7 @@ import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.SignalSeries
+import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.data.TripRepository
 import com.bruni.carscan.core.data.TripSummary
 import com.bruni.carscan.core.data.VehicleSessionRepository
@@ -363,6 +364,8 @@ private class FakeSettings : SettingsRepository {
     override suspend fun setRecordTrips(enabled: Boolean) = Unit
     override suspend fun setKeepScreenOn(enabled: Boolean) = Unit
     override suspend fun setActiveVehicleId(id: String?) = Unit
+    override suspend fun setThemeMode(mode: ThemeMode) = Unit
+    override suspend fun setGaugeStyle(style: String) = Unit
 }
 
 private class FakeTrips : TripRepository {

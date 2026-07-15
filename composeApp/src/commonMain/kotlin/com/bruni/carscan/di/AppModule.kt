@@ -20,6 +20,7 @@ import com.bruni.carscan.feature.connect.connectModule
 import com.bruni.carscan.feature.dashboard.DashboardClock
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.liveModule
+import com.bruni.carscan.feature.settings.settingsModule
 import com.bruni.carscan.obd.BundledSignalsetSource
 import com.bruni.carscan.obd.ElmObdConnector
 import com.bruni.carscan.obd.SignalsetSource
@@ -96,6 +97,7 @@ fun carScanModules(): List<Module> = listOf(
     platformModule(),
     connectModule,
     liveModule,
+    settingsModule,
 )
 
 /**

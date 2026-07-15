@@ -10,6 +10,7 @@ import com.bruni.carscan.core.data.SampleSource
 import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.database.createDatabase
 import com.bruni.carscan.core.model.DecodedValue
 import com.bruni.carscan.core.model.MetricKey
@@ -213,4 +214,6 @@ private class FakeSettings(recordTrips: Boolean) : SettingsRepository {
     override suspend fun setSpeedUnit(unit: SpeedUnit) = Unit
     override suspend fun setKeepScreenOn(enabled: Boolean) = Unit
     override suspend fun setActiveVehicleId(id: String?) = Unit
+    override suspend fun setThemeMode(mode: ThemeMode) = Unit
+    override suspend fun setGaugeStyle(style: String) = Unit
 }

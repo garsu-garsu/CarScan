@@ -130,4 +130,31 @@
         <item quantity="other">%d초</item>
     </plurals>
 
+    <string name="settings_title">설정</string>
+    <string name="settings_quantity_speed">속도</string>
+    <string name="settings_quantity_distance">거리</string>
+    <string name="settings_quantity_pressure">압력</string>
+    <string name="settings_quantity_temperature">온도</string>
+    <string name="settings_quantity_volume">부피</string>
+    <string name="settings_quantity_consumption">연비</string>
+    <string name="settings_quantity_energy_consumption">전비</string>
+    <string name="settings_quantity_power">출력</string>
+    <string name="settings_quantity_torque">토크</string>
+    <string name="settings_gauge_style">게이지 스타일</string>
+    <string name="settings_gauge_style_modern_arc">모던 아크</string>
+    <string name="settings_gauge_style_classic_analog">클래식 아날로그</string>
+    <string name="settings_theme">테마</string>
+    <string name="settings_theme_system">시스템</string>
+    <string name="settings_theme_light">라이트</string>
+    <string name="settings_theme_dark">다크</string>
+    <string name="settings_keep_screen_on">화면 켜짐 유지</string>
+    <string name="settings_record_trips">주행 기록 저장</string>
+    <string name="settings_about">정보 및 라이선스</string>
+
+    <string name="about_version">버전 %1$s</string>
+    <string name="about_obdb_attribution">차량 신호 정의는 OBDb(%1$s)에서 제공하며, %2$s 라이선스를 따릅니다.</string>
+    <string name="about_obdb_license_url">전체 라이선스 원문: %1$s</string>
+    <string name="about_obdb_no_changes">데이터는 수정 없이 그대로 사용되었습니다.</string>
+    <string name="about_licenses_heading">오픈소스 라이선스</string>
+
 </resources>

@@ -141,4 +141,31 @@
         <item quantity="other">%d секунды</item>
     </plurals>
 
+    <string name="settings_title">Настройки</string>
+    <string name="settings_quantity_speed">Скорость</string>
+    <string name="settings_quantity_distance">Расстояние</string>
+    <string name="settings_quantity_pressure">Давление</string>
+    <string name="settings_quantity_temperature">Температура</string>
+    <string name="settings_quantity_volume">Объём</string>
+    <string name="settings_quantity_consumption">Расход топлива</string>
+    <string name="settings_quantity_energy_consumption">Расход энергии</string>
+    <string name="settings_quantity_power">Мощность</string>
+    <string name="settings_quantity_torque">Крутящий момент</string>
+    <string name="settings_gauge_style">Стиль индикатора</string>
+    <string name="settings_gauge_style_modern_arc">Современная дуга</string>
+    <string name="settings_gauge_style_classic_analog">Классический аналоговый</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_theme_system">Системная</string>
+    <string name="settings_theme_light">Светлая</string>
+    <string name="settings_theme_dark">Тёмная</string>
+    <string name="settings_keep_screen_on">Не выключать экран</string>
+    <string name="settings_record_trips">Записывать поездки</string>
+    <string name="settings_about">О приложении и лицензии</string>
+
+    <string name="about_version">Версия %1$s</string>
+    <string name="about_obdb_attribution">Определения сигналов автомобиля предоставлены OBDb (%1$s) по лицензии %2$s.</string>
+    <string name="about_obdb_license_url">Полный текст лицензии: %1$s</string>
+    <string name="about_obdb_no_changes">Данные использованы без изменений.</string>
+    <string name="about_licenses_heading">Лицензии открытого ПО</string>
+
 </resources>

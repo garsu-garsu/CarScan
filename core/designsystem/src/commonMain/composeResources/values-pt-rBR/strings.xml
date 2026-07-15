@@ -133,4 +133,31 @@
         <item quantity="other">%d segundos</item>
     </plurals>
 
+    <string name="settings_title">Configurações</string>
+    <string name="settings_quantity_speed">Velocidade</string>
+    <string name="settings_quantity_distance">Distância</string>
+    <string name="settings_quantity_pressure">Pressão</string>
+    <string name="settings_quantity_temperature">Temperatura</string>
+    <string name="settings_quantity_volume">Volume</string>
+    <string name="settings_quantity_consumption">Consumo de combustível</string>
+    <string name="settings_quantity_energy_consumption">Consumo de energia</string>
+    <string name="settings_quantity_power">Potência</string>
+    <string name="settings_quantity_torque">Torque</string>
+    <string name="settings_gauge_style">Estilo do medidor</string>
+    <string name="settings_gauge_style_modern_arc">Arco moderno</string>
+    <string name="settings_gauge_style_classic_analog">Analógico clássico</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_theme_system">Sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Escuro</string>
+    <string name="settings_keep_screen_on">Manter a tela ligada</string>
+    <string name="settings_record_trips">Registrar viagens</string>
+    <string name="settings_about">Sobre e licenças</string>
+
+    <string name="about_version">Versão %1$s</string>
+    <string name="about_obdb_attribution">Definições de sinais do veículo fornecidas pela OBDb (%1$s), licenciadas sob %2$s.</string>
+    <string name="about_obdb_license_url">Texto completo da licença: %1$s</string>
+    <string name="about_obdb_no_changes">Os dados foram usados sem alterações.</string>
+    <string name="about_licenses_heading">Licenças de código aberto</string>
+
 </resources>

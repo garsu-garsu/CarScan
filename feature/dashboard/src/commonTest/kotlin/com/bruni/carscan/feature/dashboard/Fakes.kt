@@ -6,6 +6,7 @@ import com.bruni.carscan.core.data.DashboardLayoutRepository
 import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.data.VisibleSignals
 import com.bruni.carscan.core.model.MetricKey
@@ -85,6 +86,14 @@ class FakeSettings(initial: Settings = Settings(activeVehicleId = VEHICLE_ID)) :
 
     override suspend fun setActiveVehicleId(id: String?) {
         state.value = state.value.copy(activeVehicleId = id)
+    }
+
+    override suspend fun setThemeMode(mode: ThemeMode) {
+        state.value = state.value.copy(themeMode = mode)
+    }
+
+    override suspend fun setGaugeStyle(style: String) {
+        state.value = state.value.copy(gaugeStyle = style)
     }
 }
 

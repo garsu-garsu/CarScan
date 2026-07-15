@@ -31,6 +31,15 @@ data class Settings(
     val units: UnitPreferences = UnitPreferences.METRIC,
     val keepScreenOn: Boolean = true,
     val activeVehicleId: String? = null,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
+    /**
+     * Which gauge renderer to draw with, as the stable string key `:core:designsystem`'s
+     * `GaugeStyleId` maps to — e.g. `"MODERN_ARC"`, `"CLASSIC_ANALOG"`. A plain string rather
+     * than an enum here, because `:core:data` may not depend on `:core:designsystem`; the enum
+     * itself lives one layer up, and an ordinal would silently reinterpret every stored
+     * preference the day a style is inserted in the middle of it.
+     */
+    val gaugeStyle: String = "MODERN_ARC",
 ) {
     /**
      * The speed preference, *read out of* [units].
@@ -65,12 +74,21 @@ interface SettingsRepository {
     suspend fun setSpeedUnit(unit: SpeedUnit)
     suspend fun setKeepScreenOn(enabled: Boolean)
     suspend fun setActiveVehicleId(id: String?)
+    suspend fun setThemeMode(mode: ThemeMode)
+
+    /** [style] is the stable key described on [Settings.gaugeStyle]. */
+    suspend fun setGaugeStyle(style: String)
 }
+
+/** Whether the app follows the system's light/dark setting, or overrides it. */
+enum class ThemeMode { SYSTEM, LIGHT, DARK }
 
 private val RECORD_TRIPS = booleanPreferencesKey("record_trips")
 private val UNIT_PREFS = stringPreferencesKey("unit_prefs")
 private val KEEP_SCREEN_ON = booleanPreferencesKey("keep_screen_on")
 private val ACTIVE_VEHICLE = stringPreferencesKey("active_vehicle_id")
+private val THEME_MODE = stringPreferencesKey("theme_mode")
+private val GAUGE_STYLE = stringPreferencesKey("gauge_style")
 
 class DefaultSettingsRepository(
     private val store: DataStore<Preferences>,
@@ -87,6 +105,11 @@ class DefaultSettingsRepository(
             units = UnitPreferences.decode(prefs[UNIT_PREFS]),
             keepScreenOn = prefs[KEEP_SCREEN_ON] ?: defaults.keepScreenOn,
             activeVehicleId = prefs[ACTIVE_VEHICLE],
+            // An unrecognised name — a newer build's theme, or a typo'd migration — falls back
+            // to the default rather than throwing, for the same reason as the units above.
+            themeMode = prefs[THEME_MODE]?.let { name -> ThemeMode.entries.firstOrNull { it.name == name } }
+                ?: defaults.themeMode,
+            gaugeStyle = prefs[GAUGE_STYLE] ?: defaults.gaugeStyle,
         )
     }
 
@@ -125,5 +148,13 @@ class DefaultSettingsRepository(
         store.edit { prefs ->
             if (id == null) prefs.remove(ACTIVE_VEHICLE) else prefs[ACTIVE_VEHICLE] = id
         }
+    }
+
+    override suspend fun setThemeMode(mode: ThemeMode) {
+        store.edit { it[THEME_MODE] = mode.name }
+    }
+
+    override suspend fun setGaugeStyle(style: String) {
+        store.edit { it[GAUGE_STYLE] = style }
     }
 }
