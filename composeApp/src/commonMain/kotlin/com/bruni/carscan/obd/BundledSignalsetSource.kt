@@ -2,6 +2,7 @@ package com.bruni.carscan.obd
 
 import carscan.composeapp.generated.resources.Res
 import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.SignalsetProvider
 import com.bruni.carscan.core.data.VehicleRepository
 import com.bruni.carscan.core.model.obdb.Signalset
 import com.bruni.carscan.core.vehicle.EffectiveSignalset
@@ -24,9 +25,11 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
  * attribution the About screen owes a user, because these copies are *distributed*.
  *
  * The vehicle half of the union comes from [SettingsRepository.settings]`.activeVehicleId` →
- * [VehicleRepository.byId] → `Vehicle.obdbRepo` → `files/obdb/<obdbRepo>.json`. No active vehicle,
- * no `obdbRepo`, or a repo with no bundled asset all fall back to standard-only — a signalset
- * guessed wrong produces gauges that are confidently mislabelled, which is worse than no gauges.
+ * [VehicleRepository.byId] → `Vehicle.obdbRepo` → [SignalsetProvider.cachedJson] — a bundled asset
+ * or, for the vehicles that only ship download-only, whatever was cached at pick time. No active
+ * vehicle, no `obdbRepo`, or a repo neither bundled nor cached all fall back to standard-only — a
+ * signalset guessed wrong produces gauges that are confidently mislabelled, which is worse than no
+ * gauges.
  */
 class BundledSignalsetSource(
     /**
@@ -39,9 +42,12 @@ class BundledSignalsetSource(
     private val modelYear: Int,
     private val settings: SettingsRepository,
     private val vehicles: VehicleRepository,
+    /** Resolves the vehicle half — bundled-or-cached, never a download. See the class KDoc. */
+    private val provider: SignalsetProvider,
     /**
-     * Reads a bundled asset by its `composeResources`-relative path. Injected so a test can supply
-     * fake JSON without compose resources on the test classpath; production uses [readComposeAsset].
+     * Reads the bundled standard asset by its `composeResources`-relative path. Injected so a test
+     * can supply fake JSON without compose resources on the test classpath; production uses
+     * [readComposeAsset].
      */
     private val readAsset: suspend (path: String) -> String = ::readComposeAsset,
 ) : SignalsetSource {
@@ -60,7 +66,7 @@ class BundledSignalsetSource(
         val obdbRepo = vehicle?.obdbRepo
 
         val vehicleSignalset = obdbRepo?.let { repo ->
-            runCatching { SignalsetParser.parse(readAsset("files/obdb/$repo.json")) }.getOrNull()
+            provider.cachedJson(repo)?.let { json -> runCatching { SignalsetParser.parse(json) }.getOrNull() }
         }
 
         return EffectiveSignalset.of(
