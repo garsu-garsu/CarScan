@@ -15,6 +15,9 @@ kotlin {
             implementation(project(":core:data"))
             implementation(project(":core:designsystem"))
 
+            // Icons for the feature screens. Release minification tree-shakes the unused ones.
+            implementation(compose.materialIconsExtended)
+
             implementation(koinBom)
             implementation(libs.findLibrary("koin-core").get())
             implementation(libs.findLibrary("koin-compose").get())
