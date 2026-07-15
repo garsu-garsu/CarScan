@@ -42,6 +42,7 @@ import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.common_cancel
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_add_tile
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_empty
+import com.bruni.carscan.core.designsystem.generated.resources.dashboard_hud
 import com.bruni.carscan.core.designsystem.generated.resources.health_slowed_down
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.stringResource
@@ -95,6 +96,17 @@ fun DashboardScreen(
         },
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
+
+            // Enter the windshield HUD. A full-screen driving mode, so it is a destination rather
+            // than a tab — the screen only asks; :composeApp navigates.
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.End,
+            ) {
+                TextButton(onClick = { onIntent(DashboardIntent.OpenHud) }) {
+                    Text(stringResource(Res.string.dashboard_hud))
+                }
+            }
 
             // The honest number. An adapter that cannot keep up makes the dashboard slow whatever
             // we do, and saying so is the only thing that lets the user act on it.

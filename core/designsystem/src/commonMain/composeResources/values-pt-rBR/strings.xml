@@ -104,6 +104,7 @@
     <string name="dashboard_title">Painel</string>
     <string name="dashboard_empty">Nenhum medidor ainda. Adicione o primeiro.</string>
     <string name="dashboard_add_tile">Adicionar medidor</string>
+    <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">Ao vivo</string>
     <string name="live_pause">Pausar</string>

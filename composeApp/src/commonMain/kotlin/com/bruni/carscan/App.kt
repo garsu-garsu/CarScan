@@ -137,6 +137,8 @@ private fun CarScanNavHost(navController: NavHostController) {
                     when (effect) {
                         is DashboardEffect.OpenLiveChart ->
                             navController.navigate(Route.Live(effect.key.encodeForRoute()))
+
+                        DashboardEffect.OpenHud -> navController.navigate(Route.Hud)
                     }
                 }
             }

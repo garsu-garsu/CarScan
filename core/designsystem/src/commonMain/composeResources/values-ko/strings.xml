@@ -105,6 +105,7 @@
     <string name="dashboard_title">대시보드</string>
     <string name="dashboard_empty">게이지가 아직 없습니다. 하나 추가해 보세요.</string>
     <string name="dashboard_add_tile">게이지 추가</string>
+    <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">실시간</string>
     <string name="live_pause">일시정지</string>

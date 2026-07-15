@@ -105,6 +105,7 @@
     <string name="dashboard_title">Übersicht</string>
     <string name="dashboard_empty">Noch keine Anzeigen. Fügen Sie die erste hinzu.</string>
     <string name="dashboard_add_tile">Anzeige hinzufügen</string>
+    <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">Live</string>
     <string name="live_pause">Pause</string>

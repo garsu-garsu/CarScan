@@ -66,11 +66,15 @@ sealed interface DashboardIntent {
     data object OpenPicker : DashboardIntent
     data object ClosePicker : DashboardIntent
     data object ToggleEditing : DashboardIntent
+
+    /** Enter the windshield HUD. Full-screen driving mode — see [DashboardEffect.OpenHud]. */
+    data object OpenHud : DashboardIntent
 }
 
 sealed interface DashboardEffect {
     /** Features never depend on each other: the screen asks, and `:composeApp` navigates. */
     data class OpenLiveChart(val key: MetricKey) : DashboardEffect
+    data object OpenHud : DashboardEffect
 }
 
 class DashboardViewModel(
@@ -123,6 +127,7 @@ class DashboardViewModel(
             DashboardIntent.OpenPicker -> setState { copy(pickerOpen = true) }
             DashboardIntent.ClosePicker -> setState { copy(pickerOpen = false) }
             DashboardIntent.ToggleEditing -> setState { copy(editing = !editing) }
+            DashboardIntent.OpenHud -> emitEffect(DashboardEffect.OpenHud)
         }
     }
 

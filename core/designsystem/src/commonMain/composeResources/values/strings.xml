@@ -143,6 +143,7 @@
     <string name="dashboard_title">Dashboard</string>
     <string name="dashboard_empty">No gauges yet. Add one to get started.</string>
     <string name="dashboard_add_tile">Add gauge</string>
+    <string name="dashboard_hud">HUD</string>
 
     <!-- Live chart -->
     <string name="live_title">Live</string>

@@ -396,4 +396,15 @@ class DashboardViewModelTest {
             awaitItem() shouldBe DashboardEffect.OpenLiveChart(RPM_KEY)
         }
     }
+
+    @Test
+    fun `the HUD action asks to open the HUD rather than navigating itself`() = runTest(dispatcher) {
+        val vm = viewModel()
+
+        vm.effect.test {
+            vm.onIntent(DashboardIntent.OpenHud)
+            advanceUntilIdle()
+            awaitItem() shouldBe DashboardEffect.OpenHud
+        }
+    }
 }

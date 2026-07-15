@@ -104,6 +104,7 @@
     <string name="dashboard_title">Панель</string>
     <string name="dashboard_empty">Пока нет ни одного датчика. Добавьте первый.</string>
     <string name="dashboard_add_tile">Добавить датчик</string>
+    <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">График</string>
     <string name="live_pause">Пауза</string>

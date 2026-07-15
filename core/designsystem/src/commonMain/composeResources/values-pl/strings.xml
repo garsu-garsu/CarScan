@@ -104,6 +104,7 @@
     <string name="dashboard_title">Pulpit</string>
     <string name="dashboard_empty">Nie ma jeszcze żadnego wskaźnika. Dodaj pierwszy.</string>
     <string name="dashboard_add_tile">Dodaj wskaźnik</string>
+    <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">Na żywo</string>
     <string name="live_pause">Wstrzymaj</string>

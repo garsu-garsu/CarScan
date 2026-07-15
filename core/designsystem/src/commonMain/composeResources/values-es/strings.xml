@@ -104,6 +104,7 @@
     <string name="dashboard_title">Panel</string>
     <string name="dashboard_empty">Aún no hay indicadores. Añade el primero.</string>
     <string name="dashboard_add_tile">Añadir indicador</string>
+    <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">En directo</string>
     <string name="live_pause">Pausar</string>
