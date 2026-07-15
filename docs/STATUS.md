@@ -4,7 +4,7 @@
 > 세션이 끊기거나(토큰 한도 등) 새 세션에서 재개할 때의 단일 진실 공급원.
 > 전체 설계는 `C:\Users\Mureung\.claude\plans\lucky-forging-pascal.md`.
 
-**마지막 갱신**: 2026-07-15 / **M0~M5 완료 + M6 대부분 + M7 차량 선택 스켈레톤 완료**. 차량 선택(차고) 화면 + 차종별 OBDb 신호셋 로딩까지 됨. 남은 것: 실제 광고·결제 배선(스토어 계정 필요), 신호셋 다운로드 계층(하이브리드), HUD, 실기기 검증.
+**마지막 갱신**: 2026-07-15 / **M0~M5 완료 + M6 대부분 + M7 차량 선택·신호셋 다운로드 계층 완료**. 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 + 온디맨드 다운로드·ETag 캐시까지 됨. 남은 것: 실제 광고·결제 배선(스토어 계정 필요), HUD, 실기기 검증.
 
 ---
 
@@ -46,8 +46,9 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 | **M5** :composeApp 조립 + ElmObdConnector | ✅ | composeApp 24 — **APK 16MB 빌드됨** |
 | **M6** 설정·About/라이선스·i18n·수익화 모델·빌드 게이트 | 🔶 대부분 | settings 7 · monetization 신규 |
 | **M6** 실제 광고·결제 배선 + Play 내부 테스트 | ⬜ 보류(스토어 계정 필요) | |
-| **M7** 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 | 🔶 스켈레톤 | garage 신규 · composeApp 신호셋 로딩 |
-| **M7** 신호셋 다운로드 계층(하이브리드) · HUD · DTC | ⬜ 다음 | DTC는 **제외**(제조사 UDS 필요) |
+| **M7** 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 | ✅ | garage · composeApp 신호셋 로딩 |
+| **M7** 신호셋 다운로드 계층(번들+온디맨드 캐시) | ✅ | cache 5 · downloader/provider 11 · garage 5 |
+| **M7** HUD · 실기기 검증 | ⬜ 다음 | DTC·안드로이드 오토는 **제외** |
 
 **총 700개 이상 테스트, 실패 0. 재현된 변이 40건 이상.**
 
@@ -55,8 +56,10 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 - **완료(스켈레톤 B)**: `:feature:garage` 차량 선택 화면(설정→"차량" 행 진입, 선택 시 Vehicle 행 기록 + activeVehicleId 설정), 큐레이션 4종 번들 에셋(Kia-EV6·Ioniq-5·Elantra·Ford-F-150, OBDb main에서 실시간 페치·커밋 SHA 고정·BY-SA 저작자표시), `BundledSignalsetSource` 확장(선택 차량 → 표준∪차종 신호셋 union, **forever-cache 제거로 차량 변경 시 옛 신호셋 반환 버그 차단**), 카탈로그·VehicleRepository DI 배선. 다운스트림(대시보드 타일 피커·poller)은 이미 union을 소비하므로 코드 변경 0.
 - **DTC 조회/삭제는 제외** — 표준 OBD는 배출가스 DTC만, 나머지는 제조사 UDS(우리도 OBDb도 없음). 체크엔진 조회/삭제만 저비용 독립 기능으로 나중에 붙일 여지는 있음.
 - **안드로이드 오토 제외** — 템플릿이 커스텀 게이지 렌더링 불가 + OBD 미승인 카테고리. 차 안 게이지는 **HUD**로.
-- **다음**: 신호셋 다운로드 계층(하이브리드: 인기 차종 번들 + GitHub 릴리스 카탈로그 + ETag), HUD, 실기기 검증.
-- **번역**: de·es·pt-BR·ru·uk 양호, ko·pl 원어민 검수 권장(garage_* 새 용어).
+- **신호셋 다운로드 계층 완료**: `SignalsetProvider`(번들→캐시→다운로드 우선순위), `SignalsetCache`(signalset 테이블 위 리포지토리), `KtorSignalsetDownloader`(raw.githubusercontent OBDb, 조건부 GET+ETag→304 재검증). **다운로드는 차량 선택 시점(온라인)에, 연결 시점(어댑터 Wi-Fi=오프라인)엔 캐시/번들만** — Wi-Fi 어댑터 시나리오 대응. 다운로드 전용 카탈로그 7종 추가(RAV4·Civic·Model3·Golf·Mach-E·Niro·Kona, 전부 OBDb 실재 확인). 저장 테이블은 M3에 이미 있던 것 그대로 활용.
+- **다음**: HUD(차 안 게이지 정석 경로 — 안드로이드 오토 대체), 실기기 검증.
+- **아직 없는 것(후속)**: 전체 OBDb 카탈로그 인덱스(742종 열거), 카탈로그의 호스팅 갱신(현재 카탈로그는 소스 하드코딩), 연식별 신호셋 variant 선택(현재 default.json만).
+- **번역**: de·es·pt-BR·ru·uk 양호, ko·pl 원어민 검수 권장(garage_* · garage_download_* 새 용어).
 
 ### M6 완료된 것 / 보류된 것
 - **완료**: 설정 화면(수량별 단위·게이지 스타일·테마·화면 켜둠·기록 토글), About/라이선스 화면(**OBDb CC BY-SA 4.0 저작자표시 — 스토어 업로드 법적 관문**), 8개 로케일 신규 문자열 21개(파리티 게이트 통과), 수익화 엔타이틀먼트 모델(`:core:monetization` — 영구/구독/유예/보류/환불 규칙, 오프라인 정확성, 순수 리졸버), 데이터 위생 빌드 게이트.
