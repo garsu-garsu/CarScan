@@ -107,6 +107,7 @@
     <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">Ao vivo</string>
+    <string name="trips_title">Viagens</string>
     <string name="live_pause">Pausar</string>
     <string name="live_resume">Retomar</string>
     <string name="live_clear">Limpar</string>

@@ -108,6 +108,7 @@
     <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">실시간</string>
+    <string name="trips_title">주행 기록</string>
     <string name="live_pause">일시정지</string>
     <string name="live_resume">계속</string>
     <string name="live_clear">지우기</string>

@@ -101,7 +101,11 @@ fun App() {
 
 @Composable
 private fun CarScanNavHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Route.Connect) {
+    NavHost(navController = navController, startDestination = Route.Home) {
+
+        composable<Route.Home> {
+            HomeScreen(onOpen = { route -> navController.navigate(route) })
+        }
 
         composable<Route.Connect> {
             val viewModel: ConnectViewModel = koinViewModel()

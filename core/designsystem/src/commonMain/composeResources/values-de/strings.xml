@@ -108,6 +108,7 @@
     <string name="dashboard_hud">HUD</string>
 
     <string name="live_title">Live</string>
+    <string name="trips_title">Fahrten</string>
     <string name="live_pause">Pause</string>
     <string name="live_resume">Fortsetzen</string>
     <string name="live_clear">Löschen</string>

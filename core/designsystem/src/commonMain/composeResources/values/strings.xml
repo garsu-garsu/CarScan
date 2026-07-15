@@ -147,6 +147,7 @@
 
     <!-- Live chart -->
     <string name="live_title">Live</string>
+    <string name="trips_title">Trips</string>
     <string name="live_pause">Pause</string>
     <string name="live_resume">Resume</string>
     <string name="live_clear">Clear</string>

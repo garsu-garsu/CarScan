@@ -15,6 +15,10 @@ import kotlinx.serialization.Serializable
  */
 sealed interface Route {
 
+    /** The launcher. Every feature, including connecting an adapter, is reached from here. */
+    @Serializable
+    data object Home : Route
+
     @Serializable
     data object Connect : Route
 
