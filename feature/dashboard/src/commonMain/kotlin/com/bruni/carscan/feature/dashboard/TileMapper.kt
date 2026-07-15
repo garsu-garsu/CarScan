@@ -149,10 +149,13 @@ fun resolve(
             // Filled in by the screen: only a composable can resolve a localized symbol.
             unitLabel = "",
             decimals = decimalsFor(min, max),
-            // MUTATION M7: one forgotten .display() — the redline stays in celsius.
+            // All six numbers on the dial — value, both end stops, both edges of the green band,
+            // and the redline — convert, or none of them may. ClassicAnalogGauge prints its tick
+            // labels from min + fraction * span, so a partial conversion is a needle at the wrong
+            // angle on a dial labelled in the wrong unit, with a correct number in the middle.
             optimalFrom = binding?.optimalFrom?.display()?.toFloat(),
             optimalTo = binding?.optimalTo?.display()?.toFloat(),
-            redlineFrom = binding?.redlineFrom?.toFloat(),
+            redlineFrom = binding?.redlineFrom?.display()?.toFloat(),
             isStale = sample == null ||
                 reading == null ||
                 nowMs - sample.timestampMs > window,
