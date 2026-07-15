@@ -32,6 +32,8 @@ class SettingsRepositoryTest {
         assertEquals(SpeedUnit.KM_PER_HOUR, settings.speedUnit)
         assertTrue(settings.keepScreenOn)
         assertNull(settings.activeVehicleId)
+        assertEquals(ThemeMode.SYSTEM, settings.themeMode)
+        assertEquals("MODERN_ARC", settings.gaugeStyle)
     }
 
     @Test
@@ -40,12 +42,23 @@ class SettingsRepositoryTest {
         repo.setSpeedUnit(SpeedUnit.MILES_PER_HOUR)
         repo.setActiveVehicleId("veh-1")
         repo.setKeepScreenOn(false)
+        repo.setThemeMode(ThemeMode.DARK)
+        repo.setGaugeStyle("CLASSIC_ANALOG")
 
         val settings = repo.settings.first()
         assertTrue(settings.recordTrips)
         assertEquals(SpeedUnit.MILES_PER_HOUR, settings.speedUnit)
         assertEquals("veh-1", settings.activeVehicleId)
         assertFalse(settings.keepScreenOn)
+        assertEquals(ThemeMode.DARK, settings.themeMode)
+        assertEquals("CLASSIC_ANALOG", settings.gaugeStyle)
+    }
+
+    /** A preferences file from a newer build must not brick the app — see the unit test below. */
+    @Test
+    fun `an unrecognised stored theme mode falls back to the default instead of throwing`() = runTest {
+        store.edit { it[stringPreferencesKey("theme_mode")] = "SUPER_DARK" }
+        assertEquals(ThemeMode.SYSTEM, repo.settings.first().themeMode)
     }
 
     /** The repository holds no state of its own; the store is the only truth. */

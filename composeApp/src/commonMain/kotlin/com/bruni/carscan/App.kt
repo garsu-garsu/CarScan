@@ -1,5 +1,6 @@
 package com.bruni.carscan
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBar
@@ -20,6 +21,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.bruni.carscan.core.data.Settings
+import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.ThemeMode
+import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.designsystem.theme.CarScanTheme
 import com.bruni.carscan.feature.connect.ConnectEffect
 import com.bruni.carscan.feature.connect.ConnectScreen
@@ -32,7 +37,10 @@ import com.bruni.carscan.feature.hud.HudScreen
 import com.bruni.carscan.feature.live.LiveIntent
 import com.bruni.carscan.feature.live.LiveScreen
 import com.bruni.carscan.feature.live.LiveViewModel
+import com.bruni.carscan.feature.settings.AboutScreen
+import com.bruni.carscan.feature.settings.SettingsEffect
 import com.bruni.carscan.feature.settings.SettingsScreen
+import com.bruni.carscan.feature.settings.SettingsViewModel
 import com.bruni.carscan.feature.trip.TripScreen
 import com.bruni.carscan.nav.AppSettingsOpener
 import com.bruni.carscan.nav.CarScanTab
@@ -54,7 +62,20 @@ import org.koin.compose.viewmodel.koinViewModel
  */
 @Composable
 fun App() {
-    CarScanTheme {
+    val settingsRepository: SettingsRepository = koinInject()
+    val settings by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = Settings())
+
+    val darkTheme = when (settings.themeMode) {
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+    }
+    val gaugeStyle = when (settings.gaugeStyle) {
+        "CLASSIC_ANALOG" -> GaugeStyleId.CLASSIC_ANALOG
+        else -> GaugeStyleId.MODERN_ARC
+    }
+
+    CarScanTheme(darkTheme = darkTheme, gaugeStyle = gaugeStyle) {
         val navController = rememberNavController()
         val entry by navController.currentBackStackEntryAsState()
 
@@ -138,7 +159,23 @@ private fun CarScanNavHost(navController: NavHostController) {
         composable<Route.Dtc> { DtcScreen() }
         composable<Route.Hud> { HudScreen() }
         composable<Route.Trips> { TripScreen() }
-        composable<Route.Settings> { SettingsScreen() }
+
+        composable<Route.Settings> {
+            val viewModel: SettingsViewModel = koinViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            LaunchedEffect(viewModel) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        SettingsEffect.OpenAbout -> navController.navigate(Route.About)
+                    }
+                }
+            }
+
+            SettingsScreen(state, viewModel::onIntent)
+        }
+
+        composable<Route.About> { AboutScreen() }
     }
 }
 

@@ -141,4 +141,31 @@
         <item quantity="other">%d секунди</item>
     </plurals>
 
+    <string name="settings_title">Налаштування</string>
+    <string name="settings_quantity_speed">Швидкість</string>
+    <string name="settings_quantity_distance">Відстань</string>
+    <string name="settings_quantity_pressure">Тиск</string>
+    <string name="settings_quantity_temperature">Температура</string>
+    <string name="settings_quantity_volume">Об’єм</string>
+    <string name="settings_quantity_consumption">Витрата палива</string>
+    <string name="settings_quantity_energy_consumption">Витрата енергії</string>
+    <string name="settings_quantity_power">Потужність</string>
+    <string name="settings_quantity_torque">Крутний момент</string>
+    <string name="settings_gauge_style">Стиль індикатора</string>
+    <string name="settings_gauge_style_modern_arc">Сучасна дуга</string>
+    <string name="settings_gauge_style_classic_analog">Класичний аналоговий</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_theme_system">Системна</string>
+    <string name="settings_theme_light">Світла</string>
+    <string name="settings_theme_dark">Темна</string>
+    <string name="settings_keep_screen_on">Не вимикати екран</string>
+    <string name="settings_record_trips">Записувати поїздки</string>
+    <string name="settings_about">Про застосунок і ліцензії</string>
+
+    <string name="about_version">Версія %1$s</string>
+    <string name="about_obdb_attribution">Визначення сигналів автомобіля надані OBDb (%1$s) за ліцензією %2$s.</string>
+    <string name="about_obdb_license_url">Повний текст ліцензії: %1$s</string>
+    <string name="about_obdb_no_changes">Дані використано без змін.</string>
+    <string name="about_licenses_heading">Ліцензії відкритого коду</string>
+
 </resources>
