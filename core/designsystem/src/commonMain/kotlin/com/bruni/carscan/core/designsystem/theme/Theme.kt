@@ -92,44 +92,69 @@ fun CarScanTheme(
 private val ModernArcGaugeInstance = ModernArcGauge()
 private val ClassicAnalogGaugeInstance = ClassicAnalogGauge()
 
-/** Dark is the default: this is an app used in a car, most often at night or in a dim cabin. */
+/**
+ * Dark is the default: this is an app used in a car, most often at night or in a dim cabin.
+ *
+ * A near-black, high-contrast, minimal palette in the spirit of a modern EV/automotive app —
+ * deep blacks, crisp whites, an electric-cyan accent. Red is reserved for the redline/error
+ * semantic (a gauge app cannot spend it on branding), amber on warnings, green on the optimal band.
+ */
 private val CarScanDarkColors = darkColorScheme(
-    primary = Color(0xFF00E5FF),
-    onPrimary = Color(0xFF00363D),
-    secondary = Color(0xFF80DEEA),
-    onSecondary = Color(0xFF00363D),
-    error = Color(0xFFFF3B30),
-    background = Color(0xFF0E1114),
-    onBackground = Color(0xFFF2F5F7),
-    surface = Color(0xFF14171B),
-    onSurface = Color(0xFFF2F5F7),
-    surfaceVariant = Color(0xFF1E2228),
-    onSurfaceVariant = Color(0xFFC2C8CF),
-    outline = Color(0xFF565D66),
+    primary = Color(0xFF7C5CFF),          // electric indigo — vivid, alive, but not neon-cheap
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFF2A2550),
+    onPrimaryContainer = Color(0xFFDBD1FF),
+    secondary = Color(0xFFA0A6B4),
+    onSecondary = Color(0xFF1A1D22),
+    secondaryContainer = Color(0xFF262832),
+    onSecondaryContainer = Color(0xFFDEE1E8),
+    tertiary = Color(0xFFF5B841),          // amber — warnings (semantic, not brand)
+    onTertiary = Color(0xFF3A2A00),
+    error = Color(0xFFFF5A5F),
+    onError = Color(0xFF3A0006),
+    background = Color(0xFF0C0D12),        // near-black with a faint violet warmth
+    onBackground = Color(0xFFF2F3F7),
+    surface = Color(0xFF17171F),
+    onSurface = Color(0xFFF2F3F7),
+    surfaceVariant = Color(0xFF20212B),
+    onSurfaceVariant = Color(0xFFA7ABB6),
+    outline = Color(0xFF2E3038),
+    outlineVariant = Color(0xFF24252E),
 )
 
 private val CarScanLightColors = lightColorScheme(
-    primary = Color(0xFF006874),
+    primary = Color(0xFF5B3FD9),          // vivid indigo, deep enough on white
     onPrimary = Color(0xFFFFFFFF),
-    secondary = Color(0xFF4A6267),
+    primaryContainer = Color(0xFFE7E0FF),
+    onPrimaryContainer = Color(0xFF20124D),
+    secondary = Color(0xFF5A5F6E),
     onSecondary = Color(0xFFFFFFFF),
-    error = Color(0xFFBA1A1A),
-    background = Color(0xFFFAFDFD),
-    onBackground = Color(0xFF191C1D),
-    surface = Color(0xFFFAFDFD),
-    onSurface = Color(0xFF191C1D),
-    surfaceVariant = Color(0xFFEDE7DA),
-    onSurfaceVariant = Color(0xFF3F484A),
-    outline = Color(0xFF6F797A),
+    secondaryContainer = Color(0xFFE1E2EA),
+    onSecondaryContainer = Color(0xFF171922),
+    tertiary = Color(0xFF9A6B00),          // amber, darkened for light surfaces
+    onTertiary = Color(0xFFFFFFFF),
+    error = Color(0xFFD92D20),
+    onError = Color(0xFFFFFFFF),
+    background = Color(0xFFF4F4F8),
+    onBackground = Color(0xFF1A1B21),
+    surface = Color(0xFFFFFFFF),
+    onSurface = Color(0xFF1A1B21),
+    surfaceVariant = Color(0xFFE9E9F0),
+    onSurfaceVariant = Color(0xFF484B57),
+    outline = Color(0xFFC3C4D0),
+    outlineVariant = Color(0xFFDEDFE8),
 )
 
 private val CarScanTypography = Typography()
 
-/** Tiles are cards on a dashboard grid, so the corners are generous rather than sharp. */
+/**
+ * Generous, modern corner radii. Cards and tiles read as soft rounded panels, in the current
+ * trend and in the spirit of the automotive references (Tesla / Auto Garage): rounded, not sharp.
+ */
 private val CarScanShapes = Shapes(
-    extraSmall = RoundedCornerShape(4.dp),
-    small = RoundedCornerShape(8.dp),
-    medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(24.dp),
-    extraLarge = RoundedCornerShape(32.dp),
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(20.dp),
+    large = RoundedCornerShape(28.dp),
+    extraLarge = RoundedCornerShape(36.dp),
 )

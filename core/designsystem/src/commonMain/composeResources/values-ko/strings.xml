@@ -4,6 +4,8 @@
 <resources>
 
     <string name="app_name">CarScan</string>
+    <string name="home_tagline">내 차의 모든 센서, 실시간으로</string>
+    <string name="home_connect_hint">스캐너를 연결하고 시작하세요</string>
 
     <string name="common_ok">확인</string>
     <string name="common_cancel">취소</string>

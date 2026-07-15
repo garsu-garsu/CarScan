@@ -3,6 +3,8 @@
 <resources>
 
     <string name="app_name">CarScan</string>
+    <string name="home_tagline">Każdy czujnik Twojego auta, na żywo</string>
+    <string name="home_connect_hint">Podłącz skaner, aby zacząć</string>
 
     <string name="common_ok">OK</string>
     <string name="common_cancel">Anuluj</string>

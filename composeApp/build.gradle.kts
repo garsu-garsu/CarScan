@@ -62,6 +62,10 @@ kotlin {
             // This is a plain HTTPS GET to raw.githubusercontent.com — nothing to do with the
             // ktor-network raw TCP the Wi-Fi ELM327 transport uses.
             implementation(libs.ktor.client.core)
+
+            // Menu and navigation icons for the home launcher. Release minification tree-shakes
+            // the unused ones out of the APK.
+            implementation(compose.materialIconsExtended)
         }
 
         androidMain.dependencies {

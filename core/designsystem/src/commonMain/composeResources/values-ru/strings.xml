@@ -3,6 +3,8 @@
 <resources>
 
     <string name="app_name">CarScan</string>
+    <string name="home_tagline">Все датчики вашего авто — в реальном времени</string>
+    <string name="home_connect_hint">Подключите сканер, чтобы начать</string>
 
     <string name="common_ok">ОК</string>
     <string name="common_cancel">Отмена</string>

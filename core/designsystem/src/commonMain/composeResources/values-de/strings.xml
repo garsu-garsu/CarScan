@@ -4,6 +4,8 @@
 <resources>
 
     <string name="app_name">CarScan</string>
+    <string name="home_tagline">Jeder Sensor deines Autos, live</string>
+    <string name="home_connect_hint">Scanner verbinden, um zu starten</string>
 
     <string name="common_ok">OK</string>
     <string name="common_cancel">Abbrechen</string>
