@@ -2,6 +2,8 @@ package com.bruni.carscan.obd
 
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.SignalsetAvailability
+import com.bruni.carscan.core.data.SignalsetProvider
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.data.Vehicle
 import com.bruni.carscan.core.data.VehicleRepository
@@ -56,10 +58,8 @@ class BundledSignalsetSourceTest {
             modelYear = 2020,
             settings = settings,
             vehicles = vehicles,
-            readAsset = assetsOf(
-                "files/obdb/SAEJ1979.json" to STANDARD_JSON,
-                "files/obdb/Kia-EV6.json" to KIA_EV6_JSON,
-            ),
+            provider = FakeSignalsetProvider("Kia-EV6" to KIA_EV6_JSON),
+            readAsset = assetsOf("files/obdb/SAEJ1979.json" to STANDARD_JSON),
         )
 
         val loaded = source.load()
@@ -77,10 +77,8 @@ class BundledSignalsetSourceTest {
             modelYear = 2020,
             settings = settings,
             vehicles = vehicles,
-            readAsset = assetsOf(
-                "files/obdb/SAEJ1979.json" to STANDARD_JSON,
-                "files/obdb/Kia-EV6.json" to KIA_EV6_JSON,
-            ),
+            provider = FakeSignalsetProvider("Kia-EV6" to KIA_EV6_JSON),
+            readAsset = assetsOf("files/obdb/SAEJ1979.json" to STANDARD_JSON),
         )
 
         val loaded = source.load()
@@ -100,6 +98,7 @@ class BundledSignalsetSourceTest {
             modelYear = 2020,
             settings = settings,
             vehicles = vehicles,
+            provider = FakeSignalsetProvider(),
             readAsset = assetsOf("files/obdb/SAEJ1979.json" to STANDARD_JSON),
         )
 
@@ -124,10 +123,8 @@ class BundledSignalsetSourceTest {
             modelYear = 2020,
             settings = settings,
             vehicles = vehicles,
-            readAsset = assetsOf(
-                "files/obdb/SAEJ1979.json" to STANDARD_JSON,
-                "files/obdb/Kia-EV6.json" to KIA_EV6_JSON,
-            ),
+            provider = FakeSignalsetProvider("Kia-EV6" to KIA_EV6_JSON),
+            readAsset = assetsOf("files/obdb/SAEJ1979.json" to STANDARD_JSON),
         )
 
         val first = source.load()
@@ -174,4 +171,13 @@ private class FakeVehicleRepository(vararg vehicles: Pair<String, Vehicle>) : Ve
     override suspend fun remember(vehicle: Vehicle) = Unit
     override suspend fun touchLastConnected(id: String, atMs: Long) = Unit
     override suspend fun forget(id: String) = Unit
+}
+
+/** Stands in for [DefaultSignalsetProvider]: the union logic under test only needs the cached-JSON
+ * half of the port, keyed by repo, with no bundled-asset or network machinery behind it. */
+private class FakeSignalsetProvider(vararg cachedJson: Pair<String, String>) : SignalsetProvider {
+    private val byRepo = cachedJson.toMap()
+
+    override suspend fun cachedJson(repo: String): String? = byRepo[repo]
+    override suspend fun ensureAvailable(repo: String): SignalsetAvailability = SignalsetAvailability.AVAILABLE
 }

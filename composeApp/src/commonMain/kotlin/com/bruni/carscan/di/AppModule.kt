@@ -6,12 +6,15 @@ import com.bruni.carscan.core.data.DashboardLayoutRepository
 import com.bruni.carscan.core.data.DefaultAdapterRepository
 import com.bruni.carscan.core.data.DefaultDashboardLayoutRepository
 import com.bruni.carscan.core.data.DefaultSettingsRepository
+import com.bruni.carscan.core.data.DefaultSignalsetCache
 import com.bruni.carscan.core.data.DefaultTripRepository
 import com.bruni.carscan.core.data.DefaultVehicleRepository
 import com.bruni.carscan.core.data.DefaultVehicleSessionRepository
 import com.bruni.carscan.core.data.ObdConnector
 import com.bruni.carscan.core.data.SampleSource
 import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.SignalsetCache
+import com.bruni.carscan.core.data.SignalsetProvider
 import com.bruni.carscan.core.data.TripRepository
 import com.bruni.carscan.core.data.VehicleCatalog
 import com.bruni.carscan.core.data.VehicleRepository
@@ -27,10 +30,14 @@ import com.bruni.carscan.feature.live.liveModule
 import com.bruni.carscan.feature.settings.settingsModule
 import com.bruni.carscan.obd.BundledSignalsetSource
 import com.bruni.carscan.obd.BundledVehicleCatalog
+import com.bruni.carscan.obd.DefaultSignalsetProvider
 import com.bruni.carscan.obd.ElmObdConnector
+import com.bruni.carscan.obd.KtorSignalsetDownloader
+import com.bruni.carscan.obd.SignalsetDownloader
 import com.bruni.carscan.obd.SignalsetSource
 import com.bruni.carscan.obd.TripRecorder
 import com.bruni.carscan.obd.VehicleRows
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -67,8 +74,16 @@ fun appModule(): Module = module {
     single<VehicleRepository> { DefaultVehicleRepository(get()) }
     single<VehicleCatalog> { BundledVehicleCatalog() }
 
+    single<SignalsetCache> { DefaultSignalsetCache(get()) }
+    // A plain HTTPS GET to raw.githubusercontent.com — nothing to do with the ktor-network raw TCP
+    // the Wi-Fi ELM327 transport uses. The engine (okhttp/darwin) is on the platform classpath and
+    // is created lazily, so this makes no call at construction.
+    single { HttpClient() }
+    single<SignalsetDownloader> { KtorSignalsetDownloader(get()) }
+    single<SignalsetProvider> { DefaultSignalsetProvider(cache = get(), downloader = get()) }
+
     single<SignalsetSource> {
-        BundledSignalsetSource(modelYear = currentYear(), settings = get(), vehicles = get())
+        BundledSignalsetSource(modelYear = currentYear(), settings = get(), vehicles = get(), provider = get())
     }
     single { VehicleRows(get()) }
 
