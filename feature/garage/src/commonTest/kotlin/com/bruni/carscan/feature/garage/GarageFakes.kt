@@ -3,6 +3,8 @@ package com.bruni.carscan.feature.garage
 import com.bruni.carscan.core.data.CatalogEntry
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.SignalsetAvailability
+import com.bruni.carscan.core.data.SignalsetProvider
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.data.Vehicle
 import com.bruni.carscan.core.data.VehicleCatalog
@@ -80,5 +82,19 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
 
     override suspend fun setGaugeStyle(style: String) {
         state.value = state.value.copy(gaugeStyle = style)
+    }
+}
+
+class FakeSignalsetProvider(
+    private val result: SignalsetAvailability = SignalsetAvailability.AVAILABLE,
+) : SignalsetProvider {
+    /** Every repo passed to [ensureAvailable], in call order. */
+    val ensureAvailableCalls = mutableListOf<String>()
+
+    override suspend fun cachedJson(repo: String): String? = null
+
+    override suspend fun ensureAvailable(repo: String): SignalsetAvailability {
+        ensureAvailableCalls += repo
+        return result
     }
 }

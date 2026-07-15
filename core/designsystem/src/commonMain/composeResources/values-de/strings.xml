@@ -165,5 +165,8 @@
     <string name="garage_title">Garage</string>
     <string name="garage_instruction">Wähle dein Fahrzeug</string>
     <string name="garage_empty">Noch keine Fahrzeuge verfügbar.</string>
+    <string name="garage_downloading">Fahrzeugdaten werden heruntergeladen…</string>
+    <string name="garage_offline">Verbinde dich mit dem Internet, um dieses Fahrzeug herunterzuladen. Ohne Internet funktionieren die Standard-PIDs.</string>
+    <string name="garage_download_failed">Die Fahrzeugdaten konnten nicht heruntergeladen werden. Vorerst funktionieren die Standard-PIDs.</string>
 
 </resources>

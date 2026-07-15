@@ -2,6 +2,7 @@ package com.bruni.carscan.feature.garage
 
 import app.cash.turbine.test
 import com.bruni.carscan.core.data.CatalogEntry
+import com.bruni.carscan.core.data.SignalsetAvailability
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
@@ -39,9 +40,17 @@ class GarageViewModelTest {
         catalog: FakeVehicleCatalog = FakeVehicleCatalog(listOf(entry)),
         vehicles: FakeVehicleRepository = FakeVehicleRepository(),
         settings: FakeSettingsRepository = FakeSettingsRepository(),
+        signalsets: FakeSignalsetProvider = FakeSignalsetProvider(),
         now: () -> Long = { 1_000L },
         newId: () -> String = { "fixed-id" },
-    ) = GarageViewModel(catalog = catalog, vehicles = vehicles, settings = settings, now = now, newId = newId)
+    ) = GarageViewModel(
+        catalog = catalog,
+        vehicles = vehicles,
+        settings = settings,
+        signalsets = signalsets,
+        now = now,
+        newId = newId,
+    )
 
     @Test
     fun `state exposes the catalog entries on init`() = runTest(dispatcher) {
@@ -73,6 +82,68 @@ class GarageViewModelTest {
                     vehicle.createdMs shouldBe 5_000L
                 }
                 settings.activeVehicleIds shouldContainExactly listOf("vehicle-1")
+
+                awaitItem() shouldBe GarageEffect.Selected
+            }
+        }
+
+    @Test
+    fun `Select downloads the signalset while online and emits the effect on DOWNLOADED`() = runTest(dispatcher) {
+        val vehicles = FakeVehicleRepository()
+        val settings = FakeSettingsRepository()
+        val signalsets = FakeSignalsetProvider(result = SignalsetAvailability.DOWNLOADED)
+        val vm = viewModel(vehicles = vehicles, settings = settings, signalsets = signalsets, newId = { "vehicle-1" })
+
+        vm.effect.test {
+            vm.onIntent(GarageIntent.Select(entry))
+            runCurrent()
+
+            signalsets.ensureAvailableCalls shouldContainExactly listOf("Kia-EV6")
+            vehicles.remembered.single().id shouldBe "vehicle-1"
+            settings.activeVehicleIds shouldContainExactly listOf("vehicle-1")
+            vm.state.value.downloading shouldBe null
+            vm.state.value.message shouldBe null
+
+            awaitItem() shouldBe GarageEffect.Selected
+        }
+    }
+
+    @Test
+    fun `Select still records and activates the vehicle when there is no network, and surfaces the offline message`() =
+        runTest(dispatcher) {
+            val vehicles = FakeVehicleRepository()
+            val settings = FakeSettingsRepository()
+            val signalsets = FakeSignalsetProvider(result = SignalsetAvailability.NO_NETWORK)
+            val vm = viewModel(
+                vehicles = vehicles,
+                settings = settings,
+                signalsets = signalsets,
+                newId = { "vehicle-1" },
+            )
+
+            vm.onIntent(GarageIntent.Select(entry))
+            runCurrent()
+
+            // The choice sticks even though the download failed — the connect path falls back
+            // to standard PIDs, and the download can be retried.
+            vehicles.remembered.single().id shouldBe "vehicle-1"
+            settings.activeVehicleIds shouldContainExactly listOf("vehicle-1")
+            vm.state.value.downloading shouldBe null
+            vm.state.value.message shouldBe DownloadMessage.Offline
+        }
+
+    @Test
+    fun `Select succeeds without a lingering downloading flag when the signalset is already bundled`() =
+        runTest(dispatcher) {
+            val signalsets = FakeSignalsetProvider(result = SignalsetAvailability.AVAILABLE)
+            val vm = viewModel(signalsets = signalsets)
+
+            vm.effect.test {
+                vm.onIntent(GarageIntent.Select(entry))
+                runCurrent()
+
+                vm.state.value.downloading shouldBe null
+                vm.state.value.message shouldBe null
 
                 awaitItem() shouldBe GarageEffect.Selected
             }

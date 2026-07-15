@@ -172,5 +172,8 @@
     <string name="garage_title">Гараж</string>
     <string name="garage_instruction">Виберіть свій автомобіль</string>
     <string name="garage_empty">Поки немає доступних автомобілів.</string>
+    <string name="garage_downloading">Завантаження даних автомобіля…</string>
+    <string name="garage_offline">Підключіться до інтернету, щоб завантажити дані цього автомобіля. Офлайн працюватимуть стандартні PID.</string>
+    <string name="garage_download_failed">Не вдалося завантажити дані цього автомобіля. Поки що працюватимуть стандартні PID.</string>
 
 </resources>
