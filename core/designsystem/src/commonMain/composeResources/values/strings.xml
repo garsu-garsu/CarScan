@@ -38,12 +38,19 @@
 
     <!-- Connect screen -->
     <string name="connect_title">Connect an adapter</string>
+    <!-- Step 1: the method picker, before any scan starts. -->
+    <string name="connect_choose_method">Choose how to connect</string>
+    <!-- Step 2: back to the method picker from a scan or the Wi-Fi entry form. -->
+    <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Scan</string>
     <string name="connect_scanning">Scanning…</string>
     <string name="connect_stop">Stop</string>
     <string name="connect_connect">Connect</string>
     <string name="connect_disconnect">Disconnect</string>
     <string name="connect_no_adapters">No adapters found</string>
+    <!-- Wi-Fi has no scan — the adapter is its own fixed access point — so the address is typed in. -->
+    <string name="connect_wifi_host">IP address</string>
+    <string name="connect_wifi_port">Port</string>
     <!--
         The readout, and the reason this screen exists. It composes to
             "Your adapter: 14 queries/sec — 6 gauges at 2 Hz."

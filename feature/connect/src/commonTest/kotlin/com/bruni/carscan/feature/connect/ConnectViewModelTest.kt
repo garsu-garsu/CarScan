@@ -57,46 +57,65 @@ class ConnectViewModelTest {
         entitlements = entitlements,
     )
 
-    // --- the happy path, as a sequence -------------------------------------------------
+    // --- the method picker ----------------------------------------------------------------
 
     @Test
-    fun `scan, list, select, connect — Ready carries what the adapter turned out to be`() = runTest(dispatcher) {
+    fun `the initial screen is the picker — nothing selected, nothing scanned yet`() = runTest(dispatcher) {
         val vm = viewModel()
 
-        vm.state.test {
-            awaitItem().let { initial ->
-                initial.isScanning shouldBe false
-                initial.hasAdapters shouldBe false
-            }
-
-            vm.onIntent(ConnectIntent.Scan)
-            awaitItem().isScanning shouldBe true
-
-            // The fake trickles its adapters in one at a time, the way a real scan does.
-            // Drain until the scan reports itself finished.
-            var listed = awaitItem()
-            while (listed.isScanning) listed = awaitItem()
-
-            val ble = listed.sections.single { it.kind == TransportKind.BLE }.adapters
-            ble.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01", "AA:BB:CC:DD:EE:02")
-
-            vm.onIntent(ConnectIntent.Select(ble.first()))
-            awaitItem().connectingTo shouldBe ble.first()
-
-            val ready = awaitItem()
-            ready.connectingTo.shouldBeNull()
-            ready.failure.shouldBeNull()
-            ready.ready.shouldNotBeNull().let { readout ->
-                readout.adapter shouldBe ble.first()
-                readout.isStn shouldBe false
-                // ATDPN said 6, so this is what was actually negotiated — not what we hoped for.
-                readout.protocol shouldBe "ISO 15765-4 CAN (11 bit, 500 kbaud)"
-                readout.reusedProfile shouldBe false
-            }
+        vm.state.value.let { initial ->
+            initial.selectedKind.shouldBeNull()
+            initial.isScanning shouldBe false
+            initial.hasAdapters shouldBe false
         }
     }
 
-    // --- the scan list has to hold still to be usable -----------------------------------
+    @Test
+    fun `iOS offers only BLE and Wi-Fi — the picker branches on capability, not platform`() = runTest(dispatcher) {
+        // This is what iOS looks like: Apple's ExternalAccessory framework reaches only MFi
+        // hardware and no ELM327 clone is MFi, so SPP is permanently impossible there.
+        //
+        // The test runs on the JVM. An implementation that wrote `if (isAndroid) addSpp()` would
+        // pass every other test in this file and fail this one — which is the point.
+        val ios = FakeObdConnector.readyWith(
+            summary(),
+            supported = setOf(TransportKind.BLE, TransportKind.WIFI),
+        )
+
+        viewModel(connector = ios).state.value.availableKinds shouldContainExactly
+            listOf(TransportKind.BLE, TransportKind.WIFI)
+    }
+
+    @Test
+    fun `Android offers all three`() = runTest(dispatcher) {
+        viewModel().state.value.availableKinds shouldContainExactly
+            listOf(TransportKind.BLE, TransportKind.SPP, TransportKind.WIFI)
+    }
+
+    // --- picking a method scans that one method, and only that one ------------------------
+
+    @Test
+    fun `SelectMethod scans only the chosen method — never the other two`() = runTest(dispatcher) {
+        val connector = FakeObdConnector.readyWith(summary())
+        connector.discovered = listOf(
+            DiscoveredAdapter(TransportKind.BLE, "AA:BB:CC:DD:EE:01", "OBDII"),
+            DiscoveredAdapter(TransportKind.SPP, "AA:BB:CC:DD:EE:02", "OBDII"),
+            DiscoveredAdapter(TransportKind.WIFI, "192.168.0.10:35000", "Wi-Fi OBD adapter"),
+        )
+        val vm = viewModel(connector = connector)
+
+        vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
+        advanceUntilIdle()
+
+        // Only BLE was ever asked for — not the fan-out this replaces.
+        connector.discoverCalls shouldContainExactly listOf(TransportKind.BLE)
+
+        vm.state.value.let { scanned ->
+            scanned.selectedKind shouldBe TransportKind.BLE
+            scanned.isScanning shouldBe false
+            scanned.adapters.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01")
+        }
+    }
 
     @Test
     fun `a peripheral re-advertising keeps its place in the list instead of churning`() =
@@ -110,10 +129,10 @@ class ConnectViewModelTest {
             connector.discovered = listOf(first, second, first.copy(rssi = -50)) // first re-advertises last
 
             val vm = viewModel(connector = connector)
-            vm.onIntent(ConnectIntent.Scan)
+            vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
             advanceUntilIdle()
 
-            val ble = vm.state.value.sections.single { it.kind == TransportKind.BLE }.adapters
+            val ble = vm.state.value.adapters
             ble.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01", "AA:BB:CC:DD:EE:02")
             // refreshed in place — not duplicated, not moved to the end.
             ble.first().rssi shouldBe -50
@@ -128,36 +147,65 @@ class ConnectViewModelTest {
         connector.discovered = listOf(nameless, named, blank)
 
         val vm = viewModel(connector = connector)
+        vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
+        advanceUntilIdle()
+
+        vm.state.value.adapters.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01")
+    }
+
+    @Test
+    fun `Scan re-scans the currently selected method`() = runTest(dispatcher) {
+        val connector = FakeObdConnector.readyWith(summary())
+        connector.discovered = listOf(DiscoveredAdapter(TransportKind.SPP, "AA:BB:CC:DD:EE:03", "OBDII"))
+        val vm = viewModel(connector = connector)
+
+        vm.onIntent(ConnectIntent.SelectMethod(TransportKind.SPP))
+        advanceUntilIdle()
         vm.onIntent(ConnectIntent.Scan)
         advanceUntilIdle()
 
-        val ble = vm.state.value.sections.single { it.kind == TransportKind.BLE }.adapters
-        ble.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01")
+        // Asked for SPP twice — once for the selection, once for the explicit rescan — and
+        // never for BLE or Wi-Fi.
+        connector.discoverCalls shouldContainExactly listOf(TransportKind.SPP, TransportKind.SPP)
+        vm.state.value.adapters.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:03")
     }
 
-    // --- the capability rule ------------------------------------------------------------
+    // --- BackToMethods -----------------------------------------------------------------
 
     @Test
-    fun `iOS has no Bluetooth Classic section — the picker branches on capability, not platform`() =
-        runTest(dispatcher) {
-            // This is what iOS looks like: Apple's ExternalAccessory framework reaches only MFi
-            // hardware and no ELM327 clone is MFi, so SPP is permanently impossible there.
-            //
-            // The test runs on the JVM. An implementation that wrote `if (isAndroid) addSpp()`
-            // would pass every other test in this file and fail this one — which is the point.
-            val ios = FakeObdConnector.readyWith(
-                summary(),
-                supported = setOf(TransportKind.BLE, TransportKind.WIFI),
-            )
+    fun `BackToMethods returns to the picker and clears the scan results`() = runTest(dispatcher) {
+        val connector = FakeObdConnector.readyWith(summary())
+        val vm = viewModel(connector = connector)
 
-            viewModel(connector = ios).state.value.sections.map { it.kind } shouldContainExactly
-                listOf(TransportKind.BLE, TransportKind.WIFI)
+        vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
+        advanceUntilIdle()
+        vm.state.value.hasAdapters shouldBe true
+
+        vm.onIntent(ConnectIntent.BackToMethods)
+
+        vm.state.value.let { back ->
+            back.selectedKind.shouldBeNull()
+            back.adapters.shouldBeEmpty()
+            back.isScanning shouldBe false
         }
+    }
 
     @Test
-    fun `Android offers all three`() = runTest(dispatcher) {
-        viewModel().state.value.sections.map { it.kind } shouldContainExactly
-            listOf(TransportKind.BLE, TransportKind.SPP, TransportKind.WIFI)
+    fun `BackToMethods cancels a scan still in flight`() = runTest(dispatcher) {
+        val connector = FakeObdConnector.readyWith(summary())
+        val vm = viewModel(connector = connector)
+
+        vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
+        runCurrent() // the scan has started but the fake's discoveryDelay has not elapsed yet
+        vm.state.value.isScanning shouldBe true
+
+        vm.onIntent(ConnectIntent.BackToMethods)
+        advanceUntilIdle() // if the old scan were still running, it would land here
+
+        vm.state.value.let { back ->
+            back.isScanning shouldBe false
+            back.adapters.shouldBeEmpty()
+        }
     }
 
     // --- the honest throughput readout --------------------------------------------------
@@ -187,6 +235,65 @@ class ConnectViewModelTest {
 
         // ...and the dashboard is asking for 80. Say so.
         vm.state.value.health.isOverSubscribed shouldBe true
+    }
+
+    // --- the happy path end to end -------------------------------------------------------
+
+    @Test
+    fun `pick a method, scan, list, select, connect — Ready carries what the adapter turned out to be`() =
+        runTest(dispatcher) {
+            val vm = viewModel()
+
+            vm.state.test {
+                awaitItem().let { initial ->
+                    initial.selectedKind.shouldBeNull()
+                    initial.hasAdapters shouldBe false
+                }
+
+                vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
+                awaitItem().selectedKind shouldBe TransportKind.BLE
+                awaitItem().isScanning shouldBe true
+
+                // The fake trickles its adapters in one at a time, the way a real scan does.
+                // Drain until the scan reports itself finished.
+                var listed = awaitItem()
+                while (listed.isScanning) listed = awaitItem()
+
+                val ble = listed.adapters
+                ble.map { it.address } shouldContainExactly listOf("AA:BB:CC:DD:EE:01", "AA:BB:CC:DD:EE:02")
+
+                vm.onIntent(ConnectIntent.Select(ble.first()))
+                awaitItem().connectingTo shouldBe ble.first()
+
+                val ready = awaitItem()
+                ready.connectingTo.shouldBeNull()
+                ready.failure.shouldBeNull()
+                ready.ready.shouldNotBeNull().let { readout ->
+                    readout.adapter shouldBe ble.first()
+                    readout.isStn shouldBe false
+                    // ATDPN said 6, so this is what was actually negotiated — not what we hoped for.
+                    readout.protocol shouldBe "ISO 15765-4 CAN (11 bit, 500 kbaud)"
+                    readout.reusedProfile shouldBe false
+                }
+            }
+        }
+
+    // --- Wi-Fi: no scan, a typed-in host and port ----------------------------------------
+
+    @Test
+    fun `ConnectWifi builds a Wi-Fi adapter from the typed host and port`() = runTest(dispatcher) {
+        val connector = FakeObdConnector.readyWith(summary())
+        val vm = viewModel(connector = connector)
+
+        vm.onIntent(ConnectIntent.SelectMethod(TransportKind.WIFI))
+        advanceUntilIdle()
+
+        vm.onIntent(ConnectIntent.ConnectWifi(host = "10.0.0.5", port = 4444))
+        runCurrent()
+
+        val expected = DiscoveredAdapter(TransportKind.WIFI, "10.0.0.5:4444")
+        connector.calls.last().first shouldBe expected
+        vm.state.value.ready.shouldNotBeNull().adapter shouldBe expected
     }
 
     // --- failures the user can act on ---------------------------------------------------
@@ -238,7 +345,7 @@ class ConnectViewModelTest {
         connector.discoveryFailsWith = ConnectFailure.BLUETOOTH_PERMISSION
         val vm = viewModel(connector = connector)
 
-        vm.onIntent(ConnectIntent.Scan)
+        vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
         advanceUntilIdle()
 
         vm.state.value.failure shouldBe ConnectFailure.BLUETOOTH_PERMISSION
@@ -268,33 +375,39 @@ class ConnectViewModelTest {
             connector.discoveryFailsWith = null // a bare Throwable, carrying no reason
             val vm = viewModel(connector = connector)
 
-            vm.onIntent(ConnectIntent.Scan)
+            vm.onIntent(ConnectIntent.SelectMethod(TransportKind.BLE))
             advanceUntilIdle()
 
             vm.state.value.failure shouldBe ConnectFailure.INIT_FAILED
         }
 
     /**
-     * One dead radio must not take the scan down with it. A user whose Bluetooth is off should
-     * still be offered the Wi-Fi adapter that is sitting there working.
+     * The two-step picker means a scan is now of exactly one transport, so a scan that fails
+     * fails alone: there is no second or third transport in the same scan for it to spare.
+     *
+     * This replaces the old three-at-once test ("one dead radio must not take the others down
+     * with it") — that scenario cannot happen any more, because nothing here ever asks two
+     * transports for adapters at the same time. See `SelectMethod scans only the chosen method`.
      */
     @Test
-    fun `a transport that fails to scan does not abort the other transports`() = runTest(dispatcher) {
-        val connector = FakeObdConnector.readyWith(summary())
-        connector.discoveryFailsOn = TransportKind.BLE
-        val vm = viewModel(connector = connector)
+    fun `a failed scan of the selected method surfaces the failure with no adapters for it`() =
+        runTest(dispatcher) {
+            val connector = FakeObdConnector.readyWith(summary())
+            connector.discoveryFailsOn = TransportKind.SPP
+            connector.discoveryFailsWith = ConnectFailure.BLUETOOTH_OFF
+            val vm = viewModel(connector = connector)
 
-        vm.onIntent(ConnectIntent.Scan)
-        advanceUntilIdle()
+            vm.onIntent(ConnectIntent.SelectMethod(TransportKind.SPP))
+            advanceUntilIdle()
 
-        vm.state.value.let { scanned ->
-            scanned.isScanning shouldBe false
-            scanned.failure.shouldNotBeNull()
-            // BLE found nothing, but SPP and Wi-Fi still delivered.
-            scanned.sections.single { it.kind == TransportKind.BLE }.adapters.shouldBeEmpty()
-            scanned.sections.single { it.kind == TransportKind.WIFI }.adapters.size shouldBe 1
+            vm.state.value.let { scanned ->
+                scanned.isScanning shouldBe false
+                scanned.failure shouldBe ConnectFailure.BLUETOOTH_OFF
+                scanned.adapters.shouldBeEmpty()
+            }
+            // And it never touched BLE or Wi-Fi to make up for it.
+            connector.discoverCalls shouldContainExactly listOf(TransportKind.SPP)
         }
-    }
 
     @Test
     fun `Retry after a failure re-tries the same adapter, not a fresh scan`() = runTest(dispatcher) {

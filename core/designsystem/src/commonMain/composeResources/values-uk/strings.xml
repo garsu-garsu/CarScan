@@ -22,12 +22,20 @@
     <string name="connection_state_connected">Підключено</string>
 
     <string name="connect_title">Підключити адаптер</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_choose_method">Choose how to connect</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Пошук</string>
     <string name="connect_scanning">Триває пошук…</string>
     <string name="connect_stop">Зупинити</string>
     <string name="connect_connect">Підключити</string>
     <string name="connect_disconnect">Відключити</string>
     <string name="connect_no_adapters">Адаптерів не знайдено</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_wifi_host">IP address</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_wifi_port">Port</string>
     <string name="connect_budget">%1$s з частотою %2$d Гц</string>
     <string name="connect_protocol">Протокол: %1$s</string>
     <string name="connect_genuine_stn">Оригінальний чип STN</string>

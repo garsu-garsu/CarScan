@@ -23,12 +23,20 @@
     <string name="connection_state_connected">Verbunden</string>
 
     <string name="connect_title">Adapter verbinden</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_choose_method">Choose how to connect</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Suchen</string>
     <string name="connect_scanning">Suche läuft…</string>
     <string name="connect_stop">Stopp</string>
     <string name="connect_connect">Verbinden</string>
     <string name="connect_disconnect">Trennen</string>
     <string name="connect_no_adapters">Keine Adapter gefunden</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_wifi_host">IP address</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="connect_wifi_port">Port</string>
     <string name="connect_budget">%1$s mit %2$d Hz</string>
     <string name="connect_protocol">Protokoll: %1$s</string>
     <string name="connect_genuine_stn">Echter STN-Chip</string>

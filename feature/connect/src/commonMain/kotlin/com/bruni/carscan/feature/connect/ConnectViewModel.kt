@@ -15,7 +15,6 @@ import com.bruni.carscan.core.transport.TransportKind
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
 /**
@@ -43,9 +42,7 @@ class ConnectViewModel(
 ) : MviViewModel<ConnectState, ConnectIntent, ConnectEffect>(
     ConnectState(
         // Capability, not platform. TransportKind's declaration order is the display order.
-        sections = TransportKind.entries
-            .filter { it in connector.supported }
-            .map(::AdapterSection),
+        availableKinds = TransportKind.entries.filter { it in connector.supported },
     ),
 ) {
 
@@ -62,8 +59,12 @@ class ConnectViewModel(
     }
 
     override fun onIntent(intent: ConnectIntent) = when (intent) {
+        is ConnectIntent.SelectMethod -> selectMethod(intent.kind)
+        ConnectIntent.BackToMethods -> backToMethods()
         ConnectIntent.Scan -> scan()
         is ConnectIntent.Select -> connect(intent.adapter)
+        is ConnectIntent.ConnectWifi ->
+            connect(DiscoveredAdapter(TransportKind.WIFI, "${intent.host}:${intent.port}"))
         ConnectIntent.Retry -> lastTarget?.let(::connect) ?: scan()
         ConnectIntent.DismissFailure -> setState { copy(failure = null) }
         ConnectIntent.OpenSettings -> emitEffect(ConnectEffect.OpenAppSettings)
@@ -87,30 +88,33 @@ class ConnectViewModel(
         scope.launch { interstitial.show() }
     }
 
-    private fun scan() {
+    /** Choosing a method starts a scan of that method alone — never the other two. */
+    private fun selectMethod(kind: TransportKind) {
+        setState { copy(selectedKind = kind, adapters = emptyList(), failure = null) }
+        scan()
+    }
+
+    /** Back to the picker. Whatever scan was running for the old method stops right here. */
+    private fun backToMethods() {
         scanJob?.cancel()
-        setState {
-            copy(
-                isScanning = true,
-                failure = null,
-                sections = sections.map { it.copy(adapters = emptyList()) },
-            )
-        }
+        setState { copy(selectedKind = null, adapters = emptyList(), isScanning = false, failure = null) }
+    }
+
+    private fun scan() {
+        val kind = state.value.selectedKind ?: return
+        scanJob?.cancel()
+        setState { copy(isScanning = true, failure = null, adapters = emptyList()) }
 
         scanJob = scope.launch {
-            state.value.sections
-                .map { section ->
-                    connector.discover(section.kind)
-                        // A radio that is off, or a permission that was refused, kills one
-                        // transport — not the scan. The other two still have something to find.
-                        .catch { thrown -> setState { copy(failure = thrown.asConnectFailure()) } }
-                }
-                .merge()
+            connector.discover(kind)
+                // A radio that is off, or a permission that was refused, ends the scan with a
+                // reason the user can act on.
+                .catch { thrown -> setState { copy(failure = thrown.asConnectFailure()) } }
                 // No advertised name means a random nearby device — a phone, earbuds — not an
                 // ELM327, which always advertises one. Keeping them would bury the real adapter in
                 // noise the user cannot tell apart.
                 .filter { !it.name.isNullOrBlank() }
-                .collect { found -> setState { copy(sections = sections.plus(found)) } }
+                .collect { found -> setState { copy(adapters = adapters.plus(found)) } }
 
             setState { copy(isScanning = false) }
         }
@@ -154,7 +158,7 @@ class ConnectViewModel(
 }
 
 /**
- * Adds a discovered adapter to its section, or refreshes one already there **in place**.
+ * Adds a discovered adapter to the list, or refreshes one already there **in place**.
  *
  * In place is the whole point. A BLE peripheral re-advertises several times a second, so the same
  * address arrives again and again during a scan. Removing the old sighting and appending the new
@@ -162,18 +166,9 @@ class ConnectViewModel(
  * under the user's finger and a tap would never land. Keeping its position makes the list settle so
  * it can actually be used.
  */
-private fun List<AdapterSection>.plus(found: DiscoveredAdapter): List<AdapterSection> = map { section ->
-    if (section.kind != found.kind) {
-        section
-    } else {
-        val at = section.adapters.indexOfFirst { it.address == found.address }
-        val adapters = if (at >= 0) {
-            section.adapters.toMutableList().also { it[at] = found }
-        } else {
-            section.adapters + found
-        }
-        section.copy(adapters = adapters)
-    }
+private fun List<DiscoveredAdapter>.plus(found: DiscoveredAdapter): List<DiscoveredAdapter> {
+    val at = indexOfFirst { it.address == found.address }
+    return if (at >= 0) toMutableList().also { it[at] = found } else this + found
 }
 
 /**

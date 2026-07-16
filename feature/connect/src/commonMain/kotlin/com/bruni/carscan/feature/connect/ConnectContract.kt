@@ -5,12 +5,6 @@ import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.transport.DiscoveredAdapter
 import com.bruni.carscan.core.transport.TransportKind
 
-/** One transport's worth of picker. Absent entirely when the platform cannot do that transport. */
-data class AdapterSection(
-    val kind: TransportKind,
-    val adapters: List<DiscoveredAdapter> = emptyList(),
-)
-
 /** What the adapter turned out to be, once it had been asked rather than believed. */
 data class ReadyReadout(
     val adapter: DiscoveredAdapter,
@@ -24,14 +18,19 @@ data class ReadyReadout(
 
 data class ConnectState(
     /**
-     * One per transport this platform actually has, built from [com.bruni.carscan.core.data.ObdConnector.supported].
+     * The methods this platform actually has, built from
+     * [com.bruni.carscan.core.data.ObdConnector.supported] — never from the platform.
      *
      * On iOS there is no Bluetooth Classic — Apple's ExternalAccessory framework reaches only
-     * MFi-certified hardware and no ELM327 clone is MFi — so the SPP section is *not here at
-     * all*, rather than here and disabled. A greyed-out row invites the user to keep tapping
-     * at something that can never work.
+     * MFi-certified hardware and no ELM327 clone is MFi — so SPP is *not offered at all*, rather
+     * than offered and disabled. A greyed-out row invites the user to keep tapping at something
+     * that can never work.
      */
-    val sections: List<AdapterSection> = emptyList(),
+    val availableKinds: List<TransportKind> = emptyList(),
+    /** Null shows the method picker. Set, it shows the scan/list (or Wi-Fi entry) for that kind. */
+    val selectedKind: TransportKind? = null,
+    /** Results for [selectedKind] only — cleared on every [ConnectIntent.SelectMethod] or [ConnectIntent.BackToMethods]. */
+    val adapters: List<DiscoveredAdapter> = emptyList(),
     val isScanning: Boolean = false,
     val connectingTo: DiscoveredAdapter? = null,
     val ready: ReadyReadout? = null,
@@ -44,12 +43,22 @@ data class ConnectState(
      */
     val throughput: ThroughputAdvice? get() = adviseThroughput(health.capacityHz)
 
-    val hasAdapters: Boolean get() = sections.any { it.adapters.isNotEmpty() }
+    val hasAdapters: Boolean get() = adapters.isNotEmpty()
 }
 
 sealed interface ConnectIntent {
+    /** The user's choice of connection method. Sets [ConnectState.selectedKind] and starts scanning it. */
+    data class SelectMethod(val kind: TransportKind) : ConnectIntent
+
+    /** Back to the method picker. Cancels any scan in flight and clears the results. */
+    data object BackToMethods : ConnectIntent
+
+    /** Rescan the currently selected method. */
     data object Scan : ConnectIntent
     data class Select(val adapter: DiscoveredAdapter) : ConnectIntent
+
+    /** Wi-Fi has no scan — the adapter is its own fixed access point — so the host and port are typed in by hand. */
+    data class ConnectWifi(val host: String, val port: Int) : ConnectIntent
 
     /** After a failure: try the same adapter again, or rescan if there wasn't one. */
     data object Retry : ConnectIntent
