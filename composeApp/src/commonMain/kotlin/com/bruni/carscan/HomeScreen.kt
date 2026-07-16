@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bruni.carscan.core.designsystem.ads.BannerAd
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.app_name
 import com.bruni.carscan.core.designsystem.generated.resources.common_settings
@@ -70,38 +71,42 @@ import org.jetbrains.compose.resources.stringResource
  */
 @Composable
 fun HomeScreen(onOpen: (Route) -> Unit, modifier: Modifier = Modifier) {
-    LazyVerticalGrid(
-        // Adaptive, not a fixed two columns: a phone shows two, a tablet three or four, and the
-        // tiles keep the same comfortable size on both instead of stretching wide on a big screen.
-        columns = GridCells.Adaptive(minSize = 168.dp),
-        modifier = modifier.fillMaxSize().padding(horizontal = 20.dp),
-        contentPadding = PaddingValues(top = 28.dp, bottom = 28.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            Column {
-                Text(
-                    text = stringResource(Res.string.app_name),
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = stringResource(Res.string.home_tagline),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
+    Column(modifier = modifier.fillMaxSize()) {
+        LazyVerticalGrid(
+            // Adaptive, not a fixed two columns: a phone shows two, a tablet three or four, and the
+            // tiles keep the same comfortable size on both instead of stretching wide on a big screen.
+            columns = GridCells.Adaptive(minSize = 168.dp),
+            modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 20.dp),
+            contentPadding = PaddingValues(top = 28.dp, bottom = 28.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Column {
+                    Text(
+                        text = stringResource(Res.string.app_name),
+                        style = MaterialTheme.typography.displaySmall,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = stringResource(Res.string.home_tagline),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                ConnectHero(onClick = { onOpen(Route.Connect) })
+            }
+
+            items(FEATURE_ENTRIES) { entry ->
+                FeatureTile(label = stringResource(entry.label), icon = entry.icon) { onOpen(entry.route) }
             }
         }
 
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            ConnectHero(onClick = { onOpen(Route.Connect) })
-        }
-
-        items(FEATURE_ENTRIES) { entry ->
-            FeatureTile(label = stringResource(entry.label), icon = entry.icon) { onOpen(entry.route) }
-        }
+        BannerAd(Modifier.fillMaxWidth())
     }
 }
 

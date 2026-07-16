@@ -27,6 +27,11 @@ kotlin {
             // Canvas ring-buffer renderer: Vico does not hold up at 20 Hz.
             implementation(libs.vico.multiplatform.m3)
         }
+        androidMain.dependencies {
+            // BannerAd's real AdView. androidMain only — must never leak onto the iOS klib path,
+            // which is why it is declared here rather than in commonMain.
+            implementation(libs.play.services.ads)
+        }
         commonTest.dependencies {
             implementation(compose.uiTest)
         }

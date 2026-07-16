@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.bruni.carscan.core.designsystem.ads.BannerAd
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.garage_download_failed
 import com.bruni.carscan.core.designsystem.generated.resources.garage_downloading
@@ -49,42 +50,49 @@ fun GarageScreen(
     onIntent: (GarageIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        item { Text(stringResource(Res.string.garage_title), style = MaterialTheme.typography.headlineSmall) }
+    Column(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            item { Text(stringResource(Res.string.garage_title), style = MaterialTheme.typography.headlineSmall) }
 
-        if (state.downloading != null) {
-            item { DownloadingCard() }
-        }
-        state.message?.let { message ->
-            item { MessageHint(message) }
-        }
-
-        if (state.entries.isEmpty()) {
-            item { EmptyState() }
-        } else {
-            item {
-                Text(stringResource(Res.string.garage_instruction), style = MaterialTheme.typography.bodyMedium)
+            if (state.downloading != null) {
+                item { DownloadingCard() }
+            }
+            state.message?.let { message ->
+                item { MessageHint(message) }
             }
 
-            for ((make, models) in state.byMake) {
+            if (state.entries.isEmpty()) {
+                item { EmptyState() }
+            } else {
                 item {
-                    Text(
-                        text = make,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Medium,
-                    )
+                    Text(stringResource(Res.string.garage_instruction), style = MaterialTheme.typography.bodyMedium)
                 }
-                items(models, key = { it.displayName }) { entry ->
-                    // Brand names, not translated — see CatalogEntry.displayName.
-                    VehicleRow(displayName = entry.displayName, onClick = { onIntent(GarageIntent.Select(entry)) })
+
+                for ((make, models) in state.byMake) {
+                    item {
+                        Text(
+                            text = make,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontWeight = FontWeight.Medium,
+                        )
+                    }
+                    items(models, key = { it.displayName }) { entry ->
+                        // Brand names, not translated — see CatalogEntry.displayName.
+                        VehicleRow(
+                            displayName = entry.displayName,
+                            onClick = { onIntent(GarageIntent.Select(entry)) },
+                        )
+                    }
                 }
             }
         }
+
+        BannerAd(Modifier.fillMaxWidth())
     }
 }
 

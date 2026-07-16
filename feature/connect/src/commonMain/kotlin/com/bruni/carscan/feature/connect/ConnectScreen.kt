@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bruni.carscan.core.designsystem.ads.BannerAd
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.adapter_kind_ble
 import com.bruni.carscan.core.designsystem.generated.resources.adapter_kind_spp
@@ -83,72 +85,76 @@ fun ConnectScreen(
     onIntent: (ConnectIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(stringResource(Res.string.connect_title), style = MaterialTheme.typography.headlineSmall)
-                Button(
-                    onClick = { onIntent(ConnectIntent.Scan) },
-                    enabled = !state.isScanning && state.connectingTo == null,
-                    modifier = Modifier.testTag(ConnectTags.SCAN),
+    Column(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    Text(stringResource(Res.string.connect_title), style = MaterialTheme.typography.headlineSmall)
+                    Button(
+                        onClick = { onIntent(ConnectIntent.Scan) },
+                        enabled = !state.isScanning && state.connectingTo == null,
+                        modifier = Modifier.testTag(ConnectTags.SCAN),
+                    ) {
+                        Text(
+                            stringResource(
+                                if (state.isScanning) Res.string.connect_scanning else Res.string.connect_scan,
+                            ),
+                        )
+                    }
+                }
+            }
+
+            state.failure?.let { failure ->
+                item { FailureCard(failure, onIntent) }
+            }
+
+            state.ready?.let { ready ->
+                item { ReadoutCard(ready, state.throughput) }
+            }
+
+            state.connectingTo?.let { target ->
+                item { ConnectingCard(target) }
+            }
+
+            // One section per transport this platform actually has. On iOS there is no SPP
+            // section here at all — not a disabled one — because Apple will never allow it and a
+            // greyed-out row that can never light up just invites the user to keep tapping it.
+            state.sections.forEach { section ->
+                item(key = section.kind) {
                     Text(
-                        stringResource(
-                            if (state.isScanning) Res.string.connect_scanning else Res.string.connect_scan,
-                        ),
+                        text = stringResource(section.kind.label()),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.testTag(ConnectTags.section(section.kind)),
+                    )
+                }
+
+                items(section.adapters, key = { it.address }) { adapter ->
+                    AdapterRow(adapter, onClick = { onIntent(ConnectIntent.Select(adapter)) })
+                }
+            }
+
+            if (!state.hasAdapters && !state.isScanning) {
+                item {
+                    Text(
+                        text = stringResource(Res.string.connect_no_adapters),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
         }
 
-        state.failure?.let { failure ->
-            item { FailureCard(failure, onIntent) }
-        }
-
-        state.ready?.let { ready ->
-            item { ReadoutCard(ready, state.throughput) }
-        }
-
-        state.connectingTo?.let { target ->
-            item { ConnectingCard(target) }
-        }
-
-        // One section per transport this platform actually has. On iOS there is no SPP
-        // section here at all — not a disabled one — because Apple will never allow it and a
-        // greyed-out row that can never light up just invites the user to keep tapping it.
-        state.sections.forEach { section ->
-            item(key = section.kind) {
-                Text(
-                    text = stringResource(section.kind.label()),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.testTag(ConnectTags.section(section.kind)),
-                )
-            }
-
-            items(section.adapters, key = { it.address }) { adapter ->
-                AdapterRow(adapter, onClick = { onIntent(ConnectIntent.Select(adapter)) })
-            }
-        }
-
-        if (!state.hasAdapters && !state.isScanning) {
-            item {
-                Text(
-                    text = stringResource(Res.string.connect_no_adapters),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
+        BannerAd(Modifier.fillMaxWidth())
     }
 }
 
