@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -24,8 +25,10 @@ import androidx.navigation.toRoute
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
+import com.bruni.carscan.core.designsystem.ads.LocalAdsEnabled
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.designsystem.theme.CarScanTheme
+import com.bruni.carscan.core.monetization.Entitlements
 import com.bruni.carscan.feature.connect.ConnectEffect
 import com.bruni.carscan.feature.connect.ConnectScreen
 import com.bruni.carscan.feature.connect.ConnectViewModel
@@ -71,6 +74,9 @@ fun App() {
     val settingsRepository: SettingsRepository = koinInject()
     val settings by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = Settings())
 
+    val entitlements: Entitlements = koinInject()
+    val isPremium by entitlements.isPremium.collectAsStateWithLifecycle()
+
     val darkTheme = when (settings.themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
         ThemeMode.LIGHT -> false
@@ -82,21 +88,25 @@ fun App() {
     }
 
     CarScanTheme(darkTheme = darkTheme, gaugeStyle = gaugeStyle) {
-        val navController = rememberNavController()
-        val entry by navController.currentBackStackEntryAsState()
+        // Premium users and any screen this provider does not reach (Dashboard, Live, HUD) never
+        // see a BannerAd — see :core:designsystem's LocalAdsEnabled.
+        CompositionLocalProvider(LocalAdsEnabled provides !isPremium) {
+            val navController = rememberNavController()
+            val entry by navController.currentBackStackEntryAsState()
 
-        // Connect is a thing you finish, not a place you go: it is the start destination, and it
-        // pops itself off the stack the moment an adapter answers. A tab bar over it would offer
-        // a dashboard with nothing to put on it.
-        val onTab = entry?.destination?.hierarchy
-            ?.any { destination -> CarScanTab.entries.any { destination.hasRoute(it.route::class) } }
-            ?: false
+            // Connect is a thing you finish, not a place you go: it is the start destination, and it
+            // pops itself off the stack the moment an adapter answers. A tab bar over it would offer
+            // a dashboard with nothing to put on it.
+            val onTab = entry?.destination?.hierarchy
+                ?.any { destination -> CarScanTab.entries.any { destination.hasRoute(it.route::class) } }
+                ?: false
 
-        Scaffold(
-            bottomBar = { if (onTab) CarScanNavigationBar(navController, entry?.destination) },
-        ) { padding ->
-            Surface(Modifier.fillMaxSize().padding(padding)) {
-                CarScanNavHost(navController)
+            Scaffold(
+                bottomBar = { if (onTab) CarScanNavigationBar(navController, entry?.destination) },
+            ) { padding ->
+                Surface(Modifier.fillMaxSize().padding(padding)) {
+                    CarScanNavHost(navController)
+                }
             }
         }
     }

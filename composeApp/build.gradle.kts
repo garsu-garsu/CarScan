@@ -22,6 +22,11 @@ kotlin {
             implementation(project(":core:designsystem"))
             implementation(project(":core:data"))
 
+            // Entitlements.isPremium: App.kt reads it to gate BannerAd via LocalAdsEnabled, and
+            // PlatformModule.android.kt/.ios.kt construct the real binding. Pure KMP — safe on
+            // the iOS klib path too.
+            implementation(project(":core:monetization"))
+
             // The composition root is the ONE module allowed to see both sides of the :core:data
             // ports: the ELM327 stack that satisfies them, and the screens that consume them.
             // :core:data api-exports :core:transport, :core:vehicle, :core:database and
@@ -77,11 +82,6 @@ kotlin {
             // Real Play Billing / AdMob. androidMain only — this must never leak onto the iOS
             // klib path, which is why it is declared here rather than in commonMain.
             implementation(project(":platform:android-ads"))
-
-            // PlatformModule.android.kt constructs DefaultEntitlements/DataStoreEntitlementCache
-            // itself; :feature:settings pulls in the same pure KMP module through its own
-            // dependency for the paywall screen.
-            implementation(project(":core:monetization"))
         }
 
         // The iOS engine only where the Apple targets are registered (macOS host); on Windows the
