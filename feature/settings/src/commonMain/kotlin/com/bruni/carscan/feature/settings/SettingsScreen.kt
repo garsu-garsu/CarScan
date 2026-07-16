@@ -1,20 +1,41 @@
 package com.bruni.carscan.feature.settings
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.DarkMode
+import androidx.compose.material.icons.rounded.DirectionsCar
+import androidx.compose.material.icons.rounded.FiberManualRecord
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Speed
+import androidx.compose.material.icons.rounded.Straighten
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.designsystem.generated.resources.Res
@@ -52,133 +73,203 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxWidth().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier.fillMaxWidth().padding(horizontal = 20.dp),
+        contentPadding = PaddingValues(top = 20.dp, bottom = 28.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        item { Text(stringResource(Res.string.settings_title), style = MaterialTheme.typography.headlineSmall) }
+        item {
+            Text(
+                stringResource(Res.string.settings_title),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+            )
+        }
 
-        // One row per quantity — never a single metric/imperial switch. See UnitPreferences.
-        items(Quantity.entries, key = { it }) { quantity ->
-            OptionRow(
-                label = stringResource(quantity.label()),
-                options = UnitId.entries.filter { it.quantity == quantity }.map { unit ->
-                    Option(
-                        label = unitLabel(unit),
-                        selected = state.units[quantity] == unit,
-                        onClick = { onIntent(SettingsIntent.SetUnit(quantity, unit)) },
+        item {
+            SettingsCard {
+                // One row per quantity — never a single metric/imperial switch. See UnitPreferences.
+                Quantity.entries.forEachIndexed { index, quantity ->
+                    OptionRow(
+                        icon = Icons.Rounded.Straighten,
+                        label = stringResource(quantity.label()),
+                        options = UnitId.entries.filter { it.quantity == quantity }.map { unit ->
+                            Option(
+                                label = unitLabel(unit),
+                                selected = state.units[quantity] == unit,
+                                onClick = { onIntent(SettingsIntent.SetUnit(quantity, unit)) },
+                            )
+                        },
                     )
-                },
-            )
+                    if (index != Quantity.entries.lastIndex) RowDivider()
+                }
+            }
         }
 
         item {
-            OptionRow(
-                label = stringResource(Res.string.settings_gauge_style),
-                options = listOf(
-                    Option(
-                        label = stringResource(Res.string.settings_gauge_style_modern_arc),
-                        selected = state.gaugeStyle == "MODERN_ARC",
-                        onClick = { onIntent(SettingsIntent.SetGaugeStyle("MODERN_ARC")) },
+            SettingsCard {
+                OptionRow(
+                    icon = Icons.Rounded.Speed,
+                    label = stringResource(Res.string.settings_gauge_style),
+                    options = listOf(
+                        Option(
+                            label = stringResource(Res.string.settings_gauge_style_modern_arc),
+                            selected = state.gaugeStyle == "MODERN_ARC",
+                            onClick = { onIntent(SettingsIntent.SetGaugeStyle("MODERN_ARC")) },
+                        ),
+                        Option(
+                            label = stringResource(Res.string.settings_gauge_style_classic_analog),
+                            selected = state.gaugeStyle == "CLASSIC_ANALOG",
+                            onClick = { onIntent(SettingsIntent.SetGaugeStyle("CLASSIC_ANALOG")) },
+                        ),
                     ),
-                    Option(
-                        label = stringResource(Res.string.settings_gauge_style_classic_analog),
-                        selected = state.gaugeStyle == "CLASSIC_ANALOG",
-                        onClick = { onIntent(SettingsIntent.SetGaugeStyle("CLASSIC_ANALOG")) },
+                )
+                RowDivider()
+                OptionRow(
+                    icon = Icons.Rounded.DarkMode,
+                    label = stringResource(Res.string.settings_theme),
+                    options = listOf(
+                        Option(
+                            label = stringResource(Res.string.settings_theme_system),
+                            selected = state.themeMode == ThemeMode.SYSTEM,
+                            onClick = { onIntent(SettingsIntent.SetThemeMode(ThemeMode.SYSTEM)) },
+                        ),
+                        Option(
+                            label = stringResource(Res.string.settings_theme_light),
+                            selected = state.themeMode == ThemeMode.LIGHT,
+                            onClick = { onIntent(SettingsIntent.SetThemeMode(ThemeMode.LIGHT)) },
+                        ),
+                        Option(
+                            label = stringResource(Res.string.settings_theme_dark),
+                            selected = state.themeMode == ThemeMode.DARK,
+                            onClick = { onIntent(SettingsIntent.SetThemeMode(ThemeMode.DARK)) },
+                        ),
                     ),
-                ),
-            )
+                )
+            }
         }
 
         item {
-            OptionRow(
-                label = stringResource(Res.string.settings_theme),
-                options = listOf(
-                    Option(
-                        label = stringResource(Res.string.settings_theme_system),
-                        selected = state.themeMode == ThemeMode.SYSTEM,
-                        onClick = { onIntent(SettingsIntent.SetThemeMode(ThemeMode.SYSTEM)) },
-                    ),
-                    Option(
-                        label = stringResource(Res.string.settings_theme_light),
-                        selected = state.themeMode == ThemeMode.LIGHT,
-                        onClick = { onIntent(SettingsIntent.SetThemeMode(ThemeMode.LIGHT)) },
-                    ),
-                    Option(
-                        label = stringResource(Res.string.settings_theme_dark),
-                        selected = state.themeMode == ThemeMode.DARK,
-                        onClick = { onIntent(SettingsIntent.SetThemeMode(ThemeMode.DARK)) },
-                    ),
-                ),
-            )
+            SettingsCard {
+                SwitchRow(
+                    icon = Icons.Rounded.Visibility,
+                    label = stringResource(Res.string.settings_keep_screen_on),
+                    checked = state.keepScreenOn,
+                    onCheckedChange = { onIntent(SettingsIntent.SetKeepScreenOn(it)) },
+                )
+                RowDivider()
+                SwitchRow(
+                    icon = Icons.Rounded.FiberManualRecord,
+                    label = stringResource(Res.string.settings_record_trips),
+                    checked = state.recordTrips,
+                    onCheckedChange = { onIntent(SettingsIntent.SetRecordTrips(it)) },
+                )
+            }
         }
 
         item {
-            SwitchRow(
-                label = stringResource(Res.string.settings_keep_screen_on),
-                checked = state.keepScreenOn,
-                onCheckedChange = { onIntent(SettingsIntent.SetKeepScreenOn(it)) },
-            )
-        }
-
-        item {
-            SwitchRow(
-                label = stringResource(Res.string.settings_record_trips),
-                checked = state.recordTrips,
-                onCheckedChange = { onIntent(SettingsIntent.SetRecordTrips(it)) },
-            )
-        }
-
-        item {
-            Text(
-                text = stringResource(Res.string.settings_vehicle),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onIntent(SettingsIntent.OpenVehicle) }
-                    .padding(vertical = 12.dp),
-            )
-        }
-
-        item {
-            Text(
-                text = stringResource(Res.string.settings_about),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onIntent(SettingsIntent.OpenAbout) }
-                    .padding(vertical = 12.dp),
-            )
-        }
-    }
-}
-
-private data class Option(val label: String, val selected: Boolean, val onClick: () -> Unit)
-
-@Composable
-private fun OptionRow(label: String, options: List<Option>) {
-    Column {
-        Text(label, style = MaterialTheme.typography.titleSmall)
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            for (option in options) {
-                FilterChip(selected = option.selected, onClick = option.onClick, label = { Text(option.label) })
+            SettingsCard {
+                NavigationRow(
+                    icon = Icons.Rounded.DirectionsCar,
+                    label = stringResource(Res.string.settings_vehicle),
+                    onClick = { onIntent(SettingsIntent.OpenVehicle) },
+                )
+                RowDivider()
+                NavigationRow(
+                    icon = Icons.Rounded.Info,
+                    label = stringResource(Res.string.settings_about),
+                    onClick = { onIntent(SettingsIntent.OpenAbout) },
+                )
             }
         }
     }
 }
 
 @Composable
-private fun SwitchRow(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-    Row(
+private fun SettingsCard(content: @Composable () -> Unit) {
+    Card(
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column { content() }
+    }
+}
+
+/** A colour-lit icon badge matching the home launcher's tile icons. */
+@Composable
+private fun IconBadge(icon: ImageVector) {
+    Box(
+        modifier = Modifier
+            .size(44.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+    }
+}
+
+private data class Option(val label: String, val selected: Boolean, val onClick: () -> Unit)
+
+@Composable
+private fun OptionRow(icon: ImageVector, label: String, options: List<Option>) {
+    Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        IconBadge(icon)
+        Spacer(Modifier.size(16.dp))
+        Column(Modifier.fillMaxWidth()) {
+            Text(label, style = MaterialTheme.typography.titleSmall)
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                for (option in options) {
+                    FilterChip(selected = option.selected, onClick = option.onClick, label = { Text(option.label) })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SwitchRow(icon: ImageVector, label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(label, style = MaterialTheme.typography.bodyLarge)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconBadge(icon)
+            Spacer(Modifier.size(16.dp))
+            Text(label, style = MaterialTheme.typography.bodyLarge)
+        }
         Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
+}
+
+@Composable
+private fun NavigationRow(icon: ImageVector, label: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconBadge(icon)
+            Spacer(Modifier.size(16.dp))
+            Text(label, style = MaterialTheme.typography.bodyLarge)
+        }
+        Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/** A hairline separating stacked rows inside one card, indented past the icon badge. */
+@Composable
+private fun RowDivider() {
+    HorizontalDivider(
+        modifier = Modifier.padding(start = 76.dp),
+        color = MaterialTheme.colorScheme.outlineVariant,
+    )
 }
 
 private fun Quantity.label(): StringResource = when (this) {
