@@ -41,6 +41,9 @@ class FakeObdConnector(
 
     val calls = mutableListOf<Pair<DiscoveredAdapter, AdapterQuirks?>>()
 
+    /** Every kind [discover] was actually asked for — proves the picker scans one method, not all three. */
+    val discoverCalls = mutableListOf<TransportKind>()
+
     /** Set to make a scan of this transport blow up, the way a refused permission does. */
     var discoveryFailsOn: TransportKind? = null
 
@@ -57,8 +60,9 @@ class FakeObdConnector(
      */
     var discovered: List<DiscoveredAdapter>? = null
 
-    override fun discover(kind: TransportKind): Flow<DiscoveredAdapter> =
-        if (kind == discoveryFailsOn) {
+    override fun discover(kind: TransportKind): Flow<DiscoveredAdapter> {
+        discoverCalls += kind
+        return if (kind == discoveryFailsOn) {
             flow {
                 throw discoveryFailsWith
                     ?.let { ConnectException(it) }
@@ -69,6 +73,7 @@ class FakeObdConnector(
                 flow { scripted.filter { it.kind == kind }.forEach { emit(it) } }
             } ?: transports.discover(kind)
         }
+    }
 
     override suspend fun connect(target: DiscoveredAdapter, remembered: AdapterQuirks?): ConnectOutcome {
         calls += target to remembered
