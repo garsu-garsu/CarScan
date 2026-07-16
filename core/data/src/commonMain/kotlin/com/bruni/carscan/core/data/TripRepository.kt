@@ -7,6 +7,9 @@ import com.bruni.carscan.core.model.SensorSample
 import com.bruni.carscan.db.CarScanDb
 import com.bruni.carscan.db.Trip
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /** A trip's summary. All values are in native/SI units: metres, millilitres, watt-hours, km/h. */
 data class TripSummary(
@@ -20,7 +23,17 @@ data class TripSummary(
     val maxSpeedKmh: Double,
     val idleMs: Long,
     val sampleCount: Long,
+    val startLat: Double? = null,
+    val startLon: Double? = null,
+    val endLat: Double? = null,
+    val endLon: Double? = null,
+    val startAddress: String? = null,
+    val endAddress: String? = null,
+    val source: String = "OBD",
 )
+
+/** The trip currently being recorded, if any. */
+data class ActiveTrip(val id: String, val startedMs: Long)
 
 /**
  * One signal across a whole trip, stitched back out of its chunks.
@@ -33,6 +46,9 @@ class SignalSeries(val signalId: String, val values: FloatArray)
 
 interface TripRepository {
     val isRecording: Boolean
+
+    /** The trip currently being recorded, if any. Null when nothing is recording. */
+    val activeTrip: StateFlow<ActiveTrip?>
 
     /** Inserts a trip and starts recording into it. Returns its (UUID) id. */
     suspend fun start(vehicleId: String, startedMs: Long): String
@@ -48,6 +64,9 @@ interface TripRepository {
 
     /** The whole trip for one signal, for playback. Null if it was never recorded. */
     suspend fun series(tripId: String, signalId: String): SignalSeries?
+
+    suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?)
+    suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?)
 
     /**
      * Restores a trip from a backup. **Idempotent**: importing the same trip twice
@@ -67,6 +86,9 @@ class DefaultTripRepository(
 
     private val writer = SampleWriter(db, scope, flushIntervalMs)
 
+    private val _activeTrip = MutableStateFlow<ActiveTrip?>(null)
+    override val activeTrip: StateFlow<ActiveTrip?> = _activeTrip.asStateFlow()
+
     override val isRecording: Boolean get() = writer.isRecording
 
     override suspend fun start(vehicleId: String, startedMs: Long): String {
@@ -74,15 +96,27 @@ class DefaultTripRepository(
         db.tripQueries.insertOrIgnore(
             id = id, vehicle_id = vehicleId, started_ms = startedMs, ended_ms = null,
             distance_m = 0.0, fuel_ml = 0.0, energy_wh = 0.0,
-            max_speed_kmh = 0.0, idle_ms = 0, sample_count = 0,
+            max_speed_kmh = 0.0, idle_ms = 0, sample_count = 0, source = "OBD",
         )
         writer.start(id, startedMs)
+        _activeTrip.value = ActiveTrip(id, startedMs)
         return id
     }
 
     override fun offer(sample: SensorSample) = writer.offer(sample)
 
-    override suspend fun stop(endedMs: Long) = writer.stop(endedMs)
+    override suspend fun stop(endedMs: Long) {
+        writer.stop(endedMs)
+        _activeTrip.value = null
+    }
+
+    override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) {
+        db.tripQueries.setStartLocation(start_lat = lat, start_lon = lon, start_address = address, id = tripId)
+    }
+
+    override suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?) {
+        db.tripQueries.setEndLocation(end_lat = lat, end_lon = lon, end_address = address, id = tripId)
+    }
 
     override suspend fun trips(vehicleId: String): List<TripSummary> =
         db.tripQueries.selectForVehicle(vehicleId).executeAsList().map(Trip::toSummary)
@@ -119,7 +153,7 @@ class DefaultTripRepository(
                 id = trip.id, vehicle_id = trip.vehicleId, started_ms = trip.startedMs,
                 ended_ms = trip.endedMs, distance_m = trip.distanceM, fuel_ml = trip.fuelMl,
                 energy_wh = trip.energyWh, max_speed_kmh = trip.maxSpeedKmh,
-                idle_ms = trip.idleMs, sample_count = trip.sampleCount,
+                idle_ms = trip.idleMs, sample_count = trip.sampleCount, source = trip.source,
             )
             // The row may already have existed, in which case OR IGNORE left it alone.
             db.tripQueries.updateTotals(
@@ -128,6 +162,18 @@ class DefaultTripRepository(
                 sample_count = trip.sampleCount, id = trip.id,
             )
             db.tripQueries.finish(ended_ms = trip.endedMs, id = trip.id)
+            if (trip.startLat != null && trip.startLon != null) {
+                db.tripQueries.setStartLocation(
+                    start_lat = trip.startLat, start_lon = trip.startLon,
+                    start_address = trip.startAddress, id = trip.id,
+                )
+            }
+            if (trip.endLat != null && trip.endLon != null) {
+                db.tripQueries.setEndLocation(
+                    end_lat = trip.endLat, end_lon = trip.endLon,
+                    end_address = trip.endAddress, id = trip.id,
+                )
+            }
 
             for (signal in series) {
                 var offset = 0
@@ -171,4 +217,11 @@ private fun Trip.toSummary() = TripSummary(
     maxSpeedKmh = max_speed_kmh,
     idleMs = idle_ms,
     sampleCount = sample_count,
+    startLat = start_lat,
+    startLon = start_lon,
+    endLat = end_lat,
+    endLon = end_lon,
+    startAddress = start_address,
+    endAddress = end_address,
+    source = source,
 )

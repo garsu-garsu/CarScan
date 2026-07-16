@@ -373,6 +373,8 @@ private class FakeTrips : TripRepository {
     val series = mutableMapOf<Pair<String, String>, SignalSeries>()
 
     override val isRecording: Boolean get() = false
+    override val activeTrip: StateFlow<com.bruni.carscan.core.data.ActiveTrip?> =
+        MutableStateFlow(null).asStateFlow()
     override suspend fun series(tripId: String, signalId: String): SignalSeries? =
         series[tripId to signalId]
 
@@ -382,6 +384,8 @@ private class FakeTrips : TripRepository {
     override suspend fun trips(vehicleId: String): List<TripSummary> = emptyList()
     override suspend fun summary(tripId: String): TripSummary? = null
     override suspend fun signalIds(tripId: String): List<String> = series.keys.map { it.second }
+    override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
+    override suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
     override suspend fun import(trip: TripSummary, series: List<SignalSeries>) = Unit
     override suspend fun delete(tripId: String) = Unit
 }

@@ -82,6 +82,10 @@ kotlin {
             // Real Play Billing / AdMob. androidMain only — this must never leak onto the iOS
             // klib path, which is why it is declared here rather than in commonMain.
             implementation(project(":platform:android-ads"))
+
+            // Fused location + reverse geocoder that satisfy the GPS ports. androidMain only, same
+            // reasoning as the ads module above.
+            implementation(project(":platform:android-service"))
         }
 
         // The iOS engine only where the Apple targets are registered (macOS host); on Windows the

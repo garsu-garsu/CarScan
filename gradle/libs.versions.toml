@@ -50,6 +50,7 @@ kotest = "6.2.2"
 # 7.x release.
 billing = "7.1.1"
 playServicesAds = "25.4.0"
+playServicesLocation = "21.3.0"
 userMessagingPlatform = "4.0.0"
 
 # --- AndroidX process lifecycle (:androidApp only) --------------------------
@@ -117,6 +118,7 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 # --- Monetization (:platform:android-ads and :androidApp only) -------------
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "userMessagingPlatform" }
 
 # --- Gradle plugin artifacts — for build-logic's classpath only ------------

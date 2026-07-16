@@ -34,6 +34,7 @@ import com.bruni.carscan.obd.BundledSignalsetSource
 import com.bruni.carscan.obd.BundledVehicleCatalog
 import com.bruni.carscan.obd.DefaultSignalsetProvider
 import com.bruni.carscan.obd.ElmObdConnector
+import com.bruni.carscan.obd.GpsRecorder
 import com.bruni.carscan.obd.KtorSignalsetDownloader
 import com.bruni.carscan.obd.SignalsetDownloader
 import com.bruni.carscan.obd.SignalsetSource
@@ -112,6 +113,11 @@ fun appModule(): Module = module {
     // class KDoc. Registered alongside TripRecorder because it is started the same way, from
     // CarScanApplication, at launch.
     single { AutoConnector(connector = get(), source = get(), adapters = get(), settings = get()) }
+
+    // Records the trip's GPS route + start/arrival address alongside the OBD samples. Driven by
+    // TripRepository.activeTrip, so it needs no clock or connection state of its own. The
+    // LocationSource/ReverseGeocoder it consumes are bound per platform (Android: fused location).
+    single { GpsRecorder(db = get(), trips = get(), location = get(), geocoder = get()) }
 
     single { DashboardClock.system() }
 

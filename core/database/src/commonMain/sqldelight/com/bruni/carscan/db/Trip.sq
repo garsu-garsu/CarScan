@@ -14,7 +14,14 @@ CREATE TABLE trip (
     energy_wh     REAL    NOT NULL DEFAULT 0.0,
     max_speed_kmh REAL    NOT NULL DEFAULT 0.0,
     idle_ms       INTEGER NOT NULL DEFAULT 0,
-    sample_count  INTEGER NOT NULL DEFAULT 0
+    sample_count  INTEGER NOT NULL DEFAULT 0,
+    start_lat     REAL,
+    start_lon     REAL,
+    end_lat       REAL,
+    end_lon       REAL,
+    start_address TEXT,
+    end_address   TEXT,
+    source        TEXT    NOT NULL DEFAULT 'OBD'
 );
 
 CREATE INDEX trip_vehicle ON trip(vehicle_id, started_ms DESC);
@@ -23,8 +30,8 @@ CREATE INDEX trip_vehicle ON trip(vehicle_id, started_ms DESC);
 -- rather than delete it, because ON DELETE CASCADE would take trip_series and
 -- trip_gps with it. This is what makes import idempotent.
 insertOrIgnore:
-INSERT OR IGNORE INTO trip(id, vehicle_id, started_ms, ended_ms, distance_m, fuel_ml, energy_wh, max_speed_kmh, idle_ms, sample_count)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT OR IGNORE INTO trip(id, vehicle_id, started_ms, ended_ms, distance_m, fuel_ml, energy_wh, max_speed_kmh, idle_ms, sample_count, source)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 selectById:
 SELECT * FROM trip WHERE id = ?;
@@ -47,6 +54,12 @@ WHERE id = :id;
 
 finish:
 UPDATE trip SET ended_ms = :ended_ms WHERE id = :id;
+
+setStartLocation:
+UPDATE trip SET start_lat = :start_lat, start_lon = :start_lon, start_address = :start_address WHERE id = :id;
+
+setEndLocation:
+UPDATE trip SET end_lat = :end_lat, end_lon = :end_lon, end_address = :end_address WHERE id = :id;
 
 deleteById:
 DELETE FROM trip WHERE id = ?;

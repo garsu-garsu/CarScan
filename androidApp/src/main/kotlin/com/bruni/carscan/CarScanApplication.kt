@@ -8,6 +8,7 @@ import com.bruni.carscan.core.monetization.FullScreenAdGate
 import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.di.carScanModules
 import com.bruni.carscan.obd.AutoConnector
+import com.bruni.carscan.obd.GpsRecorder
 import com.bruni.carscan.obd.TripRecorder
 import com.bruni.carscan.platform.android.ads.ActivityTracker
 import com.bruni.carscan.platform.android.ads.AdsInitializer
@@ -44,6 +45,11 @@ class CarScanApplication : Application() {
         // AutoConnector's KDoc. Started the same way as the recorder above: before anything on
         // screen could have raced it into a manual connect.
         get<AutoConnector>().start(get<CoroutineScope>())
+
+        // Records the trip's GPS route + start/arrival address. Like the recorder above it just
+        // watches TripRepository.activeTrip until a trip actually starts, so it costs nothing on a
+        // launch that never records — and nothing at all if location permission was declined.
+        get<GpsRecorder>().start(get<CoroutineScope>())
 
         // Picks up a lapsed subscription or a store-side refund promptly, rather than only the
         // next time the user makes a purchase. isPremium itself needs no network call to be

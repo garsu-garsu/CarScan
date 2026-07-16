@@ -17,8 +17,12 @@ import com.bruni.carscan.core.monetization.EntitlementCache
 import com.bruni.carscan.core.monetization.FullScreenAdGate
 import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.core.monetization.RewardedAdPort
+import com.bruni.carscan.core.data.LocationSource
+import com.bruni.carscan.core.data.ReverseGeocoder
 import com.bruni.carscan.core.transport.ble.BleTransportFactory
 import com.bruni.carscan.core.transport.spp.SppTransportFactory
+import com.bruni.carscan.platform.android.service.AndroidReverseGeocoder
+import com.bruni.carscan.platform.android.service.FusedLocationSource
 import com.bruni.carscan.nav.AppSettingsOpener
 import com.bruni.carscan.obd.DefaultTransports
 import com.bruni.carscan.obd.Transports
@@ -44,6 +48,12 @@ actual fun platformModule(): Module = module {
             context.filesDir.resolve(PREFERENCES_FILE).absolutePath.toPath()
         }
     }
+
+    // GPS ports satisfied by the device's fused location + platform geocoder. Bound here in
+    // androidMain so the iOS klib never sees play-services — the GpsRecorder that consumes them
+    // lives in commonMain and knows only the ports.
+    single<LocationSource> { FusedLocationSource(androidContext()) }
+    single<ReverseGeocoder> { AndroidReverseGeocoder(androidContext()) }
 
     // All three transports. Android is the only platform where that sentence is true.
     single<Transports> {

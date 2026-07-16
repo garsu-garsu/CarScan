@@ -207,4 +207,46 @@ class TripRepositoryTest {
 
         assertEquals(listOf(second, first), repo.trips(VEHICLE).map { it.id })
     }
+
+    // --- activeTrip --------------------------------------------------------------
+
+    /**
+     * GpsRecorder (composeApp) drives entirely off this flow: it is how it learns a
+     * trip started (to open its own GpsWriter) and ended (to close it). Null must be
+     * the value both before the first trip and after every trip stops.
+     */
+    @Test
+    fun `activeTrip is null, becomes the started trip, then null again on stop`() = runTest {
+        db.seedVehicle()
+        val repo = repo(backgroundScope)
+
+        assertNull(repo.activeTrip.value)
+
+        val id = repo.start(VEHICLE, startedMs = 1_000)
+        assertEquals(ActiveTrip(id, 1_000), repo.activeTrip.value)
+
+        repo.stop(endedMs = 2_000)
+        assertNull(repo.activeTrip.value)
+    }
+
+    // --- Start/end location --------------------------------------------------------
+
+    @Test
+    fun `setStartLocation and setEndLocation persist and surface in summary`() = runTest {
+        db.seedVehicle()
+        val repo = repo(backgroundScope)
+        val id = repo.start(VEHICLE, startedMs = 0)
+
+        repo.setStartLocation(id, lat = 37.5665, lon = 126.9780, address = "Seoul City Hall")
+        repo.setEndLocation(id, lat = 37.4979, lon = 127.0276, address = "Gangnam Station")
+        repo.stop(endedMs = 1_000)
+
+        val summary = repo.summary(id)!!
+        assertEquals(37.5665, summary.startLat)
+        assertEquals(126.9780, summary.startLon)
+        assertEquals("Seoul City Hall", summary.startAddress)
+        assertEquals(37.4979, summary.endLat)
+        assertEquals(127.0276, summary.endLon)
+        assertEquals("Gangnam Station", summary.endAddress)
+    }
 }

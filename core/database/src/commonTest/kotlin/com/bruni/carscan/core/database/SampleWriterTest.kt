@@ -34,7 +34,7 @@ class SampleWriterTest {
         db.tripQueries.insertOrIgnore(
             id = TRIP, vehicle_id = VEHICLE, started_ms = 0, ended_ms = null,
             distance_m = 0.0, fuel_ml = 0.0, energy_wh = 0.0,
-            max_speed_kmh = 0.0, idle_ms = 0, sample_count = 0,
+            max_speed_kmh = 0.0, idle_ms = 0, sample_count = 0, source = "OBD",
         )
         driver.reset() // the setup rows are not what any of these tests is counting
     }

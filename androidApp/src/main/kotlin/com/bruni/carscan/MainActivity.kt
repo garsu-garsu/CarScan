@@ -45,9 +45,14 @@ class MainActivity : ComponentActivity() {
  * `neverForLocation` on `BLUETOOTH_SCAN` in the manifest is what lets us stop asking a driver for
  * their location in order to read their coolant temperature.
  */
-private fun bluetoothPermissions(): Array<String> =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+private fun bluetoothPermissions(): Array<String> {
+    val bt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
     } else {
-        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        emptyArray()
     }
+    // Foreground location for the trip route + start/arrival address. Also what a BLE scan needs
+    // on API <=30, which is why it was already requested there; now it is asked for on every
+    // version. A refusal is fine — GPS just records nothing, see FusedLocationSource.
+    return bt + Manifest.permission.ACCESS_FINE_LOCATION
+}
