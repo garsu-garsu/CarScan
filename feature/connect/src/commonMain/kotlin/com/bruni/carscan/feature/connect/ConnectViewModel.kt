@@ -7,6 +7,9 @@ import com.bruni.carscan.core.data.ConnectFailure
 import com.bruni.carscan.core.data.ConnectOutcome
 import com.bruni.carscan.core.data.ObdConnector
 import com.bruni.carscan.core.data.VehicleSessionRepository
+import com.bruni.carscan.core.monetization.Entitlements
+import com.bruni.carscan.core.monetization.FullScreenAdGate
+import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.core.transport.DiscoveredAdapter
 import com.bruni.carscan.core.transport.TransportKind
 import kotlinx.coroutines.Job
@@ -34,6 +37,9 @@ class ConnectViewModel(
     private val adapters: AdapterRepository,
     session: VehicleSessionRepository,
     private val nowMs: () -> Long,
+    private val interstitial: InterstitialAdPort,
+    private val gate: FullScreenAdGate,
+    private val entitlements: Entitlements,
 ) : MviViewModel<ConnectState, ConnectIntent, ConnectEffect>(
     ConnectState(
         // Capability, not platform. TransportKind's declaration order is the display order.
@@ -50,6 +56,9 @@ class ConnectViewModel(
 
     init {
         session.health.collectIntoState { health -> setState { copy(health = health) } }
+        // Ready well before the first disconnect — a preload started only on that intent would
+        // make the very first drive's disconnect always show nothing.
+        interstitial.preload()
     }
 
     override fun onIntent(intent: ConnectIntent) = when (intent) {
@@ -59,6 +68,23 @@ class ConnectViewModel(
         ConnectIntent.DismissFailure -> setState { copy(failure = null) }
         ConnectIntent.OpenSettings -> emitEffect(ConnectEffect.OpenAppSettings)
         ConnectIntent.Proceed -> emitEffect(ConnectEffect.NavigateToDashboard)
+        ConnectIntent.Disconnect -> disconnect()
+    }
+
+    /**
+     * Ending the drive. The full-screen ad is purely additive here: it must never block or
+     * delay the disconnect itself, so it is evaluated and shown in its own launch rather than
+     * awaited before or after [ObdConnector.disconnect].
+     */
+    private fun disconnect() {
+        scope.launch { connector.disconnect() }
+        maybeShowInterstitial()
+    }
+
+    private fun maybeShowInterstitial() {
+        if (entitlements.isPremium.value || !gate.shouldShow()) return
+        gate.record()
+        scope.launch { interstitial.show() }
     }
 
     private fun scan() {

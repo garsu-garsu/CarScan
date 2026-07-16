@@ -60,6 +60,9 @@ sealed interface ConnectIntent {
 
     /** Leave the readout and go drive. */
     data object Proceed : ConnectIntent
+
+    /** The user's explicit choice to end the drive and disconnect from the adapter. */
+    data object Disconnect : ConnectIntent
 }
 
 sealed interface ConnectEffect {

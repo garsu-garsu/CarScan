@@ -5,6 +5,8 @@ import com.bruni.carscan.core.data.ConnectFailure
 import com.bruni.carscan.core.data.ConnectOutcome
 import com.bruni.carscan.core.data.ConnectionState
 import com.bruni.carscan.core.data.SessionHealth
+import com.bruni.carscan.core.monetization.AdCadenceConfig
+import com.bruni.carscan.core.monetization.FullScreenAdGate
 import com.bruni.carscan.core.transport.DiscoveredAdapter
 import com.bruni.carscan.core.transport.TransportKind
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -40,7 +42,20 @@ class ConnectViewModelTest {
         connector: FakeObdConnector = FakeObdConnector.readyWith(summary()),
         adapters: FakeAdapterRepository = FakeAdapterRepository(),
         session: FakeSessionRepository = FakeSessionRepository(),
-    ) = ConnectViewModel(connector, adapters, session, nowMs = { 1_000L })
+        interstitial: FakeInterstitialAdPort = FakeInterstitialAdPort(),
+        // Inside the warmup window by default, so every pre-existing test above — none of
+        // which touches Disconnect — never has to think about ad cadence.
+        gate: FullScreenAdGate = FullScreenAdGate(clock = { 1_000L }),
+        entitlements: FakeEntitlements = FakeEntitlements(),
+    ) = ConnectViewModel(
+        connector = connector,
+        adapters = adapters,
+        session = session,
+        nowMs = { 1_000L },
+        interstitial = interstitial,
+        gate = gate,
+        entitlements = entitlements,
+    )
 
     // --- the happy path, as a sequence -------------------------------------------------
 
@@ -370,6 +385,51 @@ class ConnectViewModelTest {
             vm.onIntent(ConnectIntent.Proceed)
             awaitItem() shouldBe ConnectEffect.NavigateToDashboard
         }
+    }
+
+    // --- the interstitial on disconnect, gated by the shared cadence and premium ---------
+
+    @Test
+    fun `disconnect shows an interstitial when the gate allows and the user is not premium`() =
+        runTest(dispatcher) {
+            var clockMs = 0L
+            val gate = FullScreenAdGate(clock = { clockMs }) // sessionStart = 0
+            clockMs = 200_000L // past warmup, nothing shown yet this session — the gate says yes
+            val interstitial = FakeInterstitialAdPort()
+            val vm = viewModel(interstitial = interstitial, gate = gate, entitlements = FakeEntitlements(premium = false))
+
+            vm.onIntent(ConnectIntent.Disconnect)
+            runCurrent()
+
+            interstitial.showCalls shouldBe 1
+        }
+
+    @Test
+    fun `disconnect does not show an interstitial for a premium user, even when the gate allows`() =
+        runTest(dispatcher) {
+            var clockMs = 0L
+            val gate = FullScreenAdGate(clock = { clockMs })
+            clockMs = 200_000L // the gate itself would say yes
+            val interstitial = FakeInterstitialAdPort()
+            val vm = viewModel(interstitial = interstitial, gate = gate, entitlements = FakeEntitlements(premium = true))
+
+            vm.onIntent(ConnectIntent.Disconnect)
+            runCurrent()
+
+            interstitial.showCalls shouldBe 0
+        }
+
+    @Test
+    fun `disconnect does not show an interstitial when the gate refuses`() = runTest(dispatcher) {
+        val interstitial = FakeInterstitialAdPort()
+        // Still inside the warmup window — the gate says no regardless of premium status.
+        val gate = FullScreenAdGate(clock = { 1_000L }, config = AdCadenceConfig())
+        val vm = viewModel(interstitial = interstitial, gate = gate, entitlements = FakeEntitlements(premium = false))
+
+        vm.onIntent(ConnectIntent.Disconnect)
+        runCurrent()
+
+        interstitial.showCalls shouldBe 0
     }
 
     private companion object {

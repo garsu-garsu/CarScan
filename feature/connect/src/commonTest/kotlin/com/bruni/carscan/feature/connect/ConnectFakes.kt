@@ -11,6 +11,8 @@ import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.model.MetricKey
 import com.bruni.carscan.core.model.SensorSample
+import com.bruni.carscan.core.monetization.Entitlements
+import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.core.transport.DiscoveredAdapter
 import com.bruni.carscan.core.transport.TransportKind
 import com.bruni.carscan.core.transport.fake.FakeTransportFactory
@@ -117,6 +119,28 @@ class FakeSessionRepository(initial: SessionHealth = SessionHealth()) : VehicleS
     fun emit(health: SessionHealth) {
         _health.value = health
     }
+}
+
+/** Records every [show] call so a test can assert whether the interstitial actually fired. */
+class FakeInterstitialAdPort : InterstitialAdPort {
+    var preloadCalls: Int = 0
+        private set
+    var showCalls: Int = 0
+        private set
+
+    override fun preload() {
+        preloadCalls++
+    }
+
+    override suspend fun show(): Boolean {
+        showCalls++
+        return true
+    }
+}
+
+/** [isPremium] fixed at construction — nothing in these tests needs it to change mid-test. */
+class FakeEntitlements(premium: Boolean = false) : Entitlements {
+    override val isPremium: StateFlow<Boolean> = MutableStateFlow(premium)
 }
 
 /** A healthy-looking clone: not an STN, but it connected and it answers. */
