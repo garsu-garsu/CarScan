@@ -16,6 +16,8 @@ val interstitialAdUnitId: String = localProperties.getProperty("admob.interstiti
     ?: "ca-app-pub-3940256099942544/1033173712"
 val appOpenAdUnitId: String = localProperties.getProperty("admob.appopen.adunit")
     ?: "ca-app-pub-3940256099942544/9257395921"
+val bannerAdUnitId: String = localProperties.getProperty("admob.banner.adunit")
+    ?: "ca-app-pub-3940256099942544/9214589741"
 
 android {
     buildFeatures {
@@ -26,6 +28,7 @@ android {
         buildConfigField("String", "REWARDED_AD_UNIT_ID", "\"$rewardedAdUnitId\"")
         buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", "\"$interstitialAdUnitId\"")
         buildConfigField("String", "APP_OPEN_AD_UNIT_ID", "\"$appOpenAdUnitId\"")
+        buildConfigField("String", "BANNER_AD_UNIT_ID", "\"$bannerAdUnitId\"")
     }
 }
 

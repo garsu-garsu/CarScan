@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bruni.carscan.platform.android.ads.AdsConsent
+import com.bruni.carscan.platform.android.ads.BuildConfig
 
 class MainActivity : ComponentActivity() {
 
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPermissions.launch(bluetoothPermissions())
-        setContent { App() }
+        setContent { App(bannerAdUnitId = BuildConfig.BANNER_AD_UNIT_ID) }
 
         // Gathered here because this is the first point an Activity exists to attach a consent
         // form to. Non-blocking and defensive by design — see AdsConsent's KDoc — so a slow or

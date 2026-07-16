@@ -26,6 +26,7 @@ import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.designsystem.ads.LocalAdsEnabled
+import com.bruni.carscan.core.designsystem.ads.LocalBannerAdUnitId
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.designsystem.theme.CarScanTheme
 import com.bruni.carscan.core.monetization.Entitlements
@@ -72,7 +73,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * meaning anything.
  */
 @Composable
-fun App() {
+fun App(bannerAdUnitId: String? = null) {
     val settingsRepository: SettingsRepository = koinInject()
     val settings by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = Settings())
 
@@ -94,8 +95,15 @@ fun App() {
 
     CarScanTheme(darkTheme = darkTheme, gaugeStyle = gaugeStyle) {
         // Premium users and any screen this provider does not reach (Dashboard, Live, HUD) never
-        // see a BannerAd — see :core:designsystem's LocalAdsEnabled.
-        CompositionLocalProvider(LocalAdsEnabled provides !isPremium) {
+        // see a BannerAd — see :core:designsystem's LocalAdsEnabled. The banner ad-unit id, when
+        // the Android entry supplies a real one, overrides the test-id default; other platforms
+        // pass null and keep it.
+        val adProviders = if (bannerAdUnitId != null) {
+            arrayOf(LocalAdsEnabled provides !isPremium, LocalBannerAdUnitId provides bannerAdUnitId)
+        } else {
+            arrayOf(LocalAdsEnabled provides !isPremium)
+        }
+        CompositionLocalProvider(*adProviders) {
             val navController = rememberNavController()
             val entry by navController.currentBackStackEntryAsState()
 
