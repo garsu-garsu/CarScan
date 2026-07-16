@@ -180,4 +180,7 @@
     <string name="garage_offline">Підключіться до інтернету, щоб завантажити дані цього автомобіля. Офлайн працюватимуть стандартні PID.</string>
     <string name="garage_download_failed">Не вдалося завантажити дані цього автомобіля. Поки що працюватимуть стандартні PID.</string>
 
+    <!-- Untranslated: copied from English. -->
+    <string name="trip_empty">Trip history isn\'t recorded yet.</string>
+
 </resources>
