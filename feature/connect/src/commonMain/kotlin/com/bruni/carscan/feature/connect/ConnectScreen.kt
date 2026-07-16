@@ -1,24 +1,37 @@
 package com.bruni.carscan.feature.connect
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bluetooth
+import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.adapter_kind_ble
@@ -71,7 +84,8 @@ fun ConnectScreen(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxWidth().padding(16.dp),
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item {
@@ -104,15 +118,7 @@ fun ConnectScreen(
         }
 
         state.connectingTo?.let { target ->
-            item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    CircularProgressIndicator()
-                    Text("${stringResource(Res.string.connection_state_connecting)} ${target.displayName()}")
-                }
-            }
+            item { ConnectingCard(target) }
         }
 
         // One section per transport this platform actually has. On iOS there is no SPP
@@ -123,6 +129,8 @@ fun ConnectScreen(
                 Text(
                     text = stringResource(section.kind.label()),
                     style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = FontWeight.Medium,
                     modifier = Modifier.testTag(ConnectTags.section(section.kind)),
                 )
             }
@@ -133,22 +141,78 @@ fun ConnectScreen(
         }
 
         if (!state.hasAdapters && !state.isScanning) {
-            item { Text(stringResource(Res.string.connect_no_adapters)) }
+            item {
+                Text(
+                    text = stringResource(Res.string.connect_no_adapters),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }
 
+/** A discovered adapter, styled like the home launcher's list rows: icon badge + name + address. */
 @Composable
 private fun AdapterRow(adapter: DiscoveredAdapter, onClick: () -> Unit) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .testTag(ConnectTags.adapter(adapter.address))
-            .clickable(onClick = onClick),
+            .testTag(ConnectTags.adapter(adapter.address)),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
     ) {
-        Column(Modifier.padding(12.dp)) {
-            Text(adapter.displayName(), style = MaterialTheme.typography.bodyLarge)
-            Text(adapter.address, style = MaterialTheme.typography.bodySmall)
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(adapter.kind.icon(), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            }
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    text = adapter.displayName(),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = adapter.address,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+/** The connect-in-progress row, in the same card language as everything else on this screen. */
+@Composable
+private fun ConnectingCard(target: DiscoveredAdapter) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            CircularProgressIndicator()
+            Text(
+                text = "${stringResource(Res.string.connection_state_connecting)} ${target.displayName()}",
+                style = MaterialTheme.typography.bodyMedium,
+            )
         }
     }
 }
@@ -164,9 +228,18 @@ private fun AdapterRow(adapter: DiscoveredAdapter, onClick: () -> Unit) {
  */
 @Composable
 private fun ReadoutCard(ready: ReadyReadout, throughput: ThroughputAdvice?) {
-    Card(Modifier.fillMaxWidth()) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(ready.adapter.displayName(), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = ready.adapter.displayName(),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
 
             Text(
                 text = stringResource(
@@ -216,6 +289,7 @@ private fun ReadoutCard(ready: ReadyReadout, throughput: ThroughputAdvice?) {
 private fun FailureCard(failure: ConnectFailure, onIntent: (ConnectIntent) -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth().testTag(ConnectTags.FAILURE),
+        shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -245,6 +319,11 @@ private fun TransportKind.label(): StringResource = when (this) {
     TransportKind.BLE -> Res.string.adapter_kind_ble
     TransportKind.SPP -> Res.string.adapter_kind_spp
     TransportKind.WIFI -> Res.string.adapter_kind_wifi
+}
+
+private fun TransportKind.icon(): ImageVector = when (this) {
+    TransportKind.BLE, TransportKind.SPP -> Icons.Rounded.Bluetooth
+    TransportKind.WIFI -> Icons.Rounded.Wifi
 }
 
 private fun ConnectFailure.message(): StringResource = when (this) {
