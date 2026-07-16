@@ -200,6 +200,7 @@
     <string name="settings_record_trips">Record trips</string>
     <string name="settings_about">About &amp; Licenses</string>
     <string name="settings_vehicle">Vehicle</string>
+    <string name="settings_premium">Premium</string>
 
     <!--
         About & Licenses. A hard legal gate before any store upload: SAEJ1979.json ships in the
@@ -227,5 +228,24 @@
     <string name="garage_downloading">Downloading vehicle data…</string>
     <string name="garage_offline">Connect to the internet to download this vehicle. Standard PIDs will work offline.</string>
     <string name="garage_download_failed">Couldn\'t download this vehicle\'s data. Standard PIDs will work for now.</string>
+
+    <!--
+        Paywall. Prices are DISPLAY placeholders — real localized prices come from Billing's
+        ProductDetails, not this table, once that is wired through.
+    -->
+    <string name="paywall_title">Go Premium</string>
+    <string name="paywall_subtitle">Unlock every gauge, chart and trip — no limits, no ads.</string>
+    <string name="paywall_plans_header">Choose your plan</string>
+    <string name="paywall_monthly_title">Monthly</string>
+    <string name="paywall_monthly_price">$1.99 / month</string>
+    <string name="paywall_yearly_title">Yearly</string>
+    <string name="paywall_yearly_price">$5.99 / year</string>
+    <string name="paywall_lifetime_title">Lifetime</string>
+    <string name="paywall_lifetime_price">$9.99 once</string>
+    <string name="paywall_lifetime_badge">Most popular</string>
+    <string name="paywall_cta_subscribe">Subscribe</string>
+    <string name="paywall_cta_buy">Buy</string>
+    <string name="paywall_already_premium">You already have Premium</string>
+    <string name="paywall_restore">Restore purchases</string>
 
 </resources>

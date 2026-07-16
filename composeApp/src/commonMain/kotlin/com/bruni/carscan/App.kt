@@ -41,6 +41,9 @@ import com.bruni.carscan.feature.live.LiveIntent
 import com.bruni.carscan.feature.live.LiveScreen
 import com.bruni.carscan.feature.live.LiveViewModel
 import com.bruni.carscan.feature.settings.AboutScreen
+import com.bruni.carscan.feature.settings.PaywallEffect
+import com.bruni.carscan.feature.settings.PaywallScreen
+import com.bruni.carscan.feature.settings.PaywallViewModel
 import com.bruni.carscan.feature.settings.SettingsEffect
 import com.bruni.carscan.feature.settings.SettingsScreen
 import com.bruni.carscan.feature.settings.SettingsViewModel
@@ -178,6 +181,7 @@ private fun CarScanNavHost(navController: NavHostController) {
                     when (effect) {
                         SettingsEffect.OpenAbout -> navController.navigate(Route.About)
                         SettingsEffect.OpenGarage -> navController.navigate(Route.Garage)
+                        SettingsEffect.OpenPaywall -> navController.navigate(Route.Paywall)
                     }
                 }
             }
@@ -201,6 +205,21 @@ private fun CarScanNavHost(navController: NavHostController) {
             }
 
             GarageScreen(state, viewModel::onIntent)
+        }
+
+        composable<Route.Paywall> {
+            val viewModel: PaywallViewModel = koinViewModel()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
+            LaunchedEffect(viewModel) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        PaywallEffect.Close -> navController.popBackStack()
+                    }
+                }
+            }
+
+            PaywallScreen(state, viewModel::onIntent)
         }
     }
 }

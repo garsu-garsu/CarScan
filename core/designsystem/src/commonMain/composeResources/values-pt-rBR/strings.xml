@@ -158,6 +158,8 @@
     <string name="settings_record_trips">Registrar viagens</string>
     <string name="settings_about">Sobre e licenças</string>
     <string name="settings_vehicle">Veículo</string>
+    <!-- Untranslated — copied from English; see StringResourceParityTest. -->
+    <string name="settings_premium">Premium</string>
 
     <string name="about_version">Versão %1$s</string>
     <string name="about_obdb_attribution">Definições de sinais do veículo fornecidas pela OBDb (%1$s), licenciadas sob %2$s.</string>
@@ -171,5 +173,21 @@
     <string name="garage_downloading">Baixando dados do veículo…</string>
     <string name="garage_offline">Conecte-se à internet para baixar os dados deste veículo. Os PIDs padrão funcionarão offline.</string>
     <string name="garage_download_failed">Não foi possível baixar os dados deste veículo. Os PIDs padrão funcionarão por enquanto.</string>
+
+    <!-- Untranslated — copied from English; see StringResourceParityTest. -->
+    <string name="paywall_title">Go Premium</string>
+    <string name="paywall_subtitle">Unlock every gauge, chart and trip — no limits, no ads.</string>
+    <string name="paywall_plans_header">Choose your plan</string>
+    <string name="paywall_monthly_title">Monthly</string>
+    <string name="paywall_monthly_price">$1.99 / month</string>
+    <string name="paywall_yearly_title">Yearly</string>
+    <string name="paywall_yearly_price">$5.99 / year</string>
+    <string name="paywall_lifetime_title">Lifetime</string>
+    <string name="paywall_lifetime_price">$9.99 once</string>
+    <string name="paywall_lifetime_badge">Most popular</string>
+    <string name="paywall_cta_subscribe">Subscribe</string>
+    <string name="paywall_cta_buy">Buy</string>
+    <string name="paywall_already_premium">You already have Premium</string>
+    <string name="paywall_restore">Restore purchases</string>
 
 </resources>

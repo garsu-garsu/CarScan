@@ -31,6 +31,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CarScan">
 
+        <!-- AdMob refuses to serve a single ad without this — see androidApp/build.gradle.kts
+             for where ${admobAppId} comes from. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${admobAppId}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

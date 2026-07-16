@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.FiberManualRecord
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Speed
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Straighten
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material3.Card
@@ -45,6 +46,7 @@ import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_st
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_classic_analog
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_modern_arc
 import com.bruni.carscan.core.designsystem.generated.resources.settings_keep_screen_on
+import com.bruni.carscan.core.designsystem.generated.resources.settings_premium
 import com.bruni.carscan.core.designsystem.generated.resources.settings_quantity_consumption
 import com.bruni.carscan.core.designsystem.generated.resources.settings_quantity_distance
 import com.bruni.carscan.core.designsystem.generated.resources.settings_quantity_energy_consumption
@@ -83,6 +85,16 @@ fun SettingsScreen(
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
             )
+        }
+
+        item {
+            SettingsCard {
+                NavigationRow(
+                    icon = Icons.Rounded.Star,
+                    label = stringResource(Res.string.settings_premium),
+                    onClick = { onIntent(SettingsIntent.OpenPremium) },
+                )
+            }
         }
 
         item {

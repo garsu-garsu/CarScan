@@ -37,6 +37,7 @@ class SettingsViewModel(
         is SettingsIntent.SetRecordTrips -> setRecordTrips(intent.enabled)
         SettingsIntent.OpenAbout -> emitEffect(SettingsEffect.OpenAbout)
         SettingsIntent.OpenVehicle -> emitEffect(SettingsEffect.OpenGarage)
+        SettingsIntent.OpenPremium -> emitEffect(SettingsEffect.OpenPaywall)
     }
 
     private fun setUnit(quantity: Quantity, unit: UnitId) {
