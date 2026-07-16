@@ -11,4 +11,5 @@ import org.koin.dsl.module
  */
 val settingsModule: Module = module {
     viewModel { SettingsViewModel(get()) }
+    viewModel { PaywallViewModel(get(), get()) }
 }

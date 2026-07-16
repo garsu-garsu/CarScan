@@ -44,6 +44,13 @@ vico = "2.5.2"
 turbine = "1.2.1"
 kotest = "6.2.2"
 
+# --- Monetization (:platform:android-ads and :androidApp only) -------------
+# billing-ktx: the task calls for the latest stable 7.x line specifically —
+# 8.x/9.x exist on Google's Maven but were not requested. 7.1.1 is the newest
+# 7.x release.
+billing = "7.1.1"
+playServicesAds = "25.4.0"
+
 [libraries]
 # --- Kotlinx ---------------------------------------------------------------
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -98,6 +105,10 @@ androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmode
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+# --- Monetization (:platform:android-ads and :androidApp only) -------------
+billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 
 # --- Gradle plugin artifacts — for build-logic's classpath only ------------
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }

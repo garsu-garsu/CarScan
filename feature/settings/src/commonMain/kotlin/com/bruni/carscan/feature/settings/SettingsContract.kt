@@ -27,9 +27,13 @@ sealed interface SettingsIntent {
 
     /** The Vehicle row — opens the garage / vehicle picker. */
     data object OpenVehicle : SettingsIntent
+
+    /** The Premium row — opens the paywall. */
+    data object OpenPremium : SettingsIntent
 }
 
 sealed interface SettingsEffect {
     data object OpenAbout : SettingsEffect
     data object OpenGarage : SettingsEffect
+    data object OpenPaywall : SettingsEffect
 }

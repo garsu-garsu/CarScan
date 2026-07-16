@@ -50,4 +50,8 @@ sealed interface Route {
     /** The garage / vehicle picker. Reached from Settings; picking a vehicle pops back. */
     @Serializable
     data object Garage : Route
+
+    /** The paywall. Reached from Settings' Premium row; closing it pops back. */
+    @Serializable
+    data object Paywall : Route
 }
