@@ -50,9 +50,16 @@ dependencies {
     implementation(project(":composeApp"))
     implementation(project(":platform:android-ads"))
     implementation(project(":platform:android-service"))
+    // InterstitialAdPort, AppOpenAdPort, FullScreenAdGate, Entitlements — AppOpenAdManager and
+    // CarScanApplication resolve these from Koin directly. Pure KMP; no AdMob type here.
+    implementation(project(":core:monetization"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // ON_START/ON_STOP for the whole app's process, not one Activity — what AppOpenAdManager
+    // needs to tell a real foreground return apart from a screen rotation.
+    implementation(libs.androidx.lifecycle.process)
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)

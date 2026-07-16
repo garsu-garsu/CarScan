@@ -12,6 +12,10 @@ val localProperties = Properties().apply {
 }
 val rewardedAdUnitId: String = localProperties.getProperty("admob.rewarded.adunit")
     ?: "ca-app-pub-3940256099942544/5224354917"
+val interstitialAdUnitId: String = localProperties.getProperty("admob.interstitial.adunit")
+    ?: "ca-app-pub-3940256099942544/1033173712"
+val appOpenAdUnitId: String = localProperties.getProperty("admob.appopen.adunit")
+    ?: "ca-app-pub-3940256099942544/9257395921"
 
 android {
     buildFeatures {
@@ -20,6 +24,8 @@ android {
 
     defaultConfig {
         buildConfigField("String", "REWARDED_AD_UNIT_ID", "\"$rewardedAdUnitId\"")
+        buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", "\"$interstitialAdUnitId\"")
+        buildConfigField("String", "APP_OPEN_AD_UNIT_ID", "\"$appOpenAdUnitId\"")
     }
 }
 
@@ -28,6 +34,9 @@ dependencies {
 
     implementation(libs.billing.ktx)
     implementation(libs.play.services.ads)
+    // UMP consent gathering — see AdsConsent.kt. Kept in this module rather than :androidApp
+    // because it is requested around the same MobileAds.initialize() this module owns.
+    implementation(libs.user.messaging.platform)
 
     // Not `kotlin("test")`: that shorthand needs the Kotlin Gradle plugin applied, and this
     // module deliberately applies none — AGP 9 compiles Kotlin itself for a plain

@@ -14,6 +14,9 @@ import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.TripRepository
 import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.data.VisibleSignals
+import com.bruni.carscan.core.monetization.Entitlements
+import com.bruni.carscan.core.monetization.FullScreenAdGate
+import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.core.transport.TransportKind
 import com.bruni.carscan.core.transport.fake.ElmEmulator
 import com.bruni.carscan.db.CarScanDb
@@ -29,6 +32,8 @@ import com.bruni.carscan.obd.TripRecorder
 import com.bruni.carscan.obd.Transports
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import okio.Path.Companion.toPath
 import org.koin.core.Koin
 import org.koin.dsl.koinApplication
@@ -131,5 +136,21 @@ class KoinGraphTest {
         }
 
         single<AppSettingsOpener> { AppSettingsOpener { } }
+
+        // The monetization ports ConnectViewModel now depends on. The real platformModule's
+        // versions all want a Context (AdMob, DataStore-backed cache), which this plain-JVM
+        // host test has none of — so, same as the four bindings above, only the shape matters.
+        single<Entitlements> {
+            object : Entitlements {
+                override val isPremium: StateFlow<Boolean> = MutableStateFlow(false)
+            }
+        }
+        single { FullScreenAdGate(clock = { 0L }) }
+        single<InterstitialAdPort> {
+            object : InterstitialAdPort {
+                override fun preload() = Unit
+                override suspend fun show(): Boolean = false
+            }
+        }
     }
 }

@@ -8,17 +8,22 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import app.cash.sqldelight.db.SqlDriver
 import com.bruni.carscan.core.database.DriverFactory
+import com.bruni.carscan.core.monetization.AppOpenAdPort
 import com.bruni.carscan.core.monetization.BillingPort
 import com.bruni.carscan.core.monetization.DataStoreEntitlementCache
 import com.bruni.carscan.core.monetization.DefaultEntitlements
 import com.bruni.carscan.core.monetization.Entitlements
 import com.bruni.carscan.core.monetization.EntitlementCache
+import com.bruni.carscan.core.monetization.FullScreenAdGate
+import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.core.monetization.RewardedAdPort
 import com.bruni.carscan.core.transport.ble.BleTransportFactory
 import com.bruni.carscan.core.transport.spp.SppTransportFactory
 import com.bruni.carscan.nav.AppSettingsOpener
 import com.bruni.carscan.obd.DefaultTransports
 import com.bruni.carscan.obd.Transports
+import com.bruni.carscan.platform.android.ads.AdMobAppOpenAdPort
+import com.bruni.carscan.platform.android.ads.AdMobInterstitialAdPort
 import com.bruni.carscan.platform.android.ads.AdMobRewardedAdPort
 import com.bruni.carscan.platform.android.ads.PlayBillingEntitlements
 import com.bruni.carscan.platform.android.ads.PlayBillingPort
@@ -90,6 +95,12 @@ actual fun platformModule(): Module = module {
     // — picks up a lapsed subscription or a store-side refund promptly rather than only the next
     // time the user makes a purchase.
     single { PlayBillingEntitlements(billing = get(), scope = get()) }
+
+    // The one gate shared by every full-screen ad format (interstitial + app open) — see its
+    // KDoc. A Koin singleton so both callers see the same session state.
+    single { FullScreenAdGate(clock = { System.currentTimeMillis() }) }
+    single<InterstitialAdPort> { AdMobInterstitialAdPort(androidContext()) }
+    single<AppOpenAdPort> { AdMobAppOpenAdPort(androidContext()) }
 }
 
 /** DataStore requires the `.preferences_pb` suffix; it does not append it. */

@@ -19,6 +19,9 @@ val connectModule: Module = module {
             adapters = get(),
             session = get(),
             nowMs = { Clock.System.now().toEpochMilliseconds() },
+            interstitial = get(),
+            gate = get(),
+            entitlements = get(),
         )
     }
 }

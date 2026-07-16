@@ -1,9 +1,15 @@
 package com.bruni.carscan
 
 import android.app.Application
+import androidx.lifecycle.ProcessLifecycleOwner
+import com.bruni.carscan.core.monetization.AppOpenAdPort
+import com.bruni.carscan.core.monetization.Entitlements
+import com.bruni.carscan.core.monetization.FullScreenAdGate
+import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.di.carScanModules
 import com.bruni.carscan.obd.TripRecorder
 import com.bruni.carscan.platform.android.ads.ActivityTracker
+import com.bruni.carscan.platform.android.ads.AdsInitializer
 import com.bruni.carscan.platform.android.ads.PlayBillingEntitlements
 import kotlinx.coroutines.CoroutineScope
 import org.koin.android.ext.android.get
@@ -14,6 +20,9 @@ class CarScanApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Exactly once, before any ad port loads a single ad — see AdsInitializer's KDoc.
+        AdsInitializer.init(this)
 
         // PlayBillingPort and AdMobRewardedAdPort are app-scoped singletons that still need a
         // foreground Activity to launch a purchase sheet or an ad — see CurrentActivity's KDoc.
@@ -34,5 +43,19 @@ class CarScanApplication : Application() {
         // next time the user makes a purchase. isPremium itself needs no network call to be
         // right on a cold start — see DefaultEntitlements' offline cache.
         get<PlayBillingEntitlements>().refresh()
+
+        // Full-screen ads: both formats preload eagerly so the first disconnect or the first
+        // return to the foreground already has something ready to show.
+        get<InterstitialAdPort>().preload()
+        get<AppOpenAdPort>().preload()
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(
+            AppOpenAdManager(
+                appOpenAd = get<AppOpenAdPort>(),
+                gate = get<FullScreenAdGate>(),
+                entitlements = get<Entitlements>(),
+                scope = get<CoroutineScope>(),
+            ),
+        )
     }
 }
