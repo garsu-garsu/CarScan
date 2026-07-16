@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bluetooth
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.DirectionsCar
@@ -42,6 +43,7 @@ import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.allStringResources
 import com.bruni.carscan.core.designsystem.generated.resources.settings_about
+import com.bruni.carscan.core.designsystem.generated.resources.settings_auto_reconnect
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_classic_analog
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_modern_arc
@@ -174,6 +176,13 @@ fun SettingsScreen(
                     label = stringResource(Res.string.settings_record_trips),
                     checked = state.recordTrips,
                     onCheckedChange = { onIntent(SettingsIntent.SetRecordTrips(it)) },
+                )
+                RowDivider()
+                SwitchRow(
+                    icon = Icons.Rounded.Bluetooth,
+                    label = stringResource(Res.string.settings_auto_reconnect),
+                    checked = state.autoReconnect,
+                    onCheckedChange = { onIntent(SettingsIntent.SetAutoReconnect(it)) },
                 )
             }
         }

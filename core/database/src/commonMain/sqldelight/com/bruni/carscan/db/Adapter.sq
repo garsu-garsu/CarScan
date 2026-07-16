@@ -36,6 +36,12 @@ SELECT * FROM adapter ORDER BY last_used_ms DESC;
 selectByAddress:
 SELECT * FROM adapter WHERE address = ?;
 
+-- The last scanner the user actually got connected, for auto-reconnect at launch. NULLs sort
+-- last in SQLite's DESC ordering, so an adapter that was only ever remembered and never
+-- successfully used loses to one that was, exactly as "most recently used" requires.
+selectMostRecentlyUsed:
+SELECT * FROM adapter ORDER BY last_used_ms DESC LIMIT 1;
+
 -- Safe as REPLACE: nothing references adapter, so there is no cascade to trip over.
 upsert:
 INSERT OR REPLACE INTO adapter(address, kind, name, gatt_service, gatt_write, gatt_notify, is_stn, supports_expected_frames, echo_suppression_needed, max_write_chunk, protocol_num, ewma_rtt_ms, last_used_ms)

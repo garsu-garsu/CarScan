@@ -113,4 +113,27 @@ class AdapterRepositoryTest {
 
         assertEquals(6L, repo.recall(vgate.address)?.protocolNum)
     }
+
+    /** Auto-reconnect at launch needs exactly one adapter: the one last connected. */
+    @Test
+    fun `lastUsed returns the most recently used adapter`() = runTest {
+        repo.remember(vgate)
+        repo.remember(vgate.copy(address = "11:22:33:44:55:66", name = "OBDLink MX+", lastUsedMs = 9_000))
+
+        assertEquals("OBDLink MX+", repo.lastUsed()?.name)
+    }
+
+    @Test
+    fun `lastUsed is null when nothing has ever been remembered`() = runTest {
+        assertNull(repo.lastUsed())
+    }
+
+    /** An adapter only ever remembered, never actually connected, must not look "most recent". */
+    @Test
+    fun `lastUsed treats a null last_used_ms as oldest`() = runTest {
+        repo.remember(vgate.copy(lastUsedMs = null))
+        repo.remember(vgate.copy(address = "11:22:33:44:55:66", name = "OBDLink MX+", lastUsedMs = 9_000))
+
+        assertEquals("OBDLink MX+", repo.lastUsed()?.name)
+    }
 }

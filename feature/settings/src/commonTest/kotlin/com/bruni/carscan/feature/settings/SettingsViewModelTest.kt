@@ -94,6 +94,17 @@ class SettingsViewModelTest {
         vm.state.value.recordTrips shouldBe true
     }
 
+    @Test
+    fun `SetAutoReconnect reaches the repository`() = runTest(dispatcher) {
+        val repo = FakeSettingsRepository()
+        val vm = SettingsViewModel(repo)
+
+        vm.onIntent(SettingsIntent.SetAutoReconnect(false))
+        runCurrent()
+
+        vm.state.value.autoReconnect shouldBe false
+    }
+
     /**
      * Features never call a `NavController` themselves — see `App.kt`'s KDoc. The About row is
      * no exception: it emits an effect and leaves the navigation to the composition root.

@@ -160,6 +160,7 @@ private class FakeSettingsRepository(activeVehicleId: String?) : SettingsReposit
 
     override suspend fun setThemeMode(mode: ThemeMode) = Unit
     override suspend fun setGaugeStyle(style: String) = Unit
+    override suspend fun setAutoReconnect(enabled: Boolean) = Unit
 }
 
 private class FakeVehicleRepository(vararg vehicles: Pair<String, Vehicle>) : VehicleRepository {

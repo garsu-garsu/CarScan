@@ -111,6 +111,9 @@ class FakeAdapterRepository(seed: List<AdapterQuirks> = emptyList()) : AdapterRe
     override suspend fun forget(address: String) {
         rows -= address
     }
+
+    override suspend fun lastUsed(): AdapterQuirks? =
+        rows.values.maxByOrNull { it.lastUsedMs ?: Long.MIN_VALUE }
 }
 
 /** Only [health] matters to this screen; the sample streams are here to satisfy the port. */

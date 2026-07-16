@@ -174,6 +174,7 @@
     <string name="settings_theme_dark">Тёмная</string>
     <string name="settings_keep_screen_on">Не выключать экран</string>
     <string name="settings_record_trips">Записывать поездки</string>
+    <string name="settings_auto_reconnect">Auto-reconnect to last scanner</string>
     <string name="settings_about">О приложении и лицензии</string>
     <string name="settings_vehicle">Автомобиль</string>
     <!-- Untranslated — copied from English; see StringResourceParityTest. -->

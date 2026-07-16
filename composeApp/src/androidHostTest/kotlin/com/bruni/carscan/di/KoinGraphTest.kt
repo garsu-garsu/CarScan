@@ -26,6 +26,7 @@ import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.LiveViewModel
 import com.bruni.carscan.feature.live.liveModule
 import com.bruni.carscan.nav.AppSettingsOpener
+import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.ElmObdConnector
 import com.bruni.carscan.obd.FakeTransports
 import com.bruni.carscan.obd.TripRecorder
@@ -79,6 +80,7 @@ class KoinGraphTest {
         koin.get<DashboardLayoutRepository>() shouldNotBe null
         koin.get<VehicleSessionRepository>() shouldNotBe null
         koin.get<TripRecorder>() shouldNotBe null
+        koin.get<AutoConnector>() shouldNotBe null
     }
 
     /**

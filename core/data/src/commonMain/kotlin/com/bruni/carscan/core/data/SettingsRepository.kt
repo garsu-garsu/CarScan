@@ -41,6 +41,13 @@ data class Settings(
      * preference the day a style is inserted in the middle of it.
      */
     val gaugeStyle: String = "MODERN_ARC",
+    /**
+     * Try, once at launch, to reconnect to the last scanner that reached a working session —
+     * without the user re-running the picker. Defaults to **on**, for the same reason
+     * [recordTrips] does: the app should feel plugged in from the first drive, not just the
+     * first one the user remembered to configure.
+     */
+    val autoReconnect: Boolean = true,
 ) {
     /**
      * The speed preference, *read out of* [units].
@@ -79,6 +86,7 @@ interface SettingsRepository {
 
     /** [style] is the stable key described on [Settings.gaugeStyle]. */
     suspend fun setGaugeStyle(style: String)
+    suspend fun setAutoReconnect(enabled: Boolean)
 }
 
 /** Whether the app follows the system's light/dark setting, or overrides it. */
@@ -90,6 +98,7 @@ private val KEEP_SCREEN_ON = booleanPreferencesKey("keep_screen_on")
 private val ACTIVE_VEHICLE = stringPreferencesKey("active_vehicle_id")
 private val THEME_MODE = stringPreferencesKey("theme_mode")
 private val GAUGE_STYLE = stringPreferencesKey("gauge_style")
+private val AUTO_RECONNECT = booleanPreferencesKey("auto_reconnect")
 
 class DefaultSettingsRepository(
     private val store: DataStore<Preferences>,
@@ -111,6 +120,7 @@ class DefaultSettingsRepository(
             themeMode = prefs[THEME_MODE]?.let { name -> ThemeMode.entries.firstOrNull { it.name == name } }
                 ?: defaults.themeMode,
             gaugeStyle = prefs[GAUGE_STYLE] ?: defaults.gaugeStyle,
+            autoReconnect = prefs[AUTO_RECONNECT] ?: defaults.autoReconnect,
         )
     }
 
@@ -157,5 +167,9 @@ class DefaultSettingsRepository(
 
     override suspend fun setGaugeStyle(style: String) {
         store.edit { it[GAUGE_STYLE] = style }
+    }
+
+    override suspend fun setAutoReconnect(enabled: Boolean) {
+        store.edit { it[AUTO_RECONNECT] = enabled }
     }
 }

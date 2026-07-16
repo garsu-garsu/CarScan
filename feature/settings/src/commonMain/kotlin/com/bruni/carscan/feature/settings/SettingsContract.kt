@@ -12,6 +12,7 @@ data class SettingsState(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val keepScreenOn: Boolean = true,
     val recordTrips: Boolean = false,
+    val autoReconnect: Boolean = true,
 )
 
 sealed interface SettingsIntent {
@@ -21,6 +22,7 @@ sealed interface SettingsIntent {
     data class SetThemeMode(val mode: ThemeMode) : SettingsIntent
     data class SetKeepScreenOn(val enabled: Boolean) : SettingsIntent
     data class SetRecordTrips(val enabled: Boolean) : SettingsIntent
+    data class SetAutoReconnect(val enabled: Boolean) : SettingsIntent
 
     /** The About & Licenses row. Features never navigate themselves — see [SettingsEffect]. */
     data object OpenAbout : SettingsIntent

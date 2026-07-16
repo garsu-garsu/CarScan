@@ -29,6 +29,7 @@ import com.bruni.carscan.feature.dashboard.DashboardClock
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.liveModule
 import com.bruni.carscan.feature.settings.settingsModule
+import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.BundledSignalsetSource
 import com.bruni.carscan.obd.BundledVehicleCatalog
 import com.bruni.carscan.obd.DefaultSignalsetProvider
@@ -106,6 +107,11 @@ fun appModule(): Module = module {
             nowMs = { Clock.System.now().toEpochMilliseconds() },
         )
     }
+
+    // The one attempt to reconnect to the last scanner that reached a working session — see the
+    // class KDoc. Registered alongside TripRecorder because it is started the same way, from
+    // CarScanApplication, at launch.
+    single { AutoConnector(connector = get(), source = get(), adapters = get(), settings = get()) }
 
     single { DashboardClock.system() }
 

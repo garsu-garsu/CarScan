@@ -51,6 +51,10 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     override suspend fun setGaugeStyle(style: String) {
         state.value = state.value.copy(gaugeStyle = style)
     }
+
+    override suspend fun setAutoReconnect(enabled: Boolean) {
+        state.value = state.value.copy(autoReconnect = enabled)
+    }
 }
 
 /** Scriptable billing fake: hands back a fixed price map, or throws to simulate an offline store. */

@@ -43,6 +43,9 @@ interface AdapterRepository {
     suspend fun all(): List<AdapterQuirks>
     suspend fun updateRtt(address: String, ewmaRttMs: Double, atMs: Long)
     suspend fun forget(address: String)
+
+    /** The last scanner the user actually got connected — what auto-reconnect tries at launch. */
+    suspend fun lastUsed(): AdapterQuirks?
 }
 
 class DefaultAdapterRepository(private val db: CarScanDb) : AdapterRepository {
@@ -79,6 +82,9 @@ class DefaultAdapterRepository(private val db: CarScanDb) : AdapterRepository {
     override suspend fun forget(address: String) {
         db.adapterQueries.deleteByAddress(address)
     }
+
+    override suspend fun lastUsed(): AdapterQuirks? =
+        db.adapterQueries.selectMostRecentlyUsed().executeAsOneOrNull()?.toQuirks()
 }
 
 private fun Boolean.toLong(): Long = if (this) 1L else 0L

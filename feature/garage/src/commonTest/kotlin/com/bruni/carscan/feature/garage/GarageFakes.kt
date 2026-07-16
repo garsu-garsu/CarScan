@@ -83,6 +83,10 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     override suspend fun setGaugeStyle(style: String) {
         state.value = state.value.copy(gaugeStyle = style)
     }
+
+    override suspend fun setAutoReconnect(enabled: Boolean) {
+        state.value = state.value.copy(autoReconnect = enabled)
+    }
 }
 
 class FakeSignalsetProvider(

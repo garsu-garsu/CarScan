@@ -24,6 +24,7 @@ class SettingsViewModel(
                     themeMode = current.themeMode,
                     keepScreenOn = current.keepScreenOn,
                     recordTrips = current.recordTrips,
+                    autoReconnect = current.autoReconnect,
                 )
             }
         }
@@ -35,6 +36,7 @@ class SettingsViewModel(
         is SettingsIntent.SetThemeMode -> setThemeMode(intent.mode)
         is SettingsIntent.SetKeepScreenOn -> setKeepScreenOn(intent.enabled)
         is SettingsIntent.SetRecordTrips -> setRecordTrips(intent.enabled)
+        is SettingsIntent.SetAutoReconnect -> setAutoReconnect(intent.enabled)
         SettingsIntent.OpenAbout -> emitEffect(SettingsEffect.OpenAbout)
         SettingsIntent.OpenVehicle -> emitEffect(SettingsEffect.OpenGarage)
         SettingsIntent.OpenPremium -> emitEffect(SettingsEffect.OpenPaywall)
@@ -58,5 +60,9 @@ class SettingsViewModel(
 
     private fun setRecordTrips(enabled: Boolean) {
         scope.launch { settings.setRecordTrips(enabled) }
+    }
+
+    private fun setAutoReconnect(enabled: Boolean) {
+        scope.launch { settings.setAutoReconnect(enabled) }
     }
 }

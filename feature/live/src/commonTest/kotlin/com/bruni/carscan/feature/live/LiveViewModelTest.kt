@@ -366,6 +366,7 @@ private class FakeSettings : SettingsRepository {
     override suspend fun setActiveVehicleId(id: String?) = Unit
     override suspend fun setThemeMode(mode: ThemeMode) = Unit
     override suspend fun setGaugeStyle(style: String) = Unit
+    override suspend fun setAutoReconnect(enabled: Boolean) = Unit
 }
 
 private class FakeTrips : TripRepository {

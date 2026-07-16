@@ -167,6 +167,7 @@
     <string name="settings_theme_dark">Dunkel</string>
     <string name="settings_keep_screen_on">Bildschirm an lassen</string>
     <string name="settings_record_trips">Fahrten aufzeichnen</string>
+    <string name="settings_auto_reconnect">Auto-reconnect to last scanner</string>
     <string name="settings_about">Über &amp; Lizenzen</string>
     <string name="settings_vehicle">Fahrzeug</string>
     <!-- Untranslated — copied from English; see StringResourceParityTest. -->

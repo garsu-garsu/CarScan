@@ -34,6 +34,7 @@ class SettingsRepositoryTest {
         assertNull(settings.activeVehicleId)
         assertEquals(ThemeMode.SYSTEM, settings.themeMode)
         assertEquals("MODERN_ARC", settings.gaugeStyle)
+        assertTrue(settings.autoReconnect)
     }
 
     @Test
@@ -44,6 +45,7 @@ class SettingsRepositoryTest {
         repo.setKeepScreenOn(false)
         repo.setThemeMode(ThemeMode.DARK)
         repo.setGaugeStyle("CLASSIC_ANALOG")
+        repo.setAutoReconnect(false)
 
         val settings = repo.settings.first()
         assertTrue(settings.recordTrips)
@@ -52,6 +54,7 @@ class SettingsRepositoryTest {
         assertFalse(settings.keepScreenOn)
         assertEquals(ThemeMode.DARK, settings.themeMode)
         assertEquals("CLASSIC_ANALOG", settings.gaugeStyle)
+        assertFalse(settings.autoReconnect)
     }
 
     /** A preferences file from a newer build must not brick the app — see the unit test below. */

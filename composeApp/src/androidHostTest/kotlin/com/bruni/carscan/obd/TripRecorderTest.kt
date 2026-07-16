@@ -216,4 +216,5 @@ private class FakeSettings(recordTrips: Boolean) : SettingsRepository {
     override suspend fun setActiveVehicleId(id: String?) = Unit
     override suspend fun setThemeMode(mode: ThemeMode) = Unit
     override suspend fun setGaugeStyle(style: String) = Unit
+    override suspend fun setAutoReconnect(enabled: Boolean) = Unit
 }
