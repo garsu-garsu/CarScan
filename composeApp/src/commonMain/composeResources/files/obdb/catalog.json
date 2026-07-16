@@ -134,7 +134,7 @@
  },
  {
   "make": "Audi",
-  "model": "A3 e tron",
+  "model": "A3-e-tron",
   "obdbRepo": "Audi-A3-e-tron",
   "minYear": 1996,
   "maxYear": 2025
@@ -169,7 +169,7 @@
  },
  {
   "make": "Audi",
-  "model": "e tron",
+  "model": "e-tron",
   "obdbRepo": "Audi-e-tron",
   "minYear": 1996,
   "maxYear": 2025
@@ -190,7 +190,7 @@
  },
  {
   "make": "Audi",
-  "model": "Q4 e tron",
+  "model": "Q4-e-tron",
   "obdbRepo": "Audi-Q4-e-tron",
   "minYear": 1996,
   "maxYear": 2025
@@ -218,28 +218,28 @@
  },
  {
   "make": "Audi",
-  "model": "Q8 e tron",
+  "model": "Q8-e-tron",
   "obdbRepo": "Audi-Q8-e-tron",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Audi",
-  "model": "RS 3",
+  "model": "RS-3",
   "obdbRepo": "Audi-RS-3",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Audi",
-  "model": "RS 5",
+  "model": "RS-5",
   "obdbRepo": "Audi-RS-5",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Audi",
-  "model": "RS e tron",
+  "model": "RS-e-tron",
   "obdbRepo": "Audi-RS-e-tron",
   "minYear": 1996,
   "maxYear": 2025
@@ -309,7 +309,7 @@
  },
  {
   "make": "BMW",
-  "model": "1 Series",
+  "model": "1-Series",
   "obdbRepo": "BMW-1-Series",
   "minYear": 1996,
   "maxYear": 2025
@@ -323,14 +323,14 @@
  },
  {
   "make": "BMW",
-  "model": "2 Grand Coupe",
+  "model": "2-Grand Coupe",
   "obdbRepo": "BMW-2-Grand-Coupe",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "BMW",
-  "model": "2 Series",
+  "model": "2-Series",
   "obdbRepo": "BMW-2-Series",
   "minYear": 1996,
   "maxYear": 2025
@@ -344,14 +344,14 @@
  },
  {
   "make": "BMW",
-  "model": "3 Series",
+  "model": "3-Series",
   "obdbRepo": "BMW-3-Series",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "BMW",
-  "model": "3 Series eDrive",
+  "model": "3-Series eDrive",
   "obdbRepo": "BMW-3-Series-eDrive",
   "minYear": 1996,
   "maxYear": 2025
@@ -365,21 +365,21 @@
  },
  {
   "make": "BMW",
-  "model": "4 Series",
+  "model": "4-Series",
   "obdbRepo": "BMW-4-Series",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "BMW",
-  "model": "5 Series",
+  "model": "5-Series",
   "obdbRepo": "BMW-5-Series",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "BMW",
-  "model": "5 Series xDrive",
+  "model": "5-Series xDrive",
   "obdbRepo": "BMW-5-Series-xDrive",
   "minYear": 1996,
   "maxYear": 2025
@@ -393,7 +393,7 @@
  },
  {
   "make": "BMW",
-  "model": "7 Series",
+  "model": "7-Series",
   "obdbRepo": "BMW-7-Series",
   "minYear": 1996,
   "maxYear": 2025
@@ -666,7 +666,7 @@
  },
  {
   "make": "Chery",
-  "model": "Tiggo 7 Pro",
+  "model": "Tiggo 7-Pro",
   "obdbRepo": "Chery-Tiggo-7-Pro",
   "minYear": 1996,
   "maxYear": 2025
@@ -757,7 +757,7 @@
  },
  {
   "make": "Chevrolet",
-  "model": "D Max",
+  "model": "D-Max",
   "obdbRepo": "Chevrolet-D-Max",
   "minYear": 1996,
   "maxYear": 2025
@@ -813,7 +813,7 @@
  },
  {
   "make": "Chevrolet",
-  "model": "S 10",
+  "model": "S-10",
   "obdbRepo": "Chevrolet-S-10",
   "minYear": 1996,
   "maxYear": 2025
@@ -974,7 +974,7 @@
  },
  {
   "make": "Citroen",
-  "model": "E C4",
+  "model": "E-C4",
   "obdbRepo": "Citroen-E-C4",
   "minYear": 1996,
   "maxYear": 2025
@@ -1184,7 +1184,7 @@
  },
  {
   "make": "Ford",
-  "model": "E Series",
+  "model": "E-Series",
   "obdbRepo": "Ford-E-Series",
   "minYear": 1996,
   "maxYear": 2025
@@ -1233,28 +1233,28 @@
  },
  {
   "make": "Ford",
-  "model": "F 150",
+  "model": "F-150",
   "obdbRepo": "Ford-F-150",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Ford",
-  "model": "F 150 Lightning",
+  "model": "F-150 Lightning",
   "obdbRepo": "Ford-F-150-Lightning",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Ford",
-  "model": "F 250",
+  "model": "F-250",
   "obdbRepo": "Ford-F-250",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Ford",
-  "model": "F 350",
+  "model": "F-350",
   "obdbRepo": "Ford-F-350",
   "minYear": 1996,
   "maxYear": 2025
@@ -1359,7 +1359,7 @@
  },
  {
   "make": "Ford",
-  "model": "Mustang Mach E",
+  "model": "Mustang Mach-E",
   "obdbRepo": "Ford-Mustang-Mach-E",
   "minYear": 1996,
   "maxYear": 2025
@@ -1485,7 +1485,7 @@
  },
  {
   "make": "Haval",
-  "model": "H6 HEV",
+  "model": "H6-HEV",
   "obdbRepo": "Haval-H6-HEV",
   "minYear": 1996,
   "maxYear": 2025
@@ -1562,21 +1562,21 @@
  },
  {
   "make": "Honda",
-  "model": "CR V",
+  "model": "CR-V",
   "obdbRepo": "Honda-CR-V",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Honda",
-  "model": "CR V Hybrid",
+  "model": "CR-V-Hybrid",
   "obdbRepo": "Honda-CR-V-Hybrid",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Honda",
-  "model": "CR Z",
+  "model": "CR-Z",
   "obdbRepo": "Honda-CR-Z",
   "minYear": 1996,
   "maxYear": 2025
@@ -1604,7 +1604,7 @@
  },
  {
   "make": "Honda",
-  "model": "HR V",
+  "model": "HR-V",
   "obdbRepo": "Honda-HR-V",
   "minYear": 1996,
   "maxYear": 2025
@@ -1625,7 +1625,7 @@
  },
  {
   "make": "Honda",
-  "model": "M NV",
+  "model": "M-NV",
   "obdbRepo": "Honda-M-NV",
   "minYear": 1996,
   "maxYear": 2025
@@ -1667,7 +1667,7 @@
  },
  {
   "make": "Honda",
-  "model": "ZR V",
+  "model": "ZR-V",
   "obdbRepo": "Honda-ZR-V",
   "minYear": 1996,
   "maxYear": 2025
@@ -1786,7 +1786,7 @@
  },
  {
   "make": "Hyundai",
-  "model": "Santa Fe Hybrid",
+  "model": "Santa Fe-Hybrid",
   "obdbRepo": "Hyundai-Santa-Fe-Hybrid",
   "minYear": 1996,
   "maxYear": 2025
@@ -1835,7 +1835,7 @@
  },
  {
   "make": "Infiniti",
-  "model": "G Sedan",
+  "model": "G-Sedan",
   "obdbRepo": "INFINITI-G-Sedan",
   "minYear": 1996,
   "maxYear": 2025
@@ -1905,28 +1905,28 @@
  },
  {
   "make": "Jaguar",
-  "model": "E PACE",
+  "model": "E-PACE",
   "obdbRepo": "Jaguar-E-PACE",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Jaguar",
-  "model": "F PACE",
+  "model": "F-PACE",
   "obdbRepo": "Jaguar-F-PACE",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Jaguar",
-  "model": "F TYPE",
+  "model": "F-TYPE",
   "obdbRepo": "Jaguar-F-TYPE",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Jaguar",
-  "model": "I PACE",
+  "model": "I-PACE",
   "obdbRepo": "Jaguar-I-PACE",
   "minYear": 1996,
   "maxYear": 2025
@@ -2220,7 +2220,7 @@
  },
  {
   "make": "KTM",
-  "model": "RC 390",
+  "model": "RC-390",
   "obdbRepo": "KTM-RC-390",
   "minYear": 1996,
   "maxYear": 2025
@@ -2269,7 +2269,7 @@
  },
  {
   "make": "Lexus",
-  "model": "CT 200h",
+  "model": "CT-200h",
   "obdbRepo": "Lexus-CT-200h",
   "minYear": 1996,
   "maxYear": 2025
@@ -2283,7 +2283,7 @@
  },
  {
   "make": "Lexus",
-  "model": "ES 300h",
+  "model": "ES-300h",
   "obdbRepo": "Lexus-ES-300h",
   "minYear": 1996,
   "maxYear": 2025
@@ -2297,14 +2297,14 @@
  },
  {
   "make": "Lexus",
-  "model": "GX 460",
+  "model": "GX-460",
   "obdbRepo": "Lexus-GX-460",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Lexus",
-  "model": "GX 470",
+  "model": "GX-470",
   "obdbRepo": "Lexus-GX-470",
   "minYear": 1996,
   "maxYear": 2025
@@ -2318,7 +2318,7 @@
  },
  {
   "make": "Lexus",
-  "model": "LC 500",
+  "model": "LC-500",
   "obdbRepo": "Lexus-LC-500",
   "minYear": 1996,
   "maxYear": 2025
@@ -2332,7 +2332,7 @@
  },
  {
   "make": "Lexus",
-  "model": "NX 350h",
+  "model": "NX-350h",
   "obdbRepo": "Lexus-NX-350h",
   "minYear": 1996,
   "maxYear": 2025
@@ -2346,14 +2346,14 @@
  },
  {
   "make": "Lexus",
-  "model": "RX 350",
+  "model": "RX-350",
   "obdbRepo": "Lexus-RX-350",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Lexus",
-  "model": "RX 450h",
+  "model": "RX-450h",
   "obdbRepo": "Lexus-RX-450h",
   "minYear": 1996,
   "maxYear": 2025
@@ -2486,84 +2486,84 @@
  },
  {
   "make": "Mazda",
-  "model": "CX 3",
+  "model": "CX-3",
   "obdbRepo": "Mazda-CX-3",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 30",
+  "model": "CX-30",
   "obdbRepo": "Mazda-CX-30",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 5",
+  "model": "CX-5",
   "obdbRepo": "Mazda-CX-5",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 50",
+  "model": "CX-50",
   "obdbRepo": "Mazda-CX-50",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 60",
+  "model": "CX-60",
   "obdbRepo": "Mazda-CX-60",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 7",
+  "model": "CX-7",
   "obdbRepo": "Mazda-CX-7",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 70",
+  "model": "CX-70",
   "obdbRepo": "Mazda-CX-70",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 9",
+  "model": "CX-9",
   "obdbRepo": "Mazda-CX-9",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "CX 90",
+  "model": "CX-90",
   "obdbRepo": "Mazda-CX-90",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "MX 30",
+  "model": "MX-30",
   "obdbRepo": "Mazda-MX-30",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "MX 5",
+  "model": "MX-5",
   "obdbRepo": "Mazda-MX-5",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mazda",
-  "model": "RX 7",
+  "model": "RX-7",
   "obdbRepo": "Mazda-RX-7",
   "minYear": 1996,
   "maxYear": 2025
@@ -2584,28 +2584,28 @@
  },
  {
   "make": "Mercedes Benz",
-  "model": "A 180",
+  "model": "A-180",
   "obdbRepo": "Mercedes-Benz-A-180",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mercedes Benz",
-  "model": "A 200",
+  "model": "A-200",
   "obdbRepo": "Mercedes-Benz-A-200",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mercedes Benz",
-  "model": "A 220",
+  "model": "A-220",
   "obdbRepo": "Mercedes-Benz-A-220",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mercedes Benz",
-  "model": "AMG A 45",
+  "model": "AMG A-45",
   "obdbRepo": "Mercedes-Benz-AMG-A-45",
   "minYear": 1996,
   "maxYear": 2025
@@ -2619,14 +2619,14 @@
  },
  {
   "make": "Mercedes Benz",
-  "model": "C 180",
+  "model": "C-180",
   "obdbRepo": "Mercedes-Benz-C-180",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Mercedes Benz",
-  "model": "C Class",
+  "model": "C-Class",
   "obdbRepo": "Mercedes-Benz-C-Class",
   "minYear": 1996,
   "maxYear": 2025
@@ -2661,7 +2661,7 @@
  },
  {
   "make": "Mercedes Benz",
-  "model": "E Class",
+  "model": "E-Class",
   "obdbRepo": "Mercedes-Benz-E-Class",
   "minYear": 1996,
   "maxYear": 2025
@@ -2710,7 +2710,7 @@
  },
  {
   "make": "Mercedes Benz",
-  "model": "G Class",
+  "model": "G-Class",
   "obdbRepo": "Mercedes-Benz-G-Class",
   "minYear": 1996,
   "maxYear": 2025
@@ -2745,7 +2745,7 @@
  },
  {
   "make": "Mercedes Benz",
-  "model": "S Class",
+  "model": "S-Class",
   "obdbRepo": "Mercedes-Benz-S-Class",
   "minYear": 1996,
   "maxYear": 2025
@@ -2794,7 +2794,7 @@
  },
  {
   "make": "MG",
-  "model": "ZS EV",
+  "model": "ZS-EV",
   "obdbRepo": "MG-ZS-EV",
   "minYear": 1996,
   "maxYear": 2025
@@ -3067,7 +3067,7 @@
  },
  {
   "make": "Nissan",
-  "model": "X Trail",
+  "model": "X-Trail",
   "obdbRepo": "Nissan-X-Trail",
   "minYear": 1996,
   "maxYear": 2025
@@ -3081,7 +3081,7 @@
  },
  {
   "make": "Omoda",
-  "model": "Omoda 5 EV",
+  "model": "Omoda 5-EV",
   "obdbRepo": "Omoda-Omoda-5-EV",
   "minYear": 1996,
   "maxYear": 2025
@@ -3186,7 +3186,7 @@
  },
  {
   "make": "Peugeot",
-  "model": "e 208",
+  "model": "e-208",
   "obdbRepo": "Peugeot-e-208",
   "minYear": 1996,
   "maxYear": 2025
@@ -3375,7 +3375,7 @@
  },
  {
   "make": "Renault",
-  "model": "Megane E Tech",
+  "model": "Megane E-Tech",
   "obdbRepo": "Renault-Megane-E-Tech",
   "minYear": 1996,
   "maxYear": 2025
@@ -3410,21 +3410,21 @@
  },
  {
   "make": "Saab",
-  "model": "9 3",
+  "model": "9-3",
   "obdbRepo": "Saab-9-3",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Saab",
-  "model": "9 5",
+  "model": "9-5",
   "obdbRepo": "Saab-9-5",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Scion",
-  "model": "FR S",
+  "model": "FR-S",
   "obdbRepo": "Scion-FR-S",
   "minYear": 1996,
   "maxYear": 2025
@@ -3823,7 +3823,7 @@
  },
  {
   "make": "Toyota",
-  "model": "C HR",
+  "model": "C-HR",
   "obdbRepo": "Toyota-C-HR",
   "minYear": 1996,
   "maxYear": 2025
@@ -3893,7 +3893,7 @@
  },
  {
   "make": "Toyota",
-  "model": "FJ Cruiser",
+  "model": "FJ-Cruiser",
   "obdbRepo": "Toyota-FJ-Cruiser",
   "minYear": 1996,
   "maxYear": 2025
@@ -3907,14 +3907,14 @@
  },
  {
   "make": "Toyota",
-  "model": "GR Corolla",
+  "model": "GR-Corolla",
   "obdbRepo": "Toyota-GR-Corolla",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Toyota",
-  "model": "GR Supra",
+  "model": "GR-Supra",
   "obdbRepo": "Toyota-GR-Supra",
   "minYear": 1996,
   "maxYear": 2025
@@ -4243,7 +4243,7 @@
  },
  {
   "make": "Volkswagen",
-  "model": "e Golf",
+  "model": "e-Golf",
   "obdbRepo": "Volkswagen-e-Golf",
   "minYear": 1996,
   "maxYear": 2025
@@ -4271,7 +4271,7 @@
  },
  {
   "make": "Volkswagen",
-  "model": "ID Buzz",
+  "model": "ID-Buzz",
   "obdbRepo": "Volkswagen-ID-Buzz",
   "minYear": 1996,
   "maxYear": 2025
@@ -4383,14 +4383,14 @@
  },
  {
   "make": "Volkswagen",
-  "model": "T Cross",
+  "model": "T-Cross",
   "obdbRepo": "Volkswagen-T-Cross",
   "minYear": 1996,
   "maxYear": 2025
  },
  {
   "make": "Volkswagen",
-  "model": "T Roc",
+  "model": "T-Roc",
   "obdbRepo": "Volkswagen-T-Roc",
   "minYear": 1996,
   "maxYear": 2025
@@ -4544,7 +4544,7 @@
  },
  {
   "make": "Volvo",
-  "model": "XC40 T4 Recharge",
+  "model": "XC40 T4-Recharge",
   "obdbRepo": "Volvo-XC40-T4-Recharge",
   "minYear": 1996,
   "maxYear": 2025

@@ -4,20 +4,19 @@ plugins {
     id("carscan.android.lib")
 }
 
-// Google's public TEST rewarded ad unit id, safe to compile in. Overridable per machine via a
-// gitignored `local.properties` key so the real id never has to touch source control.
+// Google's public TEST ad unit ids. Debug builds always compile these in, so development never
+// serves or clicks a real ad (which risks an AdMob ban). Release builds use the real ids from a
+// gitignored `local.properties` (falling back to test when it's absent, e.g. on CI).
+val TEST_REWARDED = "ca-app-pub-3940256099942544/5224354917"
+val TEST_INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
+val TEST_APP_OPEN = "ca-app-pub-3940256099942544/9257395921"
+val TEST_BANNER = "ca-app-pub-3940256099942544/9214589741"
+
 val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use { stream -> load(stream) }
 }
-val rewardedAdUnitId: String = localProperties.getProperty("admob.rewarded.adunit")
-    ?: "ca-app-pub-3940256099942544/5224354917"
-val interstitialAdUnitId: String = localProperties.getProperty("admob.interstitial.adunit")
-    ?: "ca-app-pub-3940256099942544/1033173712"
-val appOpenAdUnitId: String = localProperties.getProperty("admob.appopen.adunit")
-    ?: "ca-app-pub-3940256099942544/9257395921"
-val bannerAdUnitId: String = localProperties.getProperty("admob.banner.adunit")
-    ?: "ca-app-pub-3940256099942544/9214589741"
+fun realOr(key: String, test: String) = "\"${localProperties.getProperty(key) ?: test}\""
 
 android {
     buildFeatures {
@@ -25,10 +24,20 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "REWARDED_AD_UNIT_ID", "\"$rewardedAdUnitId\"")
-        buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", "\"$interstitialAdUnitId\"")
-        buildConfigField("String", "APP_OPEN_AD_UNIT_ID", "\"$appOpenAdUnitId\"")
-        buildConfigField("String", "BANNER_AD_UNIT_ID", "\"$bannerAdUnitId\"")
+        // Test ids by default → debug (and any variant without an override) never touches real ads.
+        buildConfigField("String", "REWARDED_AD_UNIT_ID", "\"$TEST_REWARDED\"")
+        buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", "\"$TEST_INTERSTITIAL\"")
+        buildConfigField("String", "APP_OPEN_AD_UNIT_ID", "\"$TEST_APP_OPEN\"")
+        buildConfigField("String", "BANNER_AD_UNIT_ID", "\"$TEST_BANNER\"")
+    }
+
+    buildTypes {
+        getByName("release") {
+            buildConfigField("String", "REWARDED_AD_UNIT_ID", realOr("admob.rewarded.adunit", TEST_REWARDED))
+            buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", realOr("admob.interstitial.adunit", TEST_INTERSTITIAL))
+            buildConfigField("String", "APP_OPEN_AD_UNIT_ID", realOr("admob.appopen.adunit", TEST_APP_OPEN))
+            buildConfigField("String", "BANNER_AD_UNIT_ID", realOr("admob.banner.adunit", TEST_BANNER))
+        }
     }
 }
 

@@ -7,14 +7,14 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
-// Google's public TEST AdMob app id, safe to compile in. Overridable per machine via a
-// gitignored `local.properties` key so the real id never has to touch source control.
+// Google's public TEST AdMob app id. Debug builds compile it in so development never touches the
+// real ad account; only release uses the real id from a gitignored `local.properties`.
+val TEST_ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
 val localProperties = Properties().apply {
     val file = rootProject.file("local.properties")
     if (file.exists()) file.inputStream().use { stream -> load(stream) }
 }
-val admobAppId: String = localProperties.getProperty("admob.app.id")
-    ?: "ca-app-pub-3940256099942544~3347511713"
+val admobAppId: String = localProperties.getProperty("admob.app.id") ?: TEST_ADMOB_APP_ID
 
 android {
     namespace = "com.bruni.carscan"
@@ -27,7 +27,8 @@ android {
         versionCode = 1
         versionName = "0.1.0"
 
-        manifestPlaceholders["admobAppId"] = admobAppId
+        // Test app id by default → debug never touches the real ad account.
+        manifestPlaceholders["admobAppId"] = TEST_ADMOB_APP_ID
     }
 
     buildFeatures {
@@ -37,6 +38,8 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // The real app id ships only in the store (release) build.
+            manifestPlaceholders["admobAppId"] = admobAppId
         }
     }
 
