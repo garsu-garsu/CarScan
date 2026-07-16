@@ -3,12 +3,17 @@ package com.bruni.carscan.feature.settings
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
+import com.bruni.carscan.core.monetization.BillingPort
+import com.bruni.carscan.core.monetization.Entitlements
+import com.bruni.carscan.core.monetization.Purchase
+import com.bruni.carscan.core.monetization.PurchaseKind
 import com.bruni.carscan.core.units.Quantity
 import com.bruni.carscan.core.units.SpeedUnit
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepository {
     private val state = MutableStateFlow(initial)
@@ -46,4 +51,20 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     override suspend fun setGaugeStyle(style: String) {
         state.value = state.value.copy(gaugeStyle = style)
     }
+}
+
+/** Scriptable billing fake: hands back a fixed price map, or throws to simulate an offline store. */
+class FakeBillingPort(
+    private val prices: Map<PurchaseKind, String> = emptyMap(),
+    private val failPrices: Boolean = false,
+) : BillingPort {
+    override suspend fun queryPurchases(): List<Purchase> = emptyList()
+    override suspend fun purchase(kind: PurchaseKind): List<Purchase> = emptyList()
+    override suspend fun restore(): List<Purchase> = emptyList()
+    override suspend fun queryPrices(): Map<PurchaseKind, String> =
+        if (failPrices) throw RuntimeException("billing unavailable") else prices
+}
+
+class FakeEntitlements(isPremium: Boolean = false) : Entitlements {
+    override val isPremium: StateFlow<Boolean> = MutableStateFlow(isPremium)
 }

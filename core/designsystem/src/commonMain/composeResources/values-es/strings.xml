@@ -186,6 +186,10 @@
     <string name="paywall_yearly_price">$5.99 / year</string>
     <string name="paywall_lifetime_title">Lifetime</string>
     <string name="paywall_lifetime_price">$9.99 once</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="paywall_price_monthly_fmt">%s / month</string>
+    <string name="paywall_price_yearly_fmt">%s / year</string>
+    <string name="paywall_price_lifetime_fmt">%s once</string>
     <string name="paywall_lifetime_badge">Most popular</string>
     <string name="paywall_cta_subscribe">Subscribe</string>
     <string name="paywall_cta_buy">Buy</string>

@@ -93,6 +93,22 @@ class PlayBillingPort(
 
     override suspend fun restore(): List<Purchase> = queryPurchases()
 
+    override suspend fun queryPrices(): Map<PurchaseKind, String> = runCatching {
+        ensureConnected()
+        val prices = mutableMapOf<PurchaseKind, String>()
+
+        val lifetimeDetails = queryProductDetails(PurchaseKind.LIFETIME.toProductId(), BillingClient.ProductType.INAPP)
+        lifetimeDetails?.oneTimePurchaseOfferDetails?.formattedPrice?.let { prices[PurchaseKind.LIFETIME] = it }
+
+        for (kind in listOf(PurchaseKind.SUB_MONTHLY, PurchaseKind.SUB_YEARLY)) {
+            val details = queryProductDetails(kind.toProductId(), BillingClient.ProductType.SUBS)
+            val price = details?.subscriptionOfferDetails?.firstOrNull()?.pricingPhases?.pricingPhaseList?.firstOrNull()?.formattedPrice
+            price?.let { prices[kind] = it }
+        }
+
+        prices
+    }.getOrDefault(emptyMap())
+
     override suspend fun purchase(kind: PurchaseKind): List<Purchase> {
         ensureConnected()
         val activity = CurrentActivity.value

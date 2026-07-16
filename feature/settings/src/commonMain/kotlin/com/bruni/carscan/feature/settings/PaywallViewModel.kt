@@ -18,6 +18,12 @@ class PaywallViewModel(
 
     init {
         entitlements.isPremium.collectIntoState { premium -> setState { copy(isPremium = premium) } }
+        // Load the store's real localized prices once on open. A failure or a missing product
+        // leaves the map empty for that tier, and the screen falls back to its placeholder price.
+        scope.launch {
+            val prices = runCatching { billing.queryPrices() }.getOrDefault(emptyMap())
+            setState { copy(prices = prices) }
+        }
     }
 
     override fun onIntent(intent: PaywallIntent) = when (intent) {

@@ -47,6 +47,9 @@ import com.bruni.carscan.core.designsystem.generated.resources.paywall_lifetime_
 import com.bruni.carscan.core.designsystem.generated.resources.paywall_monthly_price
 import com.bruni.carscan.core.designsystem.generated.resources.paywall_monthly_title
 import com.bruni.carscan.core.designsystem.generated.resources.paywall_plans_header
+import com.bruni.carscan.core.designsystem.generated.resources.paywall_price_lifetime_fmt
+import com.bruni.carscan.core.designsystem.generated.resources.paywall_price_monthly_fmt
+import com.bruni.carscan.core.designsystem.generated.resources.paywall_price_yearly_fmt
 import com.bruni.carscan.core.designsystem.generated.resources.paywall_restore
 import com.bruni.carscan.core.designsystem.generated.resources.paywall_subtitle
 import com.bruni.carscan.core.designsystem.generated.resources.paywall_title
@@ -58,9 +61,10 @@ import org.jetbrains.compose.resources.stringResource
 /**
  * The paywall: Monthly and Yearly are plain cards, Lifetime is the hero — a gradient card, badged
  * as the recommended tier, matching the plan's positioning (yearly the cheap entry point,
- * lifetime the one-time upsell). Prices are DISPLAY placeholders ($1.99/$5.99/$9.99) until
- * [PurchaseKind]'s real `ProductDetails` price strings are threaded through from
- * `PlayBillingPort.queryProductDetails` — see this module's build notes.
+ * lifetime the one-time upsell). Prices come from the store: [PaywallState.prices] holds the real
+ * localized `ProductDetails` price per tier (loaded by `PlayBillingPort.queryPrices`), rendered
+ * through the `paywall_price_*_fmt` templates. The static `paywall_*_price` strings are only a
+ * fallback for when billing is offline or a product isn't configured yet.
  */
 @Composable
 fun PaywallScreen(
@@ -109,29 +113,35 @@ fun PaywallScreen(
             }
 
             item {
+                val real = state.prices[PurchaseKind.SUB_MONTHLY]
                 PlanCard(
                     icon = Icons.Rounded.CalendarMonth,
                     title = stringResource(Res.string.paywall_monthly_title),
-                    price = stringResource(Res.string.paywall_monthly_price),
+                    price = if (real != null) stringResource(Res.string.paywall_price_monthly_fmt, real)
+                    else stringResource(Res.string.paywall_monthly_price),
                     ctaLabel = stringResource(Res.string.paywall_cta_subscribe),
                     isLoading = state.purchasing == PurchaseKind.SUB_MONTHLY,
                     onClick = { onIntent(PaywallIntent.Purchase(PurchaseKind.SUB_MONTHLY)) },
                 )
             }
             item {
+                val real = state.prices[PurchaseKind.SUB_YEARLY]
                 PlanCard(
                     icon = Icons.Rounded.EventRepeat,
                     title = stringResource(Res.string.paywall_yearly_title),
-                    price = stringResource(Res.string.paywall_yearly_price),
+                    price = if (real != null) stringResource(Res.string.paywall_price_yearly_fmt, real)
+                    else stringResource(Res.string.paywall_yearly_price),
                     ctaLabel = stringResource(Res.string.paywall_cta_subscribe),
                     isLoading = state.purchasing == PurchaseKind.SUB_YEARLY,
                     onClick = { onIntent(PaywallIntent.Purchase(PurchaseKind.SUB_YEARLY)) },
                 )
             }
             item {
+                val real = state.prices[PurchaseKind.LIFETIME]
                 HeroPlanCard(
                     title = stringResource(Res.string.paywall_lifetime_title),
-                    price = stringResource(Res.string.paywall_lifetime_price),
+                    price = if (real != null) stringResource(Res.string.paywall_price_lifetime_fmt, real)
+                    else stringResource(Res.string.paywall_lifetime_price),
                     badge = stringResource(Res.string.paywall_lifetime_badge),
                     ctaLabel = stringResource(Res.string.paywall_cta_buy),
                     isLoading = state.purchasing == PurchaseKind.LIFETIME,

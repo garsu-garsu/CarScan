@@ -180,6 +180,9 @@
     <string name="paywall_yearly_price">연 $5.99</string>
     <string name="paywall_lifetime_title">평생 이용권</string>
     <string name="paywall_lifetime_price">$9.99 (1회 결제)</string>
+    <string name="paywall_price_monthly_fmt">%s / 월</string>
+    <string name="paywall_price_yearly_fmt">%s / 년</string>
+    <string name="paywall_price_lifetime_fmt">%s · 1회 결제</string>
     <string name="paywall_lifetime_badge">가장 인기</string>
     <string name="paywall_cta_subscribe">구독하기</string>
     <string name="paywall_cta_buy">구매하기</string>
