@@ -27,7 +27,9 @@
 
     <application
         android:name=".CarScanApplication"
+        android:icon="@mipmap/ic_launcher"
         android:label="CarScan"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CarScan">
 
