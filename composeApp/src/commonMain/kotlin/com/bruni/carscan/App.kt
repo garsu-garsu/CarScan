@@ -29,6 +29,8 @@ import com.bruni.carscan.core.designsystem.ads.LocalAdsEnabled
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.designsystem.theme.CarScanTheme
 import com.bruni.carscan.core.monetization.Entitlements
+import com.bruni.carscan.core.monetization.FullScreenAdGate
+import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.feature.connect.ConnectEffect
 import com.bruni.carscan.feature.connect.ConnectScreen
 import com.bruni.carscan.feature.connect.ConnectViewModel
@@ -77,6 +79,9 @@ fun App() {
     val entitlements: Entitlements = koinInject()
     val isPremium by entitlements.isPremium.collectAsStateWithLifecycle()
 
+    val interstitialAd: InterstitialAdPort = koinInject()
+    val adGate: FullScreenAdGate = koinInject()
+
     val darkTheme = when (settings.themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
         ThemeMode.LIGHT -> false
@@ -93,6 +98,20 @@ fun App() {
         CompositionLocalProvider(LocalAdsEnabled provides !isPremium) {
             val navController = rememberNavController()
             val entry by navController.currentBackStackEntryAsState()
+
+            // Interstitial at a natural break: arriving back at the launcher after finishing a
+            // screen. The shared FullScreenAdGate enforces warmup, spacing, and the per-session cap
+            // (so the cold-start Home never qualifies), and premium users never do — leaving at most
+            // an occasional full-screen ad at a transition, never mid-drive.
+            LaunchedEffect(entry) {
+                if (entry?.destination?.hasRoute(Route.Home::class) == true &&
+                    !isPremium && adGate.shouldShow()
+                ) {
+                    // Count it only if an ad actually appeared — a no-fill or missing Activity
+                    // must not burn a session slot or reset the spacing interval.
+                    if (interstitialAd.show()) adGate.record()
+                }
+            }
 
             // Connect is a thing you finish, not a place you go: it is the start destination, and it
             // pops itself off the stack the moment an adapter answers. A tab bar over it would offer
