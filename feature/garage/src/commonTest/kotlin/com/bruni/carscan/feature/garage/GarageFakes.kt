@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeVehicleCatalog(private val entries: List<CatalogEntry>) : VehicleCatalog {
-    override fun all(): List<CatalogEntry> = entries
+    override suspend fun all(): List<CatalogEntry> = entries
 }
 
 class FakeVehicleRepository : VehicleRepository {

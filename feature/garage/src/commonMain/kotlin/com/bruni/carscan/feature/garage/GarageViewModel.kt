@@ -14,22 +14,31 @@ import kotlinx.coroutines.launch
  * The garage: picking a vehicle from the curated catalog makes it the active one, so the rest
  * of the app knows which OBDb signalset to load.
  *
- * The catalog is read once, at construction — [VehicleCatalog.all] is a bundled, in-memory list,
- * not something that changes underneath a running screen.
+ * [VehicleCatalog.all] reads a bundled JSON asset, which is I/O — the state starts
+ * [GarageState.loading] and is populated once that read completes, rather than blocking
+ * construction of the ViewModel itself.
  */
 class GarageViewModel(
-    catalog: VehicleCatalog,
+    private val catalog: VehicleCatalog,
     private val vehicles: VehicleRepository,
     private val settings: SettingsRepository,
     private val signalsets: SignalsetProvider,
     private val now: () -> Long,
     private val newId: () -> String,
 ) : MviViewModel<GarageState, GarageIntent, GarageEffect>(
-    GarageState(entries = catalog.all()),
+    GarageState(loading = true),
 ) {
+
+    init {
+        scope.launch {
+            val entries = catalog.all()
+            setState { copy(entries = entries, loading = false) }
+        }
+    }
 
     override fun onIntent(intent: GarageIntent) = when (intent) {
         is GarageIntent.Select -> select(intent.entry)
+        is GarageIntent.Search -> setState { copy(query = intent.query) }
     }
 
     private fun select(entry: CatalogEntry) {

@@ -19,12 +19,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.DirectionsCar
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +41,9 @@ import com.bruni.carscan.core.designsystem.generated.resources.garage_download_f
 import com.bruni.carscan.core.designsystem.generated.resources.garage_downloading
 import com.bruni.carscan.core.designsystem.generated.resources.garage_empty
 import com.bruni.carscan.core.designsystem.generated.resources.garage_instruction
+import com.bruni.carscan.core.designsystem.generated.resources.garage_no_matches
 import com.bruni.carscan.core.designsystem.generated.resources.garage_offline
+import com.bruni.carscan.core.designsystem.generated.resources.garage_search_hint
 import com.bruni.carscan.core.designsystem.generated.resources.garage_title
 import org.jetbrains.compose.resources.stringResource
 
@@ -65,28 +69,44 @@ fun GarageScreen(
                 item { MessageHint(message) }
             }
 
-            if (state.entries.isEmpty()) {
+            if (state.loading) {
+                item { LoadingState() }
+            } else if (state.entries.isEmpty()) {
                 item { EmptyState() }
             } else {
                 item {
-                    Text(stringResource(Res.string.garage_instruction), style = MaterialTheme.typography.bodyMedium)
+                    SearchField(
+                        query = state.query,
+                        onQueryChange = { onIntent(GarageIntent.Search(it)) },
+                    )
                 }
 
-                for ((make, models) in state.byMake) {
+                if (state.byMake.isEmpty()) {
+                    item { NoMatchesState() }
+                } else {
                     item {
                         Text(
-                            text = make,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontWeight = FontWeight.Medium,
+                            stringResource(Res.string.garage_instruction),
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
-                    items(models, key = { it.displayName }) { entry ->
-                        // Brand names, not translated — see CatalogEntry.displayName.
-                        VehicleRow(
-                            displayName = entry.displayName,
-                            onClick = { onIntent(GarageIntent.Select(entry)) },
-                        )
+
+                    for ((make, models) in state.byMake) {
+                        item {
+                            Text(
+                                text = make,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium,
+                            )
+                        }
+                        items(models, key = { it.displayName }) { entry ->
+                            // Brand names, not translated — see CatalogEntry.displayName.
+                            VehicleRow(
+                                displayName = entry.displayName,
+                                onClick = { onIntent(GarageIntent.Select(entry)) },
+                            )
+                        }
                     }
                 }
             }
@@ -181,6 +201,43 @@ private fun MessageHint(message: DownloadMessage) {
             color = tint,
         )
     }
+}
+
+/** Filters the (possibly 654-long) catalog down to what the user is looking for. */
+@Composable
+private fun SearchField(query: String, onQueryChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(stringResource(Res.string.garage_search_hint)) },
+        leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+    )
+}
+
+/** The catalog is still being read off the bundled asset — the same spinner [DownloadingCard] uses. */
+@Composable
+private fun LoadingState() {
+    Box(
+        modifier = Modifier.fillMaxSize().padding(32.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+/** The search query matched nothing in the catalog. */
+@Composable
+private fun NoMatchesState() {
+    Text(
+        text = stringResource(Res.string.garage_no_matches),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+        textAlign = TextAlign.Center,
+    )
 }
 
 /** No vehicles in the curated catalog, styled like the dashboard's empty state. */

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -25,6 +26,7 @@ import androidx.navigation.toRoute
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
+import com.bruni.carscan.core.data.VehicleRepository
 import com.bruni.carscan.core.designsystem.ads.LocalAdsEnabled
 import com.bruni.carscan.core.designsystem.ads.LocalBannerAdUnitId
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
@@ -76,6 +78,14 @@ import org.koin.compose.viewmodel.koinViewModel
 fun App(bannerAdUnitId: String? = null) {
     val settingsRepository: SettingsRepository = koinInject()
     val settings by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = Settings())
+
+    // The launcher's "current vehicle" chip — resolved here, once, and handed down, so HomeScreen
+    // stays pure navigation with no repository of its own. Re-resolves whenever the active vehicle
+    // id changes (a garage pick) rather than once at first composition.
+    val vehicleRepository: VehicleRepository = koinInject()
+    val activeVehicleName by produceState<String?>(initialValue = null, settings.activeVehicleId, vehicleRepository) {
+        value = settings.activeVehicleId?.let { id -> vehicleRepository.byId(id)?.displayName }
+    }
 
     val entitlements: Entitlements = koinInject()
     val isPremium by entitlements.isPremium.collectAsStateWithLifecycle()
@@ -132,7 +142,7 @@ fun App(bannerAdUnitId: String? = null) {
                 bottomBar = { if (onTab) CarScanNavigationBar(navController, entry?.destination) },
             ) { padding ->
                 Surface(Modifier.fillMaxSize().padding(padding)) {
-                    CarScanNavHost(navController)
+                    CarScanNavHost(navController, activeVehicleName)
                 }
             }
         }
@@ -140,11 +150,11 @@ fun App(bannerAdUnitId: String? = null) {
 }
 
 @Composable
-private fun CarScanNavHost(navController: NavHostController) {
+private fun CarScanNavHost(navController: NavHostController, activeVehicleName: String?) {
     NavHost(navController = navController, startDestination = Route.Home) {
 
         composable<Route.Home> {
-            HomeScreen(onOpen = { route -> navController.navigate(route) })
+            HomeScreen(onOpen = { route -> navController.navigate(route) }, activeVehicleName = activeVehicleName)
         }
 
         composable<Route.Connect> {

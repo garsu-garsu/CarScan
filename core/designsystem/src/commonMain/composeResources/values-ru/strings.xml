@@ -5,6 +5,8 @@
     <string name="app_name">CarScan</string>
     <string name="home_tagline">Все датчики вашего авто — в реальном времени</string>
     <string name="home_connect_hint">Подключите сканер, чтобы начать</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="home_no_vehicle">Select your vehicle</string>
 
     <string name="common_ok">ОК</string>
     <string name="common_cancel">Отмена</string>
@@ -186,6 +188,10 @@
     <string name="garage_title">Гараж</string>
     <string name="garage_instruction">Выберите свой автомобиль</string>
     <string name="garage_empty">Пока нет доступных автомобилей.</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="garage_search_hint">Search make or model</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="garage_no_matches">No vehicles match your search.</string>
     <string name="garage_downloading">Загрузка данных автомобиля…</string>
     <string name="garage_offline">Подключитесь к интернету, чтобы загрузить данные этого автомобиля. Офлайн будут работать стандартные PID.</string>
     <string name="garage_download_failed">Не удалось загрузить данные этого автомобиля. Пока будут работать стандартные PID.</string>
