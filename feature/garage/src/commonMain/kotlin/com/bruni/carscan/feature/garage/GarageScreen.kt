@@ -2,12 +2,15 @@ package com.bruni.carscan.feature.garage
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.DirectionsCar
@@ -29,12 +33,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.bruni.carscan.core.data.CatalogEntry
 import com.bruni.carscan.core.designsystem.ads.BannerAd
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.garage_download_failed
@@ -45,9 +57,13 @@ import com.bruni.carscan.core.designsystem.generated.resources.garage_no_matches
 import com.bruni.carscan.core.designsystem.generated.resources.garage_offline
 import com.bruni.carscan.core.designsystem.generated.resources.garage_search_hint
 import com.bruni.carscan.core.designsystem.generated.resources.garage_title
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
-/** A tappable list of the curated catalog, grouped by make. Picking a row selects that vehicle. */
+/**
+ * A tappable list of the curated (654-vehicle) catalog, grouped by make behind sticky headers,
+ * with a fixed search bar and an A-Z fast-scroll rail. Picking a row selects that vehicle.
+ */
 @Composable
 fun GarageScreen(
     state: GarageState,
@@ -55,64 +71,189 @@ fun GarageScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            item { Text(stringResource(Res.string.garage_title), style = MaterialTheme.typography.headlineSmall) }
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp)) {
+            Text(stringResource(Res.string.garage_title), style = MaterialTheme.typography.headlineSmall)
 
             if (state.downloading != null) {
-                item { DownloadingCard() }
+                Spacer(Modifier.height(12.dp))
+                DownloadingCard()
             }
             state.message?.let { message ->
-                item { MessageHint(message) }
+                Spacer(Modifier.height(12.dp))
+                MessageHint(message)
             }
 
-            if (state.loading) {
-                item { LoadingState() }
-            } else if (state.entries.isEmpty()) {
-                item { EmptyState() }
-            } else {
-                item {
-                    SearchField(
-                        query = state.query,
-                        onQueryChange = { onIntent(GarageIntent.Search(it)) },
-                    )
-                }
+            // The search bar stays put outside the scrolling list, so it's always reachable
+            // while browsing a 654-entry catalog.
+            if (!state.loading && state.entries.isNotEmpty()) {
+                Spacer(Modifier.height(12.dp))
+                SearchField(
+                    query = state.query,
+                    onQueryChange = { onIntent(GarageIntent.Search(it)) },
+                )
+                Spacer(Modifier.height(12.dp))
+                Text(stringResource(Res.string.garage_instruction), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
 
-                if (state.byMake.isEmpty()) {
-                    item { NoMatchesState() }
-                } else {
-                    item {
-                        Text(
-                            stringResource(Res.string.garage_instruction),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-
-                    for ((make, models) in state.byMake) {
-                        item {
-                            Text(
-                                text = make,
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Medium,
-                            )
-                        }
-                        items(models, key = { it.displayName }) { entry ->
-                            // Brand names, not translated — see CatalogEntry.displayName.
-                            VehicleRow(
-                                displayName = entry.displayName,
-                                onClick = { onIntent(GarageIntent.Select(entry)) },
-                            )
-                        }
-                    }
-                }
+        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            when {
+                state.loading -> LoadingState()
+                state.entries.isEmpty() -> EmptyState()
+                state.byMake.isEmpty() -> NoMatchesState()
+                else -> GarageList(byMake = state.byMake, onSelect = { onIntent(GarageIntent.Select(it)) })
             }
         }
 
         BannerAd(Modifier.fillMaxWidth())
+    }
+}
+
+/**
+ * The grouped, filtered catalog: a [LazyColumn] with one [stickyHeader] per make, plus the A-Z
+ * rail pinned to the right edge for jumping straight to a manufacturer.
+ */
+@Composable
+private fun GarageList(byMake: Map<String, List<CatalogEntry>>, onSelect: (CatalogEntry) -> Unit) {
+    val rows = remember(byMake) { garageRows(byMake) }
+    val index = remember(rows) { letterIndex(rows) }
+    val letters = remember(index) { index.map { it.first } }
+    val headerIndexByLetter = remember(index) { index.toMap() }
+
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    var draggedLetter by remember { mutableStateOf<Char?>(null) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(start = 20.dp, end = 36.dp, top = 16.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            for ((make, entries) in byMake) {
+                stickyHeader(key = make) { GarageMakeHeader(make) }
+                items(entries, key = { it.displayName }) { entry ->
+                    // Brand names, not translated — see CatalogEntry.displayName.
+                    VehicleRow(
+                        displayName = entry.displayName,
+                        onClick = { onSelect(entry) },
+                    )
+                }
+            }
+        }
+
+        if (letters.isNotEmpty()) {
+            AlphabetRail(
+                letters = letters,
+                onLetterSelected = { letter ->
+                    val itemIndex = headerIndexByLetter[letter] ?: return@AlphabetRail
+                    scope.launch { listState.scrollToItem(itemIndex) }
+                },
+                onDragLetterChange = { draggedLetter = it },
+                modifier = Modifier.align(Alignment.CenterEnd),
+            )
+        }
+
+        draggedLetter?.let { letter ->
+            LetterBubble(letter, modifier = Modifier.align(Alignment.Center))
+        }
+    }
+}
+
+/** The sticky section header for one manufacturer's group of vehicles. */
+@Composable
+private fun GarageMakeHeader(make: String) {
+    Text(
+        text = make,
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        fontWeight = FontWeight.Medium,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(vertical = 8.dp),
+    )
+}
+
+/**
+ * A slim A-Z rail pinned to the list's right edge. Tapping or dragging over a letter calls
+ * [onLetterSelected]; [onDragLetterChange] reports the letter currently under the finger (or
+ * null once the touch ends) so the caller can show/hide the big overlay bubble.
+ */
+@Composable
+private fun AlphabetRail(
+    letters: List<Char>,
+    onLetterSelected: (Char) -> Unit,
+    onDragLetterChange: (Char?) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var railHeightPx by remember { mutableStateOf(0f) }
+
+    Column(
+        modifier = modifier
+            .fillMaxHeight()
+            .width(24.dp)
+            .onSizeChanged { railHeightPx = it.height.toFloat() }
+            .pointerInput(letters) {
+                awaitEachGesture {
+                    val down = awaitFirstDown()
+                    down.consume()
+                    var position = down.position.y
+
+                    fun report() {
+                        letterAt(letters, position, railHeightPx)?.let { letter ->
+                            onDragLetterChange(letter)
+                            onLetterSelected(letter)
+                        }
+                    }
+                    report()
+
+                    var pressed = true
+                    while (pressed) {
+                        val event = awaitPointerEvent()
+                        val change = event.changes.firstOrNull { it.id == down.id }
+                        if (change != null) {
+                            position = change.position.y
+                            change.consume()
+                            report()
+                            pressed = change.pressed
+                        } else {
+                            pressed = false
+                        }
+                    }
+                    onDragLetterChange(null)
+                }
+            },
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        letters.forEach { letter ->
+            Text(
+                text = letter.toString(),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            )
+        }
+    }
+}
+
+/** The big centered "current letter" cue shown while dragging across the [AlphabetRail]. */
+@Composable
+private fun LetterBubble(letter: Char, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .size(72.dp)
+            .clip(MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.primary),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = letter.toString(),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 
@@ -235,7 +376,7 @@ private fun NoMatchesState() {
         text = stringResource(Res.string.garage_no_matches),
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 24.dp),
         textAlign = TextAlign.Center,
     )
 }
