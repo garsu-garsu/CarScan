@@ -5,6 +5,8 @@
     <string name="app_name">CarScan</string>
     <string name="home_tagline">Cada sensor do seu carro, ao vivo</string>
     <string name="home_connect_hint">Conecte um scanner para começar</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="home_no_vehicle">Select your vehicle</string>
 
     <string name="common_ok">OK</string>
     <string name="common_cancel">Cancelar</string>
@@ -170,6 +172,10 @@
     <string name="garage_title">Garagem</string>
     <string name="garage_instruction">Escolha seu veículo</string>
     <string name="garage_empty">Ainda não há veículos disponíveis.</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="garage_search_hint">Search make or model</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="garage_no_matches">No vehicles match your search.</string>
     <string name="garage_downloading">Baixando dados do veículo…</string>
     <string name="garage_offline">Conecte-se à internet para baixar os dados deste veículo. Os PIDs padrão funcionarão offline.</string>
     <string name="garage_download_failed">Não foi possível baixar os dados deste veículo. Os PIDs padrão funcionarão por enquanto.</string>

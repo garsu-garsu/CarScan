@@ -16,6 +16,8 @@
     <string name="app_name">CarScan</string>
     <string name="home_tagline">Every sensor in your car, live</string>
     <string name="home_connect_hint">Connect a scanner to begin</string>
+    <!-- The garage-picked vehicle chip on the launcher; shown instead when nothing is picked yet. -->
+    <string name="home_no_vehicle">Select your vehicle</string>
 
     <!-- Shared -->
     <string name="common_ok">OK</string>
@@ -221,6 +223,8 @@
     <string name="garage_title">Garage</string>
     <string name="garage_instruction">Choose your vehicle</string>
     <string name="garage_empty">No vehicles available yet.</string>
+    <string name="garage_search_hint">Search make or model</string>
+    <string name="garage_no_matches">No vehicles match your search.</string>
     <!--
         Signalset download status, shown right after picking a vehicle — see
         core/data's SignalsetProvider for why this must happen while still online.

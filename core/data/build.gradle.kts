@@ -1,5 +1,7 @@
 plugins {
     id("carscan.kmp")
+    // @Serializable CatalogEntry — the bundled vehicle catalog is parsed from a JSON asset.
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val koinBom = dependencies.platform(libs.koin.bom)
@@ -7,6 +9,7 @@ val koinBom = dependencies.platform(libs.koin.bom)
 kotlin {
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.kotlinx.serialization.json)
             // Deliberately NOT :core:obd. A repository needs the *shape* of the sample stream,
             // not the ELM327 implementation behind it. :core:data declares the port; :core:obd
             // satisfies it; :composeApp binds the two. That keeps the OBD stack swappable (the

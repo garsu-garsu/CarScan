@@ -61,6 +61,42 @@ class GarageViewModelTest {
     }
 
     @Test
+    fun `state starts loading and clears once the catalog resolves`() = runTest(dispatcher) {
+        val vm = viewModel()
+
+        vm.state.value.loading shouldBe true
+        vm.state.value.entries shouldContainExactly emptyList()
+
+        runCurrent()
+
+        vm.state.value.loading shouldBe false
+        vm.state.value.entries shouldContainExactly listOf(entry)
+    }
+
+    @Test
+    fun `Search narrows byMake to entries whose display name matches, case-insensitively`() = runTest(dispatcher) {
+        val niro = CatalogEntry(make = "Kia", model = "Niro", obdbRepo = "Kia-Niro", minYear = 2022, maxYear = 2024)
+        val vm = viewModel(catalog = FakeVehicleCatalog(listOf(entry, niro)))
+        runCurrent()
+
+        vm.onIntent(GarageIntent.Search("ev6"))
+
+        vm.state.value.byMake shouldBe mapOf("Kia" to listOf(entry))
+    }
+
+    @Test
+    fun `an empty query after a Search restores every entry`() = runTest(dispatcher) {
+        val niro = CatalogEntry(make = "Kia", model = "Niro", obdbRepo = "Kia-Niro", minYear = 2022, maxYear = 2024)
+        val vm = viewModel(catalog = FakeVehicleCatalog(listOf(entry, niro)))
+        runCurrent()
+
+        vm.onIntent(GarageIntent.Search("ev6"))
+        vm.onIntent(GarageIntent.Search(""))
+
+        vm.state.value.byMake shouldBe mapOf("Kia" to listOf(entry, niro))
+    }
+
+    @Test
     fun `Select remembers the vehicle with the catalog's fields, marks it active, and emits the effect`() =
         runTest(dispatcher) {
             val vehicles = FakeVehicleRepository()

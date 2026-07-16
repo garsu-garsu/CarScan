@@ -16,12 +16,15 @@ class BundledAssetsParseTest {
 
     @Test
     fun `every bundled obdb asset parses`() {
-        val jsonFiles = obdbAssetsDir().listFiles { f -> f.extension == "json" }.orEmpty()
+        // catalog.json lives in the same directory but is not a signalset — it is the
+        // make/model/obdbRepo/year-range list BundledVehicleCatalog parses, checked separately.
+        val jsonFiles = obdbAssetsDir().listFiles { f -> f.extension == "json" && f.name != "catalog.json" }
+            .orEmpty()
 
         jsonFiles.map { it.name }.shouldContainExactlyInAnyOrder(
             "SAEJ1979.json",
             "Kia-EV6.json",
-            "Hyundai-Ioniq-5.json",
+            "Hyundai-IONIQ-5.json",
             "Hyundai-Elantra.json",
             "Ford-F-150.json",
         )

@@ -50,6 +50,7 @@ import com.bruni.carscan.core.designsystem.generated.resources.connect_title
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_hud
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_title
 import com.bruni.carscan.core.designsystem.generated.resources.home_connect_hint
+import com.bruni.carscan.core.designsystem.generated.resources.home_no_vehicle
 import com.bruni.carscan.core.designsystem.generated.resources.home_tagline
 import com.bruni.carscan.core.designsystem.generated.resources.live_title
 import com.bruni.carscan.core.designsystem.generated.resources.settings_vehicle
@@ -67,10 +68,13 @@ import org.jetbrains.compose.resources.stringResource
  *
  * Lives in `:composeApp` rather than a feature module because it is pure navigation: it names the
  * destinations, which only the module that owns the `NavController` may do. [onOpen] is the App's
- * `navController::navigate`, so this screen still never touches the controller itself.
+ * `navController::navigate`, so this screen still never touches the controller itself. Likewise
+ * [activeVehicleName] is resolved by App.kt (from [com.bruni.carscan.core.data.SettingsRepository]
+ * and [com.bruni.carscan.core.data.VehicleRepository]) and simply handed down — this stays a
+ * screen with no ViewModel or repository of its own.
  */
 @Composable
-fun HomeScreen(onOpen: (Route) -> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(onOpen: (Route) -> Unit, activeVehicleName: String? = null, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxSize()) {
         LazyVerticalGrid(
             // Adaptive, not a fixed two columns: a phone shows two, a tablet three or four, and the
@@ -98,6 +102,10 @@ fun HomeScreen(onOpen: (Route) -> Unit, modifier: Modifier = Modifier) {
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
+                CurrentVehicleRow(vehicleName = activeVehicleName, onClick = { onOpen(Route.Garage) })
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 ConnectHero(onClick = { onOpen(Route.Connect) })
             }
 
@@ -107,6 +115,46 @@ fun HomeScreen(onOpen: (Route) -> Unit, modifier: Modifier = Modifier) {
         }
 
         BannerAd(Modifier.fillMaxWidth())
+    }
+}
+
+/** The garage-picked vehicle, or a prompt to pick one — tapping either opens the garage. */
+@Composable
+private fun CurrentVehicleRow(vehicleName: String?, onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    Icons.Rounded.DirectionsCar,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+            Spacer(Modifier.width(12.dp))
+            Text(
+                text = vehicleName ?: stringResource(Res.string.home_no_vehicle),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(Icons.Rounded.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
     }
 }
 
