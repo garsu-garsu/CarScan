@@ -14,6 +14,7 @@ import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.model.MetricKey
 import com.bruni.carscan.core.model.ObdUnit
 import com.bruni.carscan.core.model.SensorSample
+import com.bruni.carscan.core.model.SuggestedMetric
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import com.bruni.carscan.core.vehicle.EffectiveSignalset
@@ -231,17 +232,25 @@ class DashboardViewModel(
     /**
      * A layout keyed on no vehicle at all is not an edge case: before anything is paired there is
      * no vehicle to key one on, and the app still has to show the user a dashboard.
+     *
+     * A brand-new layout — no row exists yet for this vehicle (or none at all) — is seeded with
+     * [defaultTiles] rather than left empty. The poller only polls what is on screen, so an
+     * empty dashboard polls nothing and records nothing: the app would look broken the moment a
+     * scanner connects. A layout the user has already saved, even one they emptied on purpose, is
+     * never touched — seeding only ever fires the first time a layout is created.
      */
     private suspend fun restore() {
         val vehicleId = settings.settings.first().activeVehicleId
-        layout = vehicleId?.let { layouts.activeFor(it) } ?: DashboardLayout(
+        val existing = vehicleId?.let { layouts.activeFor(it) }
+        layout = existing ?: DashboardLayout(
             id = newUuid(),
             vehicleId = vehicleId,
             name = DEFAULT_LAYOUT_NAME,
             isActive = true,
-            layoutJson = LayoutCodec.encode(emptyList()),
+            layoutJson = LayoutCodec.encode(defaultTiles()),
         )
         tiles.value = LayoutCodec.decode(layout!!.layoutJson)
+        if (existing == null) layouts.save(layout!!)
     }
 
     private companion object {
@@ -250,6 +259,66 @@ class DashboardViewModel(
 
         /** Never shown in M5 — there is no multi-layout UI yet. See the report. */
         const val DEFAULT_LAYOUT_NAME = "Dashboard"
+
+        /**
+         * The six tiles a brand-new dashboard is seeded with, one per new gauge shape so the app
+         * shows every look the moment it is opened.
+         *
+         * Every key is a standard SAE J1979 (Mode 01) signal, present on any OBD2 car and on the
+         * ELM emulator — never something vehicle-specific that could be missing on the car this
+         * layout is first created for. Ranges are in the signal's native unit, confirmed against
+         * `composeApp/.../obdb/SAEJ1979.json`:
+         *  - VSS (0x0D) vehicle speed: `speed`, km/h, 0-255 declared — dial capped at 240.
+         *  - RPM (0x0C): no suggestedMetric, addressed by signal id, rpm, 0-8000.
+         *  - ECT (0x05) coolant temperature: `engineCoolantTemperature`, °C, 0-120.
+         *  - LOAD_PCT (0x04) engine load: `engineLoad`, %, 0-100.
+         *  - IAT (0x0F) intake air temperature: no suggestedMetric, °C, -20-60.
+         *  - TP (0x11) throttle position: `throttlePosition`, %, 0-100.
+         */
+        fun defaultTiles(): List<DashboardTile> = listOf(
+            DashboardTile(
+                id = newUuid(),
+                key = MetricKey.Metric(SuggestedMetric.SPEED),
+                style = GaugeStyleId.SEMICIRCLE,
+                min = 0.0,
+                max = 240.0,
+            ),
+            DashboardTile(
+                id = newUuid(),
+                key = MetricKey.Signal("RPM"),
+                style = GaugeStyleId.MODERN_ARC,
+                min = 0.0,
+                max = 8000.0,
+            ),
+            DashboardTile(
+                id = newUuid(),
+                key = MetricKey.Metric(SuggestedMetric.ENGINE_COOLANT_TEMPERATURE),
+                style = GaugeStyleId.LINEAR_BAR_H,
+                min = 0.0,
+                max = 120.0,
+            ),
+            DashboardTile(
+                id = newUuid(),
+                key = MetricKey.Metric(SuggestedMetric.ENGINE_LOAD),
+                style = GaugeStyleId.LINEAR_BAR_V,
+                min = 0.0,
+                max = 100.0,
+            ),
+            DashboardTile(
+                id = newUuid(),
+                key = MetricKey.Signal("IAT"),
+                style = GaugeStyleId.NUMERIC,
+                min = -20.0,
+                max = 60.0,
+            ),
+            DashboardTile(
+                id = newUuid(),
+                key = MetricKey.Metric(SuggestedMetric.THROTTLE_POSITION),
+                style = GaugeStyleId.CLASSIC_ANALOG,
+                min = 0.0,
+                max = 100.0,
+            ),
+        )
     }
 }
 

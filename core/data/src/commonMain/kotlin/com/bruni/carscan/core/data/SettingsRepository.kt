@@ -22,12 +22,13 @@ import kotlinx.coroutines.flow.map
  * It is a choice **per quantity**, never a metric/imperial switch: a British driver reads
  * miles, litres and imperial MPG simultaneously, and no boolean can say that.
  *
- * [recordTrips] defaults to **off**. That is a storage decision, not a UI one: with it
- * on, every minute the app spends open in someone's car writes to disk, and the gauges
- * need none of it — they read the live sample stream.
+ * [recordTrips] defaults to **on**. `TripRecorder` only ever writes while a session is
+ * CONNECTED, so nothing is recorded until a scanner is actually plugged in — the app must
+ * be usable out of the box, and a first-run user who never finds the settings screen should
+ * still get their trips recorded rather than a silently empty history.
  */
 data class Settings(
-    val recordTrips: Boolean = false,
+    val recordTrips: Boolean = true,
     val units: UnitPreferences = UnitPreferences.METRIC,
     val keepScreenOn: Boolean = true,
     val activeVehicleId: String? = null,

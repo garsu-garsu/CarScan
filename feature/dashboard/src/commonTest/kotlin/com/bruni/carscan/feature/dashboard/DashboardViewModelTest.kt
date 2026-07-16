@@ -1,6 +1,7 @@
 package com.bruni.carscan.feature.dashboard
 
 import app.cash.turbine.test
+import com.bruni.carscan.core.data.DashboardLayout
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.model.DecodedValue
 import com.bruni.carscan.core.model.MetricKey
@@ -25,6 +26,10 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class DashboardViewModelTest {
+
+    private companion object {
+        const val EXISTING_LAYOUT_ID = "existing-layout"
+    }
 
     // 0D = vehicle speed (km/h, `speed`, 4 Hz). 0C = RPM, which has no suggestedMetric and is
     // therefore only addressable as MetricKey.Signal — the reason MetricKey exists. 0142 =
@@ -76,7 +81,23 @@ class DashboardViewModelTest {
     private val voltsCommandId = effective[volts].single().command.id
 
     private val session = FakeSession()
-    private val layouts = FakeLayouts()
+
+    /**
+     * Pre-seeded with an already-existing, empty *active* layout for [VEHICLE_ID] — the state a
+     * returning user's repository is in. `restore()` only seeds the six default tiles the first
+     * time a layout is ever created (see `defaultVehicleGetsSeededWithSixDefaultTiles` below,
+     * which uses a genuinely empty [FakeLayouts]); every other test in this file is about an
+     * *existing* dashboard, so it must not see the seed tiles appear underneath it.
+     */
+    private val layouts = FakeLayouts().apply {
+        saved[EXISTING_LAYOUT_ID] = DashboardLayout(
+            id = EXISTING_LAYOUT_ID,
+            vehicleId = VEHICLE_ID,
+            name = "Dashboard",
+            isActive = true,
+            layoutJson = LayoutCodec.encode(emptyList()),
+        )
+    }
     private val settings = FakeSettings()
     private val vehicle = FakeActiveVehicle(effective)
     private val poller = FakeVisibleSignals()
@@ -406,5 +427,62 @@ class DashboardViewModelTest {
             advanceUntilIdle()
             awaitItem() shouldBe DashboardEffect.OpenHud
         }
+    }
+
+    // --- a brand-new dashboard is seeded, not empty -----------------------------
+
+    private fun TestScope.freshViewModel(freshLayouts: FakeLayouts) = DashboardViewModel(
+        session = session,
+        layouts = freshLayouts,
+        settings = settings,
+        vehicle = vehicle,
+        visibility = poller,
+        clock = clock,
+        ticks = ticks,
+    ).also { advanceUntilIdle() }
+
+    /**
+     * The app must be usable the moment a scanner connects: the poller only polls what is on
+     * screen, so an empty dashboard polls — and records — nothing. `FakeLayouts` starts with
+     * nothing saved, which is exactly the state a genuinely new install (or a new vehicle) is in.
+     */
+    @Test
+    fun `a fresh dashboard with no persisted layout is seeded with the six default tiles`() =
+        runTest(dispatcher) {
+            val freshLayouts = FakeLayouts()
+            val vm = freshViewModel(freshLayouts)
+
+            vm.state.value.tiles.map { it.style } shouldContainExactly listOf(
+                GaugeStyleId.SEMICIRCLE,
+                GaugeStyleId.MODERN_ARC,
+                GaugeStyleId.LINEAR_BAR_H,
+                GaugeStyleId.LINEAR_BAR_V,
+                GaugeStyleId.NUMERIC,
+                GaugeStyleId.CLASSIC_ANALOG,
+            )
+            vm.state.value.tiles.map { it.key } shouldContainExactly listOf(
+                MetricKey.Metric(SuggestedMetric.SPEED),
+                MetricKey.Signal("RPM"),
+                MetricKey.Metric(SuggestedMetric.ENGINE_COOLANT_TEMPERATURE),
+                MetricKey.Metric(SuggestedMetric.ENGINE_LOAD),
+                MetricKey.Signal("IAT"),
+                MetricKey.Metric(SuggestedMetric.THROTTLE_POSITION),
+            )
+
+            // And it survives a restart: a fresh ViewModel over the same repository must not
+            // seed a *second* time, nor come back empty.
+            freshViewModel(freshLayouts).state.value.tiles.map { it.key } shouldContainExactly
+                vm.state.value.tiles.map { it.key }
+        }
+
+    /**
+     * The other half of the contract: a layout the user deliberately emptied must stay empty.
+     * `layouts` (the shared fixture) already carries an existing, empty, active layout for
+     * [VEHICLE_ID] — the state every other test in this file relies on — so this pins that down
+     * as an explicit assertion rather than an accident of setup.
+     */
+    @Test
+    fun `restoring an existing but empty layout does not reseed it`() = runTest(dispatcher) {
+        viewModel().state.value.tiles shouldBe emptyList()
     }
 }

@@ -122,6 +122,22 @@ class GaugeRenderersUiTest {
         drawsEveryEdgeCaseWithoutCrashing(ClassicAnalogGauge())
 
     @Test
+    fun semicircleDrawsEveryEdgeCaseWithoutCrashing() =
+        drawsEveryEdgeCaseWithoutCrashing(SemicircleGauge())
+
+    @Test
+    fun numericDrawsEveryEdgeCaseWithoutCrashing() =
+        drawsEveryEdgeCaseWithoutCrashing(NumericGauge())
+
+    @Test
+    fun linearBarHDrawsEveryEdgeCaseWithoutCrashing() =
+        drawsEveryEdgeCaseWithoutCrashing(LinearBarHGauge())
+
+    @Test
+    fun linearBarVDrawsEveryEdgeCaseWithoutCrashing() =
+        drawsEveryEdgeCaseWithoutCrashing(LinearBarVGauge())
+
+    @Test
     fun degenerateAndInvertedRangesDoNotCrashEitherRenderer() = runComposeUiTest {
         val degenerate = GaugeSpec(
             label = "Broken",
@@ -170,6 +186,18 @@ class GaugeRenderersUiTest {
     fun classicAnalogOverlayShowsTheReading() = overlayShowsTheReading(ClassicAnalogGauge())
 
     @Test
+    fun semicircleOverlayShowsTheReading() = overlayShowsTheReading(SemicircleGauge())
+
+    @Test
+    fun numericOverlayShowsTheReading() = overlayShowsTheReading(NumericGauge())
+
+    @Test
+    fun linearBarHOverlayShowsTheReading() = overlayShowsTheReading(LinearBarHGauge())
+
+    @Test
+    fun linearBarVOverlayShowsTheReading() = overlayShowsTheReading(LinearBarVGauge())
+
+    @Test
     fun overlayHonoursTheDecimalsOfTheSpec() = runComposeUiTest {
         setContent {
             // The gauge reads LocalNumberFormatter, which now fails loudly outside a theme
@@ -213,5 +241,42 @@ class GaugeRenderersUiTest {
     fun eachRendererReportsItsOwnStyleId() {
         assertEquals(GaugeStyleId.MODERN_ARC, ModernArcGauge().id)
         assertEquals(GaugeStyleId.CLASSIC_ANALOG, ClassicAnalogGauge().id)
+        assertEquals(GaugeStyleId.SEMICIRCLE, SemicircleGauge().id)
+        assertEquals(GaugeStyleId.NUMERIC, NumericGauge().id)
+        assertEquals(GaugeStyleId.LINEAR_BAR_H, LinearBarHGauge().id)
+        assertEquals(GaugeStyleId.LINEAR_BAR_V, LinearBarVGauge().id)
+    }
+
+    @Test
+    fun degenerateAndInvertedRangesDoNotCrashTheNewShapesEither() = runComposeUiTest {
+        val degenerate = GaugeSpec(
+            label = "Broken",
+            value = 5f,
+            min = 5f,
+            max = 5f,          // min == max
+            unitLabel = "",
+            redlineFrom = 5f,
+            optimalFrom = 5f,
+            optimalTo = 5f,
+        )
+        setContent {
+            CompositionLocalProvider(LocalNumberFormatter provides NumberFormatter("en")) {
+                Gauge(degenerate, theme, SemicircleGauge(), Modifier.size(120.dp))
+                Gauge(degenerate, theme, NumericGauge(), Modifier.size(120.dp))
+                Gauge(
+                    degenerate.copy(min = 100f, max = 0f),   // inverted
+                    theme,
+                    LinearBarHGauge(),
+                    Modifier.size(120.dp),
+                )
+                Gauge(
+                    degenerate.copy(min = 100f, max = 0f),   // inverted
+                    theme,
+                    LinearBarVGauge(),
+                    Modifier.size(120.dp),
+                )
+            }
+        }
+        waitForIdle()
     }
 }

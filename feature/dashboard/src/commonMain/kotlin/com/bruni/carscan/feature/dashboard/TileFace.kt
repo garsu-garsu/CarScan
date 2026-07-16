@@ -28,7 +28,14 @@ fun tileFace(style: GaugeStyleId, surface: Color): Color = when (style) {
     // GaugeThemes.Classic strokes at 0xFFEDE7DA, so the rim still reads against it.
     GaugeStyleId.CLASSIC_ANALOG -> CLASSIC_FACE
 
-    GaugeStyleId.MODERN_ARC -> surface
+    // The other four shapes are all dark-ground moderns like the arc — GaugeThemes.forStyle
+    // gives them the ModernDark palette, so they get the Material surface unchanged too.
+    GaugeStyleId.MODERN_ARC,
+    GaugeStyleId.SEMICIRCLE,
+    GaugeStyleId.NUMERIC,
+    GaugeStyleId.LINEAR_BAR_H,
+    GaugeStyleId.LINEAR_BAR_V,
+    -> surface
 }
 
 /** The dial face of a classic instrument. Light, always — see [tileFace]. */

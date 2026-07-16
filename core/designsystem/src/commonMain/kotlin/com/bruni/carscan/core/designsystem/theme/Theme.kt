@@ -18,8 +18,12 @@ import com.bruni.carscan.core.designsystem.gauge.ClassicAnalogGauge
 import com.bruni.carscan.core.designsystem.gauge.GaugeRenderer
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.designsystem.gauge.GaugeTheme
+import com.bruni.carscan.core.designsystem.gauge.LinearBarHGauge
+import com.bruni.carscan.core.designsystem.gauge.LinearBarVGauge
 import com.bruni.carscan.core.designsystem.gauge.LocalGaugeRenderer
 import com.bruni.carscan.core.designsystem.gauge.ModernArcGauge
+import com.bruni.carscan.core.designsystem.gauge.NumericGauge
+import com.bruni.carscan.core.designsystem.gauge.SemicircleGauge
 import com.bruni.carscan.core.units.NumberFormatter
 
 /**
@@ -68,6 +72,10 @@ fun CarScanTheme(
         when (gaugeStyle) {
             GaugeStyleId.MODERN_ARC -> ModernArcGaugeInstance
             GaugeStyleId.CLASSIC_ANALOG -> ClassicAnalogGaugeInstance
+            GaugeStyleId.SEMICIRCLE -> SemicircleGaugeInstance
+            GaugeStyleId.NUMERIC -> NumericGaugeInstance
+            GaugeStyleId.LINEAR_BAR_H -> LinearBarHGaugeInstance
+            GaugeStyleId.LINEAR_BAR_V -> LinearBarVGaugeInstance
         }
     }
 
@@ -91,6 +99,10 @@ fun CarScanTheme(
 // Renderers are stateless, so one of each is enough for the whole app.
 private val ModernArcGaugeInstance = ModernArcGauge()
 private val ClassicAnalogGaugeInstance = ClassicAnalogGauge()
+private val SemicircleGaugeInstance = SemicircleGauge()
+private val NumericGaugeInstance = NumericGauge()
+private val LinearBarHGaugeInstance = LinearBarHGauge()
+private val LinearBarVGaugeInstance = LinearBarVGauge()
 
 /**
  * Dark is the default: this is an app used in a car, most often at night or in a dim cabin.

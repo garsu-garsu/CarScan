@@ -52,7 +52,11 @@ import com.bruni.carscan.core.designsystem.gauge.ClassicAnalogGauge
 import com.bruni.carscan.core.designsystem.gauge.Gauge
 import com.bruni.carscan.core.designsystem.gauge.GaugeRenderer
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
+import com.bruni.carscan.core.designsystem.gauge.LinearBarHGauge
+import com.bruni.carscan.core.designsystem.gauge.LinearBarVGauge
 import com.bruni.carscan.core.designsystem.gauge.ModernArcGauge
+import com.bruni.carscan.core.designsystem.gauge.NumericGauge
+import com.bruni.carscan.core.designsystem.gauge.SemicircleGauge
 import com.bruni.carscan.core.designsystem.theme.GaugeThemes
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.common_cancel
@@ -270,10 +274,18 @@ private fun TileCard(
 /** Renderers are stateless, so one of each serves the whole grid. */
 private val MODERN_ARC: GaugeRenderer = ModernArcGauge()
 private val CLASSIC_ANALOG: GaugeRenderer = ClassicAnalogGauge()
+private val SEMICIRCLE: GaugeRenderer = SemicircleGauge()
+private val NUMERIC: GaugeRenderer = NumericGauge()
+private val LINEAR_BAR_H: GaugeRenderer = LinearBarHGauge()
+private val LINEAR_BAR_V: GaugeRenderer = LinearBarVGauge()
 
 private fun rendererFor(style: GaugeStyleId): GaugeRenderer = when (style) {
     GaugeStyleId.MODERN_ARC -> MODERN_ARC
     GaugeStyleId.CLASSIC_ANALOG -> CLASSIC_ANALOG
+    GaugeStyleId.SEMICIRCLE -> SEMICIRCLE
+    GaugeStyleId.NUMERIC -> NUMERIC
+    GaugeStyleId.LINEAR_BAR_H -> LINEAR_BAR_H
+    GaugeStyleId.LINEAR_BAR_V -> LINEAR_BAR_V
 }
 
 /**

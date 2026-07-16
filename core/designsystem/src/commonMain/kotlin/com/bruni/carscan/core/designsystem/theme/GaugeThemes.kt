@@ -72,7 +72,12 @@ object GaugeThemes {
 
     /** The palette that goes with a gauge style. The HUD picks [Hud] itself; it is not a style. */
     fun forStyle(style: GaugeStyleId): GaugeTheme = when (style) {
-        GaugeStyleId.MODERN_ARC -> ModernDark
+        GaugeStyleId.MODERN_ARC,
+        GaugeStyleId.SEMICIRCLE,
+        GaugeStyleId.NUMERIC,
+        GaugeStyleId.LINEAR_BAR_H,
+        GaugeStyleId.LINEAR_BAR_V,
+        -> ModernDark
         GaugeStyleId.CLASSIC_ANALOG -> Classic
     }
 }

@@ -17,13 +17,13 @@ class SettingsRepositoryTest {
     private val repo = DefaultSettingsRepository(store)
 
     /**
-     * Recording off is the default, and that is a storage decision rather than a UI
-     * one: with it on, every minute the app spends open in someone's car writes to
-     * disk. The gauges read the live sample stream and need none of it.
+     * Recording on is the default: `TripRecorder` only ever writes while CONNECTED, so a
+     * first-run user gets their drives recorded the moment a scanner is plugged in, without
+     * ever having to find the settings screen.
      */
     @Test
-    fun `trip recording is off by default`() = runTest {
-        assertFalse(repo.settings.first().recordTrips)
+    fun `trip recording is on by default`() = runTest {
+        assertTrue(repo.settings.first().recordTrips)
     }
 
     @Test

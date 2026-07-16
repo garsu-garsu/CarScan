@@ -44,7 +44,18 @@ data class GaugeSpec(
 )
 
 /** Which renderer draws a tile. Persisted per-tile in the dashboard layout. */
-enum class GaugeStyleId { MODERN_ARC, CLASSIC_ANALOG }
+enum class GaugeStyleId {
+    MODERN_ARC,
+    CLASSIC_ANALOG,
+    /** A 180° half-circle arc, top half only. Value sweeps left→right. */
+    SEMICIRCLE,
+    /** No dial graphic at all — just the big centered number the [Overlay] already draws. */
+    NUMERIC,
+    /** A horizontal fill bar: track plus a proportional filled portion. */
+    LINEAR_BAR_H,
+    /** A vertical fill bar, filling bottom→top. */
+    LINEAR_BAR_V,
+}
 
 /**
  * Colors a renderer may use. Passed in rather than read from MaterialTheme so that a gauge
