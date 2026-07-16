@@ -1,25 +1,38 @@
 package com.bruni.carscan.feature.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ShowChart
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Flip
+import androidx.compose.material.icons.rounded.SpaceDashboard
+import androidx.compose.material.icons.rounded.WarningAmber
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -30,7 +43,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bruni.carscan.core.designsystem.gauge.ClassicAnalogGauge
 import com.bruni.carscan.core.designsystem.gauge.Gauge
@@ -91,6 +107,8 @@ fun DashboardScreen(
                 onClick = { onIntent(DashboardIntent.OpenPicker) },
                 modifier = Modifier.testTag(DashboardTags.ADD),
             ) {
+                Icon(Icons.Rounded.Add, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
                 Text(stringResource(Res.string.dashboard_add_tile))
             }
         },
@@ -100,31 +118,70 @@ fun DashboardScreen(
             // Enter the windshield HUD. A full-screen driving mode, so it is a destination rather
             // than a tab — the screen only asks; :composeApp navigates.
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.End,
             ) {
-                TextButton(onClick = { onIntent(DashboardIntent.OpenHud) }) {
-                    Text(stringResource(Res.string.dashboard_hud))
-                }
+                AssistChip(
+                    onClick = { onIntent(DashboardIntent.OpenHud) },
+                    label = { Text(stringResource(Res.string.dashboard_hud)) },
+                    leadingIcon = { Icon(Icons.Rounded.Flip, contentDescription = null) },
+                )
             }
 
             // The honest number. An adapter that cannot keep up makes the dashboard slow whatever
             // we do, and saying so is the only thing that lets the user act on it.
             if (state.health.isOverSubscribed) {
-                Text(
-                    text = stringResource(Res.string.health_slowed_down),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 8.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.error.copy(alpha = 0.12f))
+                        .padding(horizontal = 12.dp, vertical = 10.dp)
                         .testTag(DashboardTags.HEALTH),
-                )
+                ) {
+                    Icon(
+                        Icons.Rounded.WarningAmber,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(Res.string.health_slowed_down),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
             }
 
             if (state.tiles.isEmpty()) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Rounded.SpaceDashboard,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(32.dp),
+                        )
+                    }
+                    Spacer(Modifier.height(16.dp))
                     Text(
                         text = stringResource(Res.string.dashboard_empty),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
                         modifier = Modifier.testTag(DashboardTags.EMPTY),
                     )
                 }
@@ -231,17 +288,45 @@ private fun TilePickerSheet(
     offers: List<PickerEntry>,
     onIntent: (DashboardIntent) -> Unit,
 ) {
-    LazyColumn(Modifier.fillMaxWidth().padding(16.dp)) {
+    LazyColumn(Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
+        item {
+            Text(
+                text = stringResource(Res.string.dashboard_add_tile),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(bottom = 12.dp),
+            )
+        }
+
         items(offers, key = { it.key.toString() }) { offer ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag(DashboardTags.offer(offer.key.toString()))
                     .clickable { onIntent(DashboardIntent.Add(offer.key)) }
-                    .padding(vertical = 12.dp),
+                    .padding(vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(tileLabelOf(offer.key, offer.label))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Rounded.ShowChart,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Text(tileLabelOf(offer.key, offer.label))
+                }
 
                 // OBDb has not verified this signal for this vehicle. Offer it — it may well
                 // work — but never present it as fact.
@@ -256,7 +341,10 @@ private fun TilePickerSheet(
         }
 
         item {
-            TextButton(onClick = { onIntent(DashboardIntent.ClosePicker) }) {
+            TextButton(
+                onClick = { onIntent(DashboardIntent.ClosePicker) },
+                modifier = Modifier.padding(top = 8.dp, bottom = 20.dp),
+            ) {
                 Text(stringResource(Res.string.common_cancel))
             }
         }
