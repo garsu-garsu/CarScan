@@ -1,0 +1,4580 @@
+[
+ {
+  "make": "Abarth",
+  "model": "500",
+  "obdbRepo": "Abarth-500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Abarth",
+  "model": "595",
+  "obdbRepo": "Abarth-595",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "CL",
+  "obdbRepo": "Acura-CL",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "ILX",
+  "obdbRepo": "Acura-ILX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "Integra",
+  "obdbRepo": "Acura-Integra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "MDX",
+  "obdbRepo": "Acura-MDX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "RDX",
+  "obdbRepo": "Acura-RDX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "TL",
+  "obdbRepo": "Acura-TL",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "TLX",
+  "obdbRepo": "Acura-TLX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "TSX",
+  "obdbRepo": "Acura-TSX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Acura",
+  "model": "ZDX",
+  "obdbRepo": "Acura-ZDX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Aiways",
+  "model": "U5",
+  "obdbRepo": "Aiways-U5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Alfa Romeo",
+  "model": "Giulia",
+  "obdbRepo": "Alfa-Romeo-Giulia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Alfa Romeo",
+  "model": "Giulietta",
+  "obdbRepo": "Alfa-Romeo-Giulietta",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Alfa Romeo",
+  "model": "MiTo",
+  "obdbRepo": "Alfa-Romeo-MiTo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Alfa Romeo",
+  "model": "Tonale",
+  "obdbRepo": "Alfa-Romeo-Tonale",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Aston Martin",
+  "model": "Vantage",
+  "obdbRepo": "Aston-Martin-Vantage",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "A1",
+  "obdbRepo": "Audi-A1",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "A3",
+  "obdbRepo": "Audi-A3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "A3 e tron",
+  "obdbRepo": "Audi-A3-e-tron",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "A4",
+  "obdbRepo": "Audi-A4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "A5",
+  "obdbRepo": "Audi-A5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "A6",
+  "obdbRepo": "Audi-A6",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "A7",
+  "obdbRepo": "Audi-A7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "e tron",
+  "obdbRepo": "Audi-e-tron",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "Q2",
+  "obdbRepo": "Audi-Q2",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "Q3",
+  "obdbRepo": "Audi-Q3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "Q4 e tron",
+  "obdbRepo": "Audi-Q4-e-tron",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "Q5",
+  "obdbRepo": "Audi-Q5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "Q7",
+  "obdbRepo": "Audi-Q7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "Q8",
+  "obdbRepo": "Audi-Q8",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "Q8 e tron",
+  "obdbRepo": "Audi-Q8-e-tron",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "RS 3",
+  "obdbRepo": "Audi-RS-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "RS 5",
+  "obdbRepo": "Audi-RS-5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "RS e tron",
+  "obdbRepo": "Audi-RS-e-tron",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "S3",
+  "obdbRepo": "Audi-S3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "S4",
+  "obdbRepo": "Audi-S4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "S5",
+  "obdbRepo": "Audi-S5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "S6",
+  "obdbRepo": "Audi-S6",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "SQ2",
+  "obdbRepo": "Audi-SQ2",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "SQ5",
+  "obdbRepo": "Audi-SQ5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "SQ7",
+  "obdbRepo": "Audi-SQ7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Audi",
+  "model": "TT",
+  "obdbRepo": "Audi-TT",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Bentley",
+  "model": "Bentayga",
+  "obdbRepo": "Bentley-Bentayga",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "1 Series",
+  "obdbRepo": "BMW-1-Series",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "116i",
+  "obdbRepo": "BMW-116i",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "2 Grand Coupe",
+  "obdbRepo": "BMW-2-Grand-Coupe",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "2 Series",
+  "obdbRepo": "BMW-2-Series",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "230e",
+  "obdbRepo": "BMW-230e",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "3 Series",
+  "obdbRepo": "BMW-3-Series",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "3 Series eDrive",
+  "obdbRepo": "BMW-3-Series-eDrive",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "330e",
+  "obdbRepo": "BMW-330e",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "4 Series",
+  "obdbRepo": "BMW-4-Series",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "5 Series",
+  "obdbRepo": "BMW-5-Series",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "5 Series xDrive",
+  "obdbRepo": "BMW-5-Series-xDrive",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "640i f13",
+  "obdbRepo": "BMW-640i-f13",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "7 Series",
+  "obdbRepo": "BMW-7-Series",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "840i",
+  "obdbRepo": "BMW-840i",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "E91",
+  "obdbRepo": "BMW-E91",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "E92",
+  "obdbRepo": "BMW-E92",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "F34",
+  "obdbRepo": "BMW-F34",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "i3",
+  "obdbRepo": "BMW-i3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "i3s",
+  "obdbRepo": "BMW-i3s",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "i4",
+  "obdbRepo": "BMW-i4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "i5",
+  "obdbRepo": "BMW-i5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "i8",
+  "obdbRepo": "BMW-i8",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "iX",
+  "obdbRepo": "BMW-iX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "iX3",
+  "obdbRepo": "BMW-iX3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "M2",
+  "obdbRepo": "BMW-M2",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "M3",
+  "obdbRepo": "BMW-M3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "M4",
+  "obdbRepo": "BMW-M4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "M440i",
+  "obdbRepo": "BMW-M440i",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "M5",
+  "obdbRepo": "BMW-M5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "X1",
+  "obdbRepo": "BMW-X1",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "X2",
+  "obdbRepo": "BMW-X2",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "X3",
+  "obdbRepo": "BMW-X3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "X4",
+  "obdbRepo": "BMW-X4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "X5",
+  "obdbRepo": "BMW-X5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "X7",
+  "obdbRepo": "BMW-X7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "Z3",
+  "obdbRepo": "BMW-Z3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BMW",
+  "model": "Z4",
+  "obdbRepo": "BMW-Z4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Buick",
+  "model": "Encore",
+  "obdbRepo": "Buick-Encore",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Buick",
+  "model": "Encore GX",
+  "obdbRepo": "Buick-Encore-GX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Buick",
+  "model": "Envision",
+  "obdbRepo": "Buick-Envision",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Buick",
+  "model": "LaCrosse",
+  "obdbRepo": "Buick-LaCrosse",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BYD",
+  "model": "Atto 3",
+  "obdbRepo": "BYD-Atto-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BYD",
+  "model": "Dolphin Mini",
+  "obdbRepo": "BYD-Dolphin-Mini",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "BYD",
+  "model": "Sealion 6",
+  "obdbRepo": "BYD-Sealion-6",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cadillac",
+  "model": "CT4",
+  "obdbRepo": "Cadillac-CT4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cadillac",
+  "model": "CT5",
+  "obdbRepo": "Cadillac-CT5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cadillac",
+  "model": "CTS",
+  "obdbRepo": "Cadillac-CTS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cadillac",
+  "model": "ELR",
+  "obdbRepo": "Cadillac-ELR",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cadillac",
+  "model": "Escalade",
+  "obdbRepo": "Cadillac-Escalade",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cadillac",
+  "model": "LYRIQ",
+  "obdbRepo": "Cadillac-LYRIQ",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cadillac",
+  "model": "XT5",
+  "obdbRepo": "Cadillac-XT5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chery",
+  "model": "Tiggo 7 Pro",
+  "obdbRepo": "Chery-Tiggo-7-Pro",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chery",
+  "model": "Tiggo 8",
+  "obdbRepo": "Chery-Tiggo-8",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Aveo",
+  "obdbRepo": "Chevrolet-Aveo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Blazer",
+  "obdbRepo": "Chevrolet-Blazer",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Blazer EV",
+  "obdbRepo": "Chevrolet-Blazer-EV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Bolt EUV",
+  "obdbRepo": "Chevrolet-Bolt-EUV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Bolt EV",
+  "obdbRepo": "Chevrolet-Bolt-EV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Camaro",
+  "obdbRepo": "Chevrolet-Camaro",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Celta",
+  "obdbRepo": "Chevrolet-Celta",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Cobalt",
+  "obdbRepo": "Chevrolet-Cobalt",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Colorado",
+  "obdbRepo": "Chevrolet-Colorado",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Corvette",
+  "obdbRepo": "Chevrolet-Corvette",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Cruze",
+  "obdbRepo": "Chevrolet-Cruze",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "D Max",
+  "obdbRepo": "Chevrolet-D-Max",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Equinox",
+  "obdbRepo": "Chevrolet-Equinox",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Equinox EV",
+  "obdbRepo": "Chevrolet-Equinox-EV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Express Cargo",
+  "obdbRepo": "Chevrolet-Express-Cargo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Impala",
+  "obdbRepo": "Chevrolet-Impala",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Malibu",
+  "obdbRepo": "Chevrolet-Malibu",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Montana",
+  "obdbRepo": "Chevrolet-Montana",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Prizm",
+  "obdbRepo": "Chevrolet-Prizm",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "S 10",
+  "obdbRepo": "Chevrolet-S-10",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Silverado",
+  "obdbRepo": "Chevrolet-Silverado",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Silverado 1500",
+  "obdbRepo": "Chevrolet-Silverado-1500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Silverado 2500",
+  "obdbRepo": "Chevrolet-Silverado-2500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Silverado 3500",
+  "obdbRepo": "Chevrolet-Silverado-3500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Silverado EV",
+  "obdbRepo": "Chevrolet-Silverado-EV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Sonic",
+  "obdbRepo": "Chevrolet-Sonic",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Spark",
+  "obdbRepo": "Chevrolet-Spark",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Tahoe",
+  "obdbRepo": "Chevrolet-Tahoe",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Trailblazer",
+  "obdbRepo": "Chevrolet-Trailblazer",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Traverse",
+  "obdbRepo": "Chevrolet-Traverse",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Trax",
+  "obdbRepo": "Chevrolet-Trax",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chevrolet",
+  "model": "Volt",
+  "obdbRepo": "Chevrolet-Volt",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chrysler",
+  "model": "200",
+  "obdbRepo": "Chrysler-200",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chrysler",
+  "model": "300",
+  "obdbRepo": "Chrysler-300",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chrysler",
+  "model": "Pacifica",
+  "obdbRepo": "Chrysler-Pacifica",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chrysler",
+  "model": "Pacifica Hybrid",
+  "obdbRepo": "Chrysler-Pacifica-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Chrysler",
+  "model": "Sebring",
+  "obdbRepo": "Chrysler-Sebring",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Citroen",
+  "model": "Basalt",
+  "obdbRepo": "Citroen-Basalt",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Citroen",
+  "model": "Berlingo",
+  "obdbRepo": "Citroen-Berlingo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Citroen",
+  "model": "C3",
+  "obdbRepo": "Citroen-C3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Citroen",
+  "model": "C4",
+  "obdbRepo": "Citroen-C4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Citroen",
+  "model": "CZero",
+  "obdbRepo": "Citroen-CZero",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Citroen",
+  "model": "E C4",
+  "obdbRepo": "Citroen-E-C4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Citroen",
+  "model": "eC4 X",
+  "obdbRepo": "Citroen-eC4-X",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cupra",
+  "model": "Born",
+  "obdbRepo": "Cupra-Born",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cupra",
+  "model": "Formentor",
+  "obdbRepo": "Cupra-Formentor",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cupra",
+  "model": "Leon",
+  "obdbRepo": "Cupra-Leon",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Cupra",
+  "model": "Leon Sportstourer",
+  "obdbRepo": "Cupra-Leon-Sportstourer",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dacia",
+  "model": "Duster",
+  "obdbRepo": "Dacia-Duster",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dacia",
+  "model": "Lodgy",
+  "obdbRepo": "Dacia-Lodgy",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dacia",
+  "model": "Sandero",
+  "obdbRepo": "Dacia-Sandero",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dacia",
+  "model": "Spring",
+  "obdbRepo": "Dacia-Spring",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dodge",
+  "model": "Challenger",
+  "obdbRepo": "Dodge-Challenger",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dodge",
+  "model": "Charger",
+  "obdbRepo": "Dodge-Charger",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dodge",
+  "model": "Dakota",
+  "obdbRepo": "Dodge-Dakota",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dodge",
+  "model": "Durango",
+  "obdbRepo": "Dodge-Durango",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dodge",
+  "model": "Grand Caravan",
+  "obdbRepo": "Dodge-Grand-Caravan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dodge",
+  "model": "Hornet",
+  "obdbRepo": "Dodge-Hornet",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dodge",
+  "model": "Journey",
+  "obdbRepo": "Dodge-Journey",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Dongfeng",
+  "model": "Seres 3",
+  "obdbRepo": "DongFeng-Seres-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "DS",
+  "model": "7",
+  "obdbRepo": "DS-7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ferrari",
+  "model": "458 Italia",
+  "obdbRepo": "Ferrari-458-Italia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fiat",
+  "model": "500",
+  "obdbRepo": "FIAT-500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fiat",
+  "model": "500e",
+  "obdbRepo": "FIAT-500e",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fiat",
+  "model": "500X",
+  "obdbRepo": "FIAT-500X",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fiat",
+  "model": "Fastback",
+  "obdbRepo": "FIAT-Fastback",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fiat",
+  "model": "Grande Punto",
+  "obdbRepo": "Fiat-Grande-Punto",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fiat",
+  "model": "Panda",
+  "obdbRepo": "FIAT-Panda",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fiat",
+  "model": "Punto",
+  "obdbRepo": "Fiat-Punto",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Fisker",
+  "model": "Ocean",
+  "obdbRepo": "Fisker-Ocean",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Bronco",
+  "obdbRepo": "Ford-Bronco",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Bronco Sport",
+  "obdbRepo": "Ford-Bronco-Sport",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "E Series",
+  "obdbRepo": "Ford-E-Series",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "EcoSport",
+  "obdbRepo": "Ford-EcoSport",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Edge",
+  "obdbRepo": "Ford-Edge",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Escape",
+  "obdbRepo": "Ford-Escape",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Everest",
+  "obdbRepo": "Ford-Everest",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Expedition",
+  "obdbRepo": "Ford-Expedition",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Explorer",
+  "obdbRepo": "Ford-Explorer",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "F 150",
+  "obdbRepo": "Ford-F-150",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "F 150 Lightning",
+  "obdbRepo": "Ford-F-150-Lightning",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "F 250",
+  "obdbRepo": "Ford-F-250",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "F 350",
+  "obdbRepo": "Ford-F-350",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Fiesta",
+  "obdbRepo": "Ford-Fiesta",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Five Hundred",
+  "obdbRepo": "Ford-Five-Hundred",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Flex",
+  "obdbRepo": "Ford-Flex",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Focus",
+  "obdbRepo": "Ford-Focus",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Focus RS",
+  "obdbRepo": "Ford-Focus-RS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Focus ST",
+  "obdbRepo": "Ford-Focus-ST",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Fusion",
+  "obdbRepo": "Ford-Fusion",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Fusion Energi",
+  "obdbRepo": "Ford-Fusion-Energi",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Fusion Hybrid",
+  "obdbRepo": "Ford-Fusion-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Ka",
+  "obdbRepo": "Ford-Ka",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Kuga",
+  "obdbRepo": "Ford-Kuga",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Maverick",
+  "obdbRepo": "Ford-Maverick",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Mondeo",
+  "obdbRepo": "Ford-Mondeo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Mustang",
+  "obdbRepo": "Ford-Mustang",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Mustang Mach E",
+  "obdbRepo": "Ford-Mustang-Mach-E",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Puma",
+  "obdbRepo": "Ford-Puma",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Ranger",
+  "obdbRepo": "Ford-Ranger",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Sierra",
+  "obdbRepo": "Ford-Sierra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Taurus",
+  "obdbRepo": "Ford-Taurus",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Territory",
+  "obdbRepo": "Ford-Territory",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Transit",
+  "obdbRepo": "Ford-Transit",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ford",
+  "model": "Transit Connect",
+  "obdbRepo": "Ford-Transit-Connect",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "FSO",
+  "model": "Polonez",
+  "obdbRepo": "FSO-Polonez",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Genesis",
+  "model": "G70",
+  "obdbRepo": "Genesis-G70",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Genesis",
+  "model": "G80",
+  "obdbRepo": "Genesis-G80",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "GMC",
+  "model": "Acadia",
+  "obdbRepo": "GMC-Acadia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "GMC",
+  "model": "Canyon",
+  "obdbRepo": "GMC-Canyon",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "GMC",
+  "model": "Safari",
+  "obdbRepo": "GMC-Safari",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "GMC",
+  "model": "Sierra 1500",
+  "obdbRepo": "GMC-Sierra-1500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "GMC",
+  "model": "Terrain",
+  "obdbRepo": "GMC-Terrain",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "GMC",
+  "model": "Yukon",
+  "obdbRepo": "GMC-Yukon",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "GMC",
+  "model": "Yukon XL",
+  "obdbRepo": "GMC-Yukon-XL",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Haval",
+  "model": "H6 HEV",
+  "obdbRepo": "Haval-H6-HEV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Haval",
+  "model": "Jolion",
+  "obdbRepo": "Haval-Jolion",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Haval",
+  "model": "Jolion HEV",
+  "obdbRepo": "Haval-Jolion-HEV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Holden",
+  "model": "Commodore",
+  "obdbRepo": "Holden-Commodore",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Holden",
+  "model": "Cruze",
+  "obdbRepo": "Holden-Cruze",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Accord",
+  "obdbRepo": "Honda-Accord",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Accord Hybrid",
+  "obdbRepo": "Honda-Accord-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Brio",
+  "obdbRepo": "Honda-Brio",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "City",
+  "obdbRepo": "Honda-City",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Civic",
+  "obdbRepo": "Honda-Civic",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Clarity",
+  "obdbRepo": "Honda-Clarity",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "CR V",
+  "obdbRepo": "Honda-CR-V",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "CR V Hybrid",
+  "obdbRepo": "Honda-CR-V-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "CR Z",
+  "obdbRepo": "Honda-CR-Z",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "e",
+  "obdbRepo": "Honda-e",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Element",
+  "obdbRepo": "Honda-Element",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Fit",
+  "obdbRepo": "Honda-Fit",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "HR V",
+  "obdbRepo": "Honda-HR-V",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Insight",
+  "obdbRepo": "Honda-Insight",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Jazz",
+  "obdbRepo": "Honda-Jazz",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "M NV",
+  "obdbRepo": "Honda-M-NV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Odyssey",
+  "obdbRepo": "Honda-Odyssey",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Pilot",
+  "obdbRepo": "Honda-Pilot",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Prologue",
+  "obdbRepo": "Honda-Prologue",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "Ridgeline",
+  "obdbRepo": "Honda-Ridgeline",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "WRV",
+  "obdbRepo": "Honda-WRV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Honda",
+  "model": "ZR V",
+  "obdbRepo": "Honda-ZR-V",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Accent",
+  "obdbRepo": "Hyundai-Accent",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Avante",
+  "obdbRepo": "Hyundai-Avante",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Elantra",
+  "obdbRepo": "Hyundai-Elantra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Genesis Coupe",
+  "obdbRepo": "Hyundai-Genesis-Coupe",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "i10",
+  "obdbRepo": "Hyundai-i10",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "i20",
+  "obdbRepo": "Hyundai-i20",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "i30",
+  "obdbRepo": "Hyundai-i30",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "IONIQ 5",
+  "obdbRepo": "Hyundai-IONIQ-5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "IONIQ 6",
+  "obdbRepo": "Hyundai-IONIQ-6",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "IONIQ Electric",
+  "obdbRepo": "Hyundai-IONIQ-Electric",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "IONIQ PlugIn Hybrid",
+  "obdbRepo": "Hyundai-IONIQ-PlugIn-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Kona",
+  "obdbRepo": "Hyundai-Kona",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Kona Electric",
+  "obdbRepo": "Hyundai-Kona-Electric",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Palisade",
+  "obdbRepo": "Hyundai-Palisade",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Santa Cruz",
+  "obdbRepo": "Hyundai-Santa-Cruz",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Santa Fe",
+  "obdbRepo": "Hyundai-Santa-Fe",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Santa Fe Hybrid",
+  "obdbRepo": "Hyundai-Santa-Fe-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Sonata",
+  "obdbRepo": "Hyundai-Sonata",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Tucson",
+  "obdbRepo": "Hyundai-Tucson",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Tucson Hybrid",
+  "obdbRepo": "Hyundai-Tucson-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Veloster",
+  "obdbRepo": "Hyundai-Veloster",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Venue",
+  "obdbRepo": "Hyundai-Venue",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Hyundai",
+  "model": "Verna",
+  "obdbRepo": "Hyundai-Verna",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "G Sedan",
+  "obdbRepo": "INFINITI-G-Sedan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "G35",
+  "obdbRepo": "INFINITI-G35",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "G37",
+  "obdbRepo": "INFINITI-G37",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "Q45",
+  "obdbRepo": "INFINITI-Q45",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "Q50",
+  "obdbRepo": "INFINITI-Q50",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "Q70",
+  "obdbRepo": "INFINITI-Q70",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "QX55",
+  "obdbRepo": "INFINITI-QX55",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Infiniti",
+  "model": "QX70",
+  "obdbRepo": "INFINITI-QX70",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "JAC",
+  "model": "EJ7",
+  "obdbRepo": "JAC-EJ7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jaecoo",
+  "model": "J7",
+  "obdbRepo": "Jaecoo-J7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jaguar",
+  "model": "E PACE",
+  "obdbRepo": "Jaguar-E-PACE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jaguar",
+  "model": "F PACE",
+  "obdbRepo": "Jaguar-F-PACE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jaguar",
+  "model": "F TYPE",
+  "obdbRepo": "Jaguar-F-TYPE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jaguar",
+  "model": "I PACE",
+  "obdbRepo": "Jaguar-I-PACE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Avenger",
+  "obdbRepo": "Jeep-Avenger",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Cherokee",
+  "obdbRepo": "Jeep-Cherokee",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Commander",
+  "obdbRepo": "Jeep-Commander",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Compass",
+  "obdbRepo": "Jeep-Compass",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Gladiator",
+  "obdbRepo": "Jeep-Gladiator",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Grand Cherokee",
+  "obdbRepo": "Jeep-Grand-Cherokee",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Liberty",
+  "obdbRepo": "Jeep-Liberty",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Patriot",
+  "obdbRepo": "Jeep-Patriot",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Renegade",
+  "obdbRepo": "Jeep-Renegade",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Wagoneer",
+  "obdbRepo": "Jeep-Wagoneer",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Wrangler",
+  "obdbRepo": "Jeep-Wrangler",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Wrangler 4xe",
+  "obdbRepo": "Jeep-Wrangler-4xe",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Jeep",
+  "model": "Wrangler JK",
+  "obdbRepo": "Jeep-Wrangler-JK",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kawasaki",
+  "model": "W800",
+  "obdbRepo": "Kawasaki-W800",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Cadenza",
+  "obdbRepo": "Kia-Cadenza",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Carens",
+  "obdbRepo": "Kia-Carens",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Carnival",
+  "obdbRepo": "Kia-Carnival",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Ceed",
+  "obdbRepo": "Kia-Ceed",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Cerato",
+  "obdbRepo": "Kia-Cerato",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "EV3",
+  "obdbRepo": "Kia-EV3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "EV6",
+  "obdbRepo": "Kia-EV6",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "EV9",
+  "obdbRepo": "Kia-EV9",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Forte",
+  "obdbRepo": "Kia-Forte",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "K4",
+  "obdbRepo": "Kia-K4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "K5",
+  "obdbRepo": "Kia-K5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Niro",
+  "obdbRepo": "Kia-Niro",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Niro EV",
+  "obdbRepo": "Kia-Niro-EV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Optima",
+  "obdbRepo": "Kia-Optima",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Picanto",
+  "obdbRepo": "Kia-Picanto",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Rio",
+  "obdbRepo": "Kia-Rio",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Rondo",
+  "obdbRepo": "Kia-Rondo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Seltos",
+  "obdbRepo": "Kia-Seltos",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Sonet",
+  "obdbRepo": "Kia-Sonet",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Sorento",
+  "obdbRepo": "Kia-Sorento",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Soul",
+  "obdbRepo": "Kia-Soul",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Sportage",
+  "obdbRepo": "Kia-Sportage",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Sportage HEV",
+  "obdbRepo": "Kia-Sportage-HEV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Stinger",
+  "obdbRepo": "Kia-Stinger",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Stonic",
+  "obdbRepo": "Kia-Stonic",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Kia",
+  "model": "Telluride",
+  "obdbRepo": "Kia-Telluride",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "KTM",
+  "model": "RC",
+  "obdbRepo": "KTM-RC",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "KTM",
+  "model": "RC 390",
+  "obdbRepo": "KTM-RC-390",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lamborghini",
+  "model": "Huracan evo",
+  "obdbRepo": "Lamborghini-Huracan-evo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Land Rover",
+  "model": "Defender",
+  "obdbRepo": "Land-Rover-Defender",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Land Rover",
+  "model": "LR3",
+  "obdbRepo": "Land-Rover-LR3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Land Rover",
+  "model": "LR4",
+  "obdbRepo": "Land-Rover-LR4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Land Rover",
+  "model": "Range Rover",
+  "obdbRepo": "Land-Rover-Range-Rover",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Land Rover",
+  "model": "Range Rover Velar",
+  "obdbRepo": "Land-Rover-Range-Rover-Velar",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "CT 200h",
+  "obdbRepo": "Lexus-CT-200h",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "ES",
+  "obdbRepo": "Lexus-ES",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "ES 300h",
+  "obdbRepo": "Lexus-ES-300h",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "GX",
+  "obdbRepo": "Lexus-GX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "GX 460",
+  "obdbRepo": "Lexus-GX-460",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "GX 470",
+  "obdbRepo": "Lexus-GX-470",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "IS",
+  "obdbRepo": "Lexus-IS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "LC 500",
+  "obdbRepo": "Lexus-LC-500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "LS",
+  "obdbRepo": "Lexus-LS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "NX 350h",
+  "obdbRepo": "Lexus-NX-350h",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "RX",
+  "obdbRepo": "Lexus-RX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "RX 350",
+  "obdbRepo": "Lexus-RX-350",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "RX 450h",
+  "obdbRepo": "Lexus-RX-450h",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lexus",
+  "model": "UX",
+  "obdbRepo": "Lexus-UX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lincoln",
+  "model": "Aviator",
+  "obdbRepo": "Lincoln-Aviator",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lincoln",
+  "model": "Corsair",
+  "obdbRepo": "Lincoln-Corsair",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lincoln",
+  "model": "MKX",
+  "obdbRepo": "Lincoln-MKX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lincoln",
+  "model": "MKZ",
+  "obdbRepo": "Lincoln-MKZ",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lincoln",
+  "model": "Nautilus",
+  "obdbRepo": "Lincoln-Nautilus",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lincoln",
+  "model": "Navigator",
+  "obdbRepo": "Lincoln-Navigator",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lincoln",
+  "model": "Town Car",
+  "obdbRepo": "Lincoln-Town-Car",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Lucid",
+  "model": "Air",
+  "obdbRepo": "Lucid-Air",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Maruti",
+  "model": "Celerio",
+  "obdbRepo": "Maruti-Celerio",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Maruti",
+  "model": "Suzuki Fronx Delta",
+  "obdbRepo": "Maruti-Suzuki-Fronx-Delta",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Maserati",
+  "model": "Levante",
+  "obdbRepo": "Maserati-Levante",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Maxus",
+  "model": "eDeliver 3",
+  "obdbRepo": "Maxus-eDeliver-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "2",
+  "obdbRepo": "Mazda-2",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "3",
+  "obdbRepo": "Mazda-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "5",
+  "obdbRepo": "Mazda-5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "6",
+  "obdbRepo": "Mazda-6",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "BT50",
+  "obdbRepo": "Mazda-BT50",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 3",
+  "obdbRepo": "Mazda-CX-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 30",
+  "obdbRepo": "Mazda-CX-30",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 5",
+  "obdbRepo": "Mazda-CX-5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 50",
+  "obdbRepo": "Mazda-CX-50",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 60",
+  "obdbRepo": "Mazda-CX-60",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 7",
+  "obdbRepo": "Mazda-CX-7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 70",
+  "obdbRepo": "Mazda-CX-70",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 9",
+  "obdbRepo": "Mazda-CX-9",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "CX 90",
+  "obdbRepo": "Mazda-CX-90",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "MX 30",
+  "obdbRepo": "Mazda-MX-30",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "MX 5",
+  "obdbRepo": "Mazda-MX-5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "RX 7",
+  "obdbRepo": "Mazda-RX-7",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mazda",
+  "model": "Tribute",
+  "obdbRepo": "Mazda-Tribute",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "McLaren",
+  "model": "Artura",
+  "obdbRepo": "McLaren-Artura",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "A 180",
+  "obdbRepo": "Mercedes-Benz-A-180",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "A 200",
+  "obdbRepo": "Mercedes-Benz-A-200",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "A 220",
+  "obdbRepo": "Mercedes-Benz-A-220",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "AMG A 45",
+  "obdbRepo": "Mercedes-Benz-AMG-A-45",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "AMG GT",
+  "obdbRepo": "Mercedes-Benz-AMG-GT",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "C 180",
+  "obdbRepo": "Mercedes-Benz-C-180",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "C Class",
+  "obdbRepo": "Mercedes-Benz-C-Class",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "C200d",
+  "obdbRepo": "Mercedes-Benz-C200d",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "CLA 200",
+  "obdbRepo": "Mercedes-Benz-CLA-200",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "CLA Class",
+  "obdbRepo": "Mercedes-Benz-CLA-Class",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "CLS",
+  "obdbRepo": "Mercedes-Benz-CLS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "E Class",
+  "obdbRepo": "Mercedes-Benz-E-Class",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "E180",
+  "obdbRepo": "Mercedes-Benz-E180",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "EQA",
+  "obdbRepo": "Mercedes-Benz-EQA",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "EQB",
+  "obdbRepo": "Mercedes-Benz-EQB",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "EQE",
+  "obdbRepo": "Mercedes-Benz-EQE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "EQS",
+  "obdbRepo": "Mercedes-Benz-EQS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "EQS Class Sedan",
+  "obdbRepo": "Mercedes-Benz-EQS-Class-Sedan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "G Class",
+  "obdbRepo": "Mercedes-Benz-G-Class",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "GLA250",
+  "obdbRepo": "Mercedes-Benz-GLA250",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "GLB 250",
+  "obdbRepo": "Mercedes-Benz-GLB-250",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "GLC Class",
+  "obdbRepo": "Mercedes-Benz-GLC-Class",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "Ml63",
+  "obdbRepo": "Mercedes-Benz-Ml63",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mercedes Benz",
+  "model": "S Class",
+  "obdbRepo": "Mercedes-Benz-S-Class",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MG",
+  "model": "Comet",
+  "obdbRepo": "MG-Comet",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MG",
+  "model": "Hector",
+  "obdbRepo": "MG-Hector",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MG",
+  "model": "HS",
+  "obdbRepo": "MG-HS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MG",
+  "model": "MG4",
+  "obdbRepo": "MG-MG4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MG",
+  "model": "One",
+  "obdbRepo": "MG-One",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MG",
+  "model": "ZS",
+  "obdbRepo": "MG-ZS",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MG",
+  "model": "ZS EV",
+  "obdbRepo": "MG-ZS-EV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MINI",
+  "model": "Clubman",
+  "obdbRepo": "MINI-Clubman",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MINI",
+  "model": "Cooper",
+  "obdbRepo": "MINI-Cooper",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MINI",
+  "model": "Cooper S",
+  "obdbRepo": "MINI-Cooper-S",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MINI",
+  "model": "Cooper SE",
+  "obdbRepo": "MINI-Cooper-SE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MINI",
+  "model": "Countryman",
+  "obdbRepo": "MINI-Countryman",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MINI",
+  "model": "Hardtop",
+  "obdbRepo": "MINI-Hardtop",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "MINI",
+  "model": "JCW",
+  "obdbRepo": "MINI-JCW",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "ASX",
+  "obdbRepo": "Mitsubishi-ASX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Challenger",
+  "obdbRepo": "Mitsubishi-Challenger",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Eclipse Cross",
+  "obdbRepo": "Mitsubishi-Eclipse-Cross",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Eclipse Cross PHEV",
+  "obdbRepo": "Mitsubishi-Eclipse-Cross-PHEV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Lancer",
+  "obdbRepo": "Mitsubishi-Lancer",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Mirage",
+  "obdbRepo": "Mitsubishi-Mirage",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Outlander",
+  "obdbRepo": "Mitsubishi-Outlander",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Outlander PHEV",
+  "obdbRepo": "Mitsubishi-Outlander-PHEV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Outlander Sport",
+  "obdbRepo": "Mitsubishi-Outlander-Sport",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Pajero",
+  "obdbRepo": "Mitsubishi-Pajero",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "RVR",
+  "obdbRepo": "Mitsubishi-RVR",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Mitsubishi",
+  "model": "Triton",
+  "obdbRepo": "Mitsubishi-Triton",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Altima",
+  "obdbRepo": "Nissan-Altima",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "ARIYA",
+  "obdbRepo": "Nissan-ARIYA",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Armada",
+  "obdbRepo": "Nissan-Armada",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Frontier",
+  "obdbRepo": "Nissan-Frontier",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Juke",
+  "obdbRepo": "Nissan-Juke",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Kicks",
+  "obdbRepo": "Nissan-Kicks",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Leaf",
+  "obdbRepo": "Nissan-Leaf",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Maxima",
+  "obdbRepo": "Nissan-Maxima",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Murano",
+  "obdbRepo": "Nissan-Murano",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Navara",
+  "obdbRepo": "Nissan-Navara",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Pathfinder",
+  "obdbRepo": "Nissan-Pathfinder",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Patrol",
+  "obdbRepo": "Nissan-Patrol",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Pulsar",
+  "obdbRepo": "Nissan-Pulsar",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Qashqai",
+  "obdbRepo": "Nissan-Qashqai",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Rogue",
+  "obdbRepo": "Nissan-Rogue",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Rogue Sport",
+  "obdbRepo": "Nissan-Rogue-Sport",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Sentra",
+  "obdbRepo": "Nissan-Sentra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Titan",
+  "obdbRepo": "Nissan-Titan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Versa",
+  "obdbRepo": "Nissan-Versa",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "X Trail",
+  "obdbRepo": "Nissan-X-Trail",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Nissan",
+  "model": "Xterra",
+  "obdbRepo": "Nissan-Xterra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Omoda",
+  "model": "Omoda 5 EV",
+  "obdbRepo": "Omoda-Omoda-5-EV",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Perodua",
+  "model": "Bezza",
+  "obdbRepo": "Perodua-Bezza",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "107",
+  "obdbRepo": "Peugeot-107",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "2008",
+  "obdbRepo": "Peugeot-2008",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "205",
+  "obdbRepo": "Peugeot-205",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "206",
+  "obdbRepo": "Peugeot-206",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "207",
+  "obdbRepo": "Peugeot-207",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "208",
+  "obdbRepo": "Peugeot-208",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "3008",
+  "obdbRepo": "Peugeot-3008",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "307",
+  "obdbRepo": "Peugeot-307",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "308",
+  "obdbRepo": "Peugeot-308",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "308 Hybrid",
+  "obdbRepo": "Peugeot-308-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "407",
+  "obdbRepo": "Peugeot-407",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "505",
+  "obdbRepo": "Peugeot-505",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "508",
+  "obdbRepo": "Peugeot-508",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "e 208",
+  "obdbRepo": "Peugeot-e-208",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Peugeot",
+  "model": "Expert",
+  "obdbRepo": "Peugeot-Expert",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Polestar",
+  "model": "2",
+  "obdbRepo": "Polestar-2",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Polestar",
+  "model": "3",
+  "obdbRepo": "Polestar-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Polestar",
+  "model": "4",
+  "obdbRepo": "Polestar-4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Pontiac",
+  "model": "Vibe",
+  "obdbRepo": "Pontiac-Vibe",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "718",
+  "obdbRepo": "Porsche-718",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "911",
+  "obdbRepo": "Porsche-911",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "981 Cayman",
+  "obdbRepo": "Porsche-981-Cayman",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "Boxster",
+  "obdbRepo": "Porsche-Boxster",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "Cayenne",
+  "obdbRepo": "Porsche-Cayenne",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "Cayman",
+  "obdbRepo": "Porsche-Cayman",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "Macan",
+  "obdbRepo": "Porsche-Macan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "Macan Electric",
+  "obdbRepo": "Porsche-Macan-Electric",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "Panamera",
+  "obdbRepo": "Porsche-Panamera",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Porsche",
+  "model": "Taycan",
+  "obdbRepo": "Porsche-Taycan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ram",
+  "model": "1500",
+  "obdbRepo": "Ram-1500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ram",
+  "model": "2500",
+  "obdbRepo": "Ram-2500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Ram",
+  "model": "3500",
+  "obdbRepo": "Ram-3500",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Captur",
+  "obdbRepo": "Renault-Captur",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Clio",
+  "obdbRepo": "Renault-Clio",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Clio III",
+  "obdbRepo": "Renault-Clio-III",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Clio V",
+  "obdbRepo": "Renault-Clio-V",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Kadjar",
+  "obdbRepo": "Renault-Kadjar",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Koleos",
+  "obdbRepo": "Renault-Koleos",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Kwid",
+  "obdbRepo": "Renault-Kwid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Megane",
+  "obdbRepo": "Renault-Megane",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Megane E Tech",
+  "obdbRepo": "Renault-Megane-E-Tech",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "Symbol",
+  "obdbRepo": "Renault-Symbol",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Renault",
+  "model": "ZOE",
+  "obdbRepo": "Renault-ZOE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Rivian",
+  "model": "R1S",
+  "obdbRepo": "Rivian-R1S",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Rivian",
+  "model": "R1T",
+  "obdbRepo": "Rivian-R1T",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Saab",
+  "model": "9 3",
+  "obdbRepo": "Saab-9-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Saab",
+  "model": "9 5",
+  "obdbRepo": "Saab-9-5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Scion",
+  "model": "FR S",
+  "obdbRepo": "Scion-FR-S",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Scion",
+  "model": "iQ",
+  "obdbRepo": "Scion-iQ",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Scion",
+  "model": "tC",
+  "obdbRepo": "Scion-tC",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Scion",
+  "model": "xB",
+  "obdbRepo": "Scion-xB",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Alhambra",
+  "obdbRepo": "Seat-Alhambra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Altea",
+  "obdbRepo": "Seat-Altea",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Arona",
+  "obdbRepo": "Seat-Arona",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Ateca",
+  "obdbRepo": "Seat-Ateca",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Ibiza",
+  "obdbRepo": "Seat-Ibiza",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Leon",
+  "obdbRepo": "Seat-Leon",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Mii Electric",
+  "obdbRepo": "Seat-Mii-Electric",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Seat",
+  "model": "Tarraco",
+  "obdbRepo": "Seat-Tarraco",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Elroq",
+  "obdbRepo": "Skoda-Elroq",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Enyaq",
+  "obdbRepo": "Skoda-Enyaq",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Fabia",
+  "obdbRepo": "Skoda-Fabia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Kamiq",
+  "obdbRepo": "Skoda-Kamiq",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Kodiaq",
+  "obdbRepo": "Skoda-Kodiaq",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Octavia",
+  "obdbRepo": "Skoda-Octavia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Rapid",
+  "obdbRepo": "Skoda-Rapid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Scala",
+  "obdbRepo": "Skoda-Scala",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Skoda",
+  "model": "Superb",
+  "obdbRepo": "Skoda-Superb",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Smart",
+  "model": "fortwo",
+  "obdbRepo": "smart-fortwo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Smart",
+  "model": "Smart 1",
+  "obdbRepo": "Smart-Smart-1",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Ascent",
+  "obdbRepo": "Subaru-Ascent",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Baja",
+  "obdbRepo": "Subaru-Baja",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "BRZ",
+  "obdbRepo": "Subaru-BRZ",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Crosstrek",
+  "obdbRepo": "Subaru-Crosstrek",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Forester",
+  "obdbRepo": "Subaru-Forester",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Impreza",
+  "obdbRepo": "Subaru-Impreza",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Legacy",
+  "obdbRepo": "Subaru-Legacy",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Outback",
+  "obdbRepo": "Subaru-Outback",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Solterra",
+  "obdbRepo": "Subaru-Solterra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "Tribeca",
+  "obdbRepo": "Subaru-Tribeca",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "WRX",
+  "obdbRepo": "Subaru-WRX",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Subaru",
+  "model": "WRX STI",
+  "obdbRepo": "Subaru-WRX-STI",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "Alto",
+  "obdbRepo": "Suzuki-Alto",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "Baleno",
+  "obdbRepo": "Suzuki-Baleno",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "Ignis",
+  "obdbRepo": "Suzuki-Ignis",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "Jimny",
+  "obdbRepo": "Suzuki-Jimny",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "Splash",
+  "obdbRepo": "Suzuki-Splash",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "Swift",
+  "obdbRepo": "Suzuki-Swift",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "SX4",
+  "obdbRepo": "Suzuki-SX4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Suzuki",
+  "model": "Vitara",
+  "obdbRepo": "Suzuki-Vitara",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Tata",
+  "model": "Harrier",
+  "obdbRepo": "Tata-Harrier",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Tata",
+  "model": "Tiago",
+  "obdbRepo": "Tata-Tiago",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Tesla",
+  "model": "Cybertruck",
+  "obdbRepo": "Tesla-Cybertruck",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Tesla",
+  "model": "Model 3",
+  "obdbRepo": "Tesla-Model-3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Tesla",
+  "model": "Model S",
+  "obdbRepo": "Tesla-Model-S",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Tesla",
+  "model": "Model X",
+  "obdbRepo": "Tesla-Model-X",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Tesla",
+  "model": "Model Y",
+  "obdbRepo": "Tesla-Model-Y",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "4Runner",
+  "obdbRepo": "Toyota-4Runner",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Alphard",
+  "obdbRepo": "Toyota-Alphard",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Aqua",
+  "obdbRepo": "Toyota-Aqua",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Auris",
+  "obdbRepo": "Toyota-Auris",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Avalon",
+  "obdbRepo": "Toyota-Avalon",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Aygo",
+  "obdbRepo": "Toyota-Aygo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "bZ4X",
+  "obdbRepo": "Toyota-bZ4X",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "C HR",
+  "obdbRepo": "Toyota-C-HR",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Camry",
+  "obdbRepo": "Toyota-Camry",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Camry Hybrid",
+  "obdbRepo": "Toyota-Camry-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Celica",
+  "obdbRepo": "Toyota-Celica",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Corolla",
+  "obdbRepo": "Toyota-Corolla",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Corolla Cross",
+  "obdbRepo": "Toyota-Corolla-Cross",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Corolla Hybrid",
+  "obdbRepo": "Toyota-Corolla-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Corolla iM",
+  "obdbRepo": "Toyota-Corolla-iM",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Crown",
+  "obdbRepo": "Toyota-Crown",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Crown Signia",
+  "obdbRepo": "Toyota-Crown-Signia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "FJ Cruiser",
+  "obdbRepo": "Toyota-FJ-Cruiser",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Fortuner",
+  "obdbRepo": "Toyota-Fortuner",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "GR Corolla",
+  "obdbRepo": "Toyota-GR-Corolla",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "GR Supra",
+  "obdbRepo": "Toyota-GR-Supra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "GR86",
+  "obdbRepo": "Toyota-GR86",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Grand Highlander",
+  "obdbRepo": "Toyota-Grand-Highlander",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Grand Highlander Hybrid",
+  "obdbRepo": "Toyota-Grand-Highlander-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Highlander",
+  "obdbRepo": "Toyota-Highlander",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Hilux",
+  "obdbRepo": "Toyota-Hilux",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Innova",
+  "obdbRepo": "Toyota-Innova",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "iQ",
+  "obdbRepo": "Toyota-iQ",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Ist",
+  "obdbRepo": "Toyota-Ist",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Land Cruiser",
+  "obdbRepo": "Toyota-Land-Cruiser",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Land Cruiser Hybrid",
+  "obdbRepo": "Toyota-Land-Cruiser-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Matrix",
+  "obdbRepo": "Toyota-Matrix",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Mirai",
+  "obdbRepo": "Toyota-Mirai",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "MR2",
+  "obdbRepo": "Toyota-MR2",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Prius",
+  "obdbRepo": "Toyota-Prius",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Prius Prime",
+  "obdbRepo": "Toyota-Prius-Prime",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Prius v",
+  "obdbRepo": "Toyota-Prius-v",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "RAV4",
+  "obdbRepo": "Toyota-RAV4",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "RAV4 Hybrid",
+  "obdbRepo": "Toyota-RAV4-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "RAV4 Prime",
+  "obdbRepo": "Toyota-RAV4-Prime",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Rush",
+  "obdbRepo": "Toyota-Rush",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Sequoia",
+  "obdbRepo": "Toyota-Sequoia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Sienna",
+  "obdbRepo": "Toyota-Sienna",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Sienna Hybrid",
+  "obdbRepo": "Toyota-Sienna-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Tacoma",
+  "obdbRepo": "Toyota-Tacoma",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Tundra",
+  "obdbRepo": "Toyota-Tundra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Venza",
+  "obdbRepo": "Toyota-Venza",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Venza Hybrid",
+  "obdbRepo": "Toyota-Venza-Hybrid",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Yaris",
+  "obdbRepo": "Toyota-Yaris",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Yaris Cross",
+  "obdbRepo": "Toyota-Yaris-Cross",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Toyota",
+  "model": "Yaris iA",
+  "obdbRepo": "Toyota-Yaris-iA",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Ampera",
+  "obdbRepo": "VauxhallOpel-Ampera",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Astra",
+  "obdbRepo": "Vauxhall-Astra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Astra",
+  "obdbRepo": "VauxhallOpel-Astra",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Corsa e",
+  "obdbRepo": "VauxhallOpel-Corsa-e",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Crossland",
+  "obdbRepo": "VauxhallOpel-Crossland",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Grandland X",
+  "obdbRepo": "VauxhallOpel-Grandland-X",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Insignia",
+  "obdbRepo": "VauxhallOpel-Insignia",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Mokka",
+  "obdbRepo": "VauxhallOpel-Mokka",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Mokka e",
+  "obdbRepo": "Vauxhall-Mokka-e",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Vauxhall",
+  "model": "Zafira B",
+  "obdbRepo": "VauxhallOpel-Zafira-B",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Amarok",
+  "obdbRepo": "Volkswagen-Amarok",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Arteon",
+  "obdbRepo": "Volkswagen-Arteon",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Atlas",
+  "obdbRepo": "Volkswagen-Atlas",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Beetle",
+  "obdbRepo": "Volkswagen-Beetle",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "CC",
+  "obdbRepo": "Volkswagen-CC",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Crafter",
+  "obdbRepo": "Volkswagen-Crafter",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "e Golf",
+  "obdbRepo": "Volkswagen-e-Golf",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Golf",
+  "obdbRepo": "VW-Golf",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Golf",
+  "obdbRepo": "Volkswagen-Golf",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "GTE",
+  "obdbRepo": "Volkswagen-GTE",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "ID Buzz",
+  "obdbRepo": "Volkswagen-ID-Buzz",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "ID3",
+  "obdbRepo": "Volkswagen-ID3",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "ID5",
+  "obdbRepo": "Volkswagen-ID5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "ID7 Tourer",
+  "obdbRepo": "Volkswagen-ID7-Tourer",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Jetta",
+  "obdbRepo": "Volkswagen-Jetta",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Jetta GLI",
+  "obdbRepo": "Volkswagen-Jetta-GLI",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Nivus",
+  "obdbRepo": "Volkswagen-Nivus",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Passat",
+  "obdbRepo": "Volkswagen-Passat",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Passat B8",
+  "obdbRepo": "Volkswagen-Passat-B8",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Passat Variant",
+  "obdbRepo": "Volkswagen-Passat-Variant",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Polo",
+  "obdbRepo": "Volkswagen-Polo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Polo V",
+  "obdbRepo": "Volkswagen-Polo-V",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "R32",
+  "obdbRepo": "Volkswagen-R32",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Rabbit",
+  "obdbRepo": "Volkswagen-Rabbit",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Scirocco",
+  "obdbRepo": "Volkswagen-Scirocco",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Sharan",
+  "obdbRepo": "Volkswagen-Sharan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "T Cross",
+  "obdbRepo": "Volkswagen-T-Cross",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "T Roc",
+  "obdbRepo": "Volkswagen-T-Roc",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "T5",
+  "obdbRepo": "Volkswagen-T5",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Taigo",
+  "obdbRepo": "Volkswagen-Taigo",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Taos",
+  "obdbRepo": "Volkswagen-Taos",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Tiguan",
+  "obdbRepo": "Volkswagen-Tiguan",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Touareg",
+  "obdbRepo": "Volkswagen-Touareg",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Touran",
+  "obdbRepo": "Volkswagen-Touran",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Up",
+  "obdbRepo": "Volkswagen-Up",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volkswagen",
+  "model": "Virtus",
+  "obdbRepo": "Volkswagen-Virtus",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "C30",
+  "obdbRepo": "Volvo-C30",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "EX30",
+  "obdbRepo": "Volvo-EX30",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "S40",
+  "obdbRepo": "Volvo-S40",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "S60",
+  "obdbRepo": "Volvo-S60",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "S70",
+  "obdbRepo": "Volvo-S70",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "S90",
+  "obdbRepo": "Volvo-S90",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "V50",
+  "obdbRepo": "Volvo-V50",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "V60",
+  "obdbRepo": "Volvo-V60",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "V70",
+  "obdbRepo": "Volvo-V70",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "V90 Cross Country",
+  "obdbRepo": "Volvo-V90-Cross-Country",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "V90CC",
+  "obdbRepo": "Volvo-V90CC",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "XC40",
+  "obdbRepo": "Volvo-XC40",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "XC40 Recharge",
+  "obdbRepo": "Volvo-XC40-Recharge",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "XC40 T4 Recharge",
+  "obdbRepo": "Volvo-XC40-T4-Recharge",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "XC60",
+  "obdbRepo": "Volvo-XC60",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Volvo",
+  "model": "XC90",
+  "obdbRepo": "Volvo-XC90",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Voyah",
+  "model": "Free",
+  "obdbRepo": "Voyah-Free",
+  "minYear": 1996,
+  "maxYear": 2025
+ },
+ {
+  "make": "Zeekr",
+  "model": "009",
+  "obdbRepo": "Zeekr-009",
+  "minYear": 1996,
+  "maxYear": 2025
+ }
+]
