@@ -173,4 +173,7 @@
     <string name="garage_offline">Verbinde dich mit dem Internet, um dieses Fahrzeug herunterzuladen. Ohne Internet funktionieren die Standard-PIDs.</string>
     <string name="garage_download_failed">Die Fahrzeugdaten konnten nicht heruntergeladen werden. Vorerst funktionieren die Standard-PIDs.</string>
 
+    <!-- Untranslated: copied from English. -->
+    <string name="trip_empty">Trip history isn\'t recorded yet.</string>
+
 </resources>

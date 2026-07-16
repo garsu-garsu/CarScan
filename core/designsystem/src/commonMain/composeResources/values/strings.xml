@@ -228,4 +228,7 @@
     <string name="garage_offline">Connect to the internet to download this vehicle. Standard PIDs will work offline.</string>
     <string name="garage_download_failed">Couldn\'t download this vehicle\'s data. Standard PIDs will work for now.</string>
 
+    <!-- Trip screen: recording isn't built yet, this is a placeholder empty state. -->
+    <string name="trip_empty">Trip history isn\'t recorded yet.</string>
+
 </resources>
