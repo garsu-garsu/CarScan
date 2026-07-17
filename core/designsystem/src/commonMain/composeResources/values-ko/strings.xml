@@ -120,6 +120,9 @@
     <string name="live_resume">계속</string>
     <string name="live_clear">지우기</string>
     <string name="live_no_series_selected">차트로 볼 신호를 선택하세요</string>
+    <string name="live_min">Min</string>
+    <string name="live_avg">Avg</string>
+    <string name="live_max">Max</string>
 
     <string name="health_slowed_down">이 어댑터에 비해 게이지가 너무 많아 갱신이 느려집니다.</string>
 

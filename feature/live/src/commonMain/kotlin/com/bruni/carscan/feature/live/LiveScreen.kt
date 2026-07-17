@@ -2,7 +2,7 @@ package com.bruni.carscan.feature.live
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,25 +14,30 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ShowChart
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.intl.Locale
@@ -41,6 +46,9 @@ import com.bruni.carscan.core.designsystem.chart.LivePlot
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.allStringResources
 import com.bruni.carscan.core.designsystem.generated.resources.common_no_reading
+import com.bruni.carscan.core.designsystem.generated.resources.live_avg
+import com.bruni.carscan.core.designsystem.generated.resources.live_max
+import com.bruni.carscan.core.designsystem.generated.resources.live_min
 import com.bruni.carscan.core.designsystem.generated.resources.live_no_series_selected
 import com.bruni.carscan.core.designsystem.theme.LocalNumberFormatter
 import com.bruni.carscan.core.units.Readout
@@ -67,146 +75,161 @@ internal fun LiveScreen(
     val languageTag = Locale.current.toLanguageTag()
     val units = remember(languageTag, state.units) { UnitReadout(languageTag, state.units) }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        SeriesPicker(state, onIntent)
+    // "Poll everything while this screen is foreground" — see LiveViewModel's KDoc. This fires on
+    // every fresh composition of this screen (a re-entry after another screen took the poller's
+    // attention) *and* whenever `available` changes content, which covers the reactive case too —
+    // the VM's own combine collector already handles that half, so this is deliberately redundant
+    // there and load-bearing only on re-entry.
+    LaunchedEffect(state.available) { onIntent(LiveIntent.ScreenVisible) }
 
-        // Nothing charted yet. The chips above are populated from the vehicle's signalset, so this
-        // is a prompt rather than an error — there is nothing wrong, the user just has not picked.
-        if (state.charted.isEmpty()) {
+    val detail = state.detail
+    if (detail != null) {
+        DetailScreen(detail, units, state.history, onIntent, modifier)
+    } else {
+        SeriesList(state, units, onIntent, modifier)
+    }
+}
+
+@Composable
+private fun SeriesList(
+    state: LiveUiState,
+    units: UnitReadout,
+    onIntent: (LiveIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 16.dp)) {
+        // Nothing to show yet — no vehicle connected, or its signalset has not loaded. A prompt
+        // rather than an error: there is nothing wrong, the car just has not answered yet.
+        if (state.rows.isEmpty()) {
             Text(
                 text = stringResource(Res.string.live_no_series_selected),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            return@Column
         }
 
-        // Keyed on the MetricKey, so selecting a second series does not tear down the first one's
-        // plot and throw away the 30 s of trace it is holding.
-        state.charted.forEachIndexed { index, series ->
-            key(series.key) { SeriesCard(series, units, seriesColour(index)) }
-        }
-
-        state.history?.let { history ->
-            HistoryCard(history)
-        }
-    }
-}
-
-@Composable
-private fun SeriesPicker(state: LiveUiState, onIntent: (LiveIntent) -> Unit) {
-    val charted = remember(state.charted) { state.charted.mapTo(HashSet()) { it.key } }
-
-    Row(
-        modifier = Modifier.horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        state.available.forEach { option ->
-            FilterChip(
-                selected = option.key in charted,
-                onClick = { onIntent(LiveIntent.ToggleSeries(option.key)) },
-                label = { Text(option.label) },
-            )
-        }
-    }
-}
-
-/** One charted signal: an icon-badged header naming it, its live readout, and its 30 s strip. */
-@Composable
-private fun SeriesCard(series: LiveSeries, units: UnitReadout, colour: Color) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(44.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            Icons.AutoMirrored.Rounded.ShowChart,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-                    Spacer(Modifier.width(12.dp))
-                    Text(
-                        text = series.label,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Medium,
-                    )
-                }
-                Readout(series, units)
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            // Keyed on the MetricKey, so a row further down the list keeps its own identity (and
+            // its accumulated stats) as the list is scrolled and recomposed.
+            items(state.rows, key = { it.key }) { row ->
+                SeriesRow(
+                    row = row,
+                    bookmarked = row.key in state.bookmarked,
+                    units = units,
+                    onTap = { onIntent(LiveIntent.Select(row.key)) },
+                    onToggleBookmark = { onIntent(LiveIntent.ToggleBookmark(row.key)) },
+                )
             }
-
-            LivePlot(
-                state = series.plot,
-                min = series.min,
-                max = series.max,
-                color = colour,
-                modifier = Modifier.fillMaxWidth().height(96.dp),
-            )
         }
     }
 }
 
 /**
- * The only composable that reads [LiveSeries.latest], and it is its own function for that reason.
- *
- * `latest` is snapshot state written on every sample, so whatever composable reads it recomposes at
- * the sample rate. Confined here, that costs one `Text` twenty times a second. Read it one level
- * up — in [SeriesCard] — and it would recompose the `LivePlot` beside it just as often, undoing
- * from the outside the very thing `LivePlot` reads its revision counter inside a draw lambda to
- * avoid.
- *
- * **No test enforces this.** It needs a Compose UI test, which cannot live in `commonTest` (it dies
- * in `androidHostTest` on a null `Build.FINGERPRINT`), and a `skikoTest` source set was ruled out:
- * a `jvm()` target on a feature module drags one onto `:core:data` → `:core:transport` → Kable,
- * whose JVM support is unverified. So the invariant is a comment, and this comment is all there is.
- * If you hoist the `series.latest` read out of this function, nothing will go red — and the live
- * chart will silently recompose 600 times in 30 seconds. `LivePlotUiTest` in `:core:designsystem`
- * is the gate for the layer below; there is no gate for this one.
+ * One row: label and running stats on the left, the live readout and a bookmark star on the
+ * right. No graph — see LiveViewModel's KDoc for why only the detail signal gets one.
  */
 @Composable
-private fun Readout(series: LiveSeries, units: UnitReadout) {
+private fun SeriesRow(
+    row: LiveSeries,
+    bookmarked: Boolean,
+    units: UnitReadout,
+    onTap: () -> Unit,
+    onToggleBookmark: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onTap).padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = row.label,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Medium,
+            )
+            StatsLine(row, units)
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            StatText(row, units, MaterialTheme.typography.titleMedium) { it.latest }
+            IconButton(onClick = onToggleBookmark) {
+                Icon(
+                    imageVector = if (bookmarked) Icons.Rounded.Star else Icons.Rounded.StarBorder,
+                    contentDescription = null,
+                    tint = if (bookmarked) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                )
+            }
+        }
+    }
+}
+
+/** The running min / avg / max, in the same reduced style throughout a row. */
+@Composable
+private fun StatsLine(row: LiveSeries, units: UnitReadout) {
+    val style = MaterialTheme.typography.bodySmall
+    val color = MaterialTheme.colorScheme.onSurfaceVariant
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        LabelledStat(stringResource(Res.string.live_min), row, units, style, color) { it.min }
+        LabelledStat(stringResource(Res.string.live_avg), row, units, style, color) { it.avg }
+        LabelledStat(stringResource(Res.string.live_max), row, units, style, color) { it.max }
+    }
+}
+
+@Composable
+private fun LabelledStat(
+    label: String,
+    row: LiveSeries,
+    units: UnitReadout,
+    style: TextStyle,
+    color: Color,
+    select: (LiveSeries) -> Double?,
+) {
+    Row {
+        Text("$label ", style = style, color = color)
+        StatText(row, units, style, color, select)
+    }
+}
+
+/**
+ * The only place any of [LiveSeries]'s four snapshot fields is read, parameterised by which one.
+ *
+ * Each call site is its own composable invocation — a separate recomposition scope — so a sample
+ * invalidates exactly the one `Text` whose [select] reads a field that changed, never the row
+ * around it. That is the same discipline the old chart's `Readout` documented at length; see this
+ * file's git history (or `SeriesRow`/`DetailScreen`, its two call sites) for why it still matters
+ * with no graph on this screen: thirty rows updating their own `latest`/`avg` twenty times a
+ * second must not recompose the `LazyColumn` they live in.
+ */
+@Composable
+private fun StatText(
+    row: LiveSeries,
+    units: UnitReadout,
+    style: TextStyle,
+    color: Color = Color.Unspecified,
+    select: (LiveSeries) -> Double?,
+) {
     val numbers = LocalNumberFormatter.current
     val noReading = stringResource(Res.string.common_no_reading)
 
-    // A signal spanning 8000 rpm does not want a decimal place; one spanning 5 volts needs one.
-    val decimals = remember(series) { if (series.max - series.min >= 100f) 0 else 1 }
-
-    // Everything above is hoisted deliberately: the read of `latest` is the last thing that
-    // happens, so a sample invalidates this Text and nothing around it.
-    val value = series.latest
+    // The read of `select(row)` is the last thing that happens, so a sample invalidates this
+    // `Text` and nothing else.
+    val value = select(row)
 
     val text = when {
         // Nothing has arrived yet. An em dash, not a zero the car never reported.
         value == null -> noReading
         // Converted and formatted in one call — the only supported way to put a converted number
         // on screen. Six of our eight locales write 13,8 rather than 13.8.
-        series.nativeUnit != null -> units.forSample(value, series.nativeUnit, decimals).render()
+        row.nativeUnit != null -> units.forSample(value, row.nativeUnit, row.decimals).render()
         // No unit at all: formatted, never converted, and no suffix to hang on it.
-        else -> numbers.format(value, decimals)
+        else -> numbers.format(value, row.decimals)
     }
 
-    Text(text, style = MaterialTheme.typography.titleMedium)
+    Text(text, style = style, color = color)
 }
 
 /** The number and its unit label, resolved and joined. */
@@ -223,7 +246,53 @@ private fun Readout.render(): String =
 private fun stringLabel(key: String): String? =
     Res.allStringResources[key]?.let { stringResource(it) }
 
-/** A stored trip's trace, in the same card language as the live series above it. */
+/**
+ * One signal, full-screen: its live plot and its running stats. The only screen that keeps a
+ * [LivePlot] alive — see [LiveViewModel.onSample].
+ */
+@Composable
+private fun DetailScreen(
+    detail: DetailUiState,
+    units: UnitReadout,
+    history: HistoryUiState?,
+    onIntent: (LiveIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = { onIntent(LiveIntent.CloseDetail) }) {
+                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null)
+            }
+            Spacer(Modifier.width(4.dp))
+            Text(
+                text = detail.series.label,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Medium,
+            )
+        }
+
+        StatText(detail.series, units, MaterialTheme.typography.headlineMedium) { it.latest }
+        StatsLine(detail.series, units)
+
+        LivePlot(
+            state = detail.plot,
+            min = detail.min,
+            max = detail.max,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.fillMaxWidth().height(220.dp),
+        )
+
+        history?.let { HistoryCard(it) }
+    }
+}
+
+/** A stored trip's trace, in the same card language the rest of this screen uses. */
 @Composable
 private fun HistoryCard(history: HistoryUiState) {
     Card(
@@ -260,12 +329,4 @@ private fun HistoryCard(history: HistoryUiState) {
             )
         }
     }
-}
-
-/** Chart colours, cycled. Theme colours, so the strip follows the light/dark scheme. */
-@Composable
-private fun seriesColour(index: Int): Color {
-    val scheme = MaterialTheme.colorScheme
-    val palette = listOf(scheme.primary, scheme.tertiary, scheme.secondary, scheme.error)
-    return palette[index % palette.size]
 }

@@ -124,6 +124,9 @@
     <string name="live_resume">Wznów</string>
     <string name="live_clear">Wyczyść</string>
     <string name="live_no_series_selected">Wybierz sygnał do wykresu</string>
+    <string name="live_min">Min</string>
+    <string name="live_avg">Avg</string>
+    <string name="live_max">Max</string>
 
     <string name="health_slowed_down">Zbyt wiele wskaźników jak na ten adapter — odświeżają się wolniej.</string>
 

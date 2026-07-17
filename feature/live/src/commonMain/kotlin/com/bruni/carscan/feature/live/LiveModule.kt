@@ -17,5 +17,5 @@ val liveModule: Module = module {
     // Spelled out rather than `viewModelOf(::LiveViewModel)`: that resolves *every* constructor
     // parameter from the graph and ignores Kotlin's defaults, so it would demand an `Int` binding
     // for the ring-buffer capacity and fail at runtime, where Koin failures live.
-    viewModel { LiveViewModel(get(), get(), get(), get(), get()) }
+    viewModel { LiveViewModel(get(), get(), get(), get(), get(), get()) }
 }

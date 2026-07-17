@@ -224,12 +224,12 @@ private fun CarScanNavHost(navController: NavHostController, activeVehicleName: 
             val route = entry.toRoute<Route.Live>()
             val viewModel: LiveViewModel = koinViewModel()
 
-            // The tile the user tapped is the series the chart opens on. Keyed on the route, so
-            // coming back to a chart they already had open does not toggle it back off.
+            // The tile the user tapped is the signal the detail view opens on. Keyed on the
+            // route, so coming back to a detail they already had open does not close it back out.
             LaunchedEffect(route.metricKey) {
                 route.metricKey
                     ?.let(::decodeMetricKeyRoute)
-                    ?.let { key -> viewModel.onIntent(LiveIntent.ToggleSeries(key)) }
+                    ?.let { key -> viewModel.onIntent(LiveIntent.Select(key)) }
             }
 
             LiveScreen(viewModel = viewModel)
