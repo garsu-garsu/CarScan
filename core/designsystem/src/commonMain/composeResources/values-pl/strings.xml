@@ -240,4 +240,10 @@
     <string name="trip_source_auto">Auto</string>
     <string name="trip_recording">Recording…</string>
     <string name="trip_empty_auto">No auto-detected trips yet.</string>
+
+    <string name="trip_event_harsh_accel">Gwałtowne przyspieszenie</string>
+    <string name="trip_event_harsh_brake">Gwałtowne hamowanie</string>
+    <string name="trip_event_harsh_start">Gwałtowny start</string>
+    <string name="trip_event_harsh_stop">Gwałtowny postój</string>
+    <string name="trip_event_harsh_corner">Ostry zakręt</string>
 </resources>

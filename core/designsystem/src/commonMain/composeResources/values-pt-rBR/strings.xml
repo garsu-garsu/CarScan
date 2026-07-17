@@ -232,4 +232,10 @@
     <string name="trip_source_auto">Auto</string>
     <string name="trip_recording">Recording…</string>
     <string name="trip_empty_auto">No auto-detected trips yet.</string>
+
+    <string name="trip_event_harsh_accel">Aceleração brusca</string>
+    <string name="trip_event_harsh_brake">Frenagem brusca</string>
+    <string name="trip_event_harsh_start">Partida brusca</string>
+    <string name="trip_event_harsh_stop">Parada brusca</string>
+    <string name="trip_event_harsh_corner">Curva brusca</string>
 </resources>

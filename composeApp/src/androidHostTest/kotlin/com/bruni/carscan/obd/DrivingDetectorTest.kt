@@ -293,6 +293,7 @@ private class FakeTripRepository : TripRepository {
     override suspend fun delete(tripId: String) = Unit
     override suspend fun recordEvent(event: com.bruni.carscan.core.data.TripEvent) = Unit
     override suspend fun events(tripId: String): List<com.bruni.carscan.core.data.TripEvent> = emptyList()
+    override suspend fun track(tripId: String): List<com.bruni.carscan.core.data.GpsPoint> = emptyList()
 }
 
 private class FakeDetectSettings(thresholdKmh: Int) : SettingsRepository {

@@ -55,6 +55,11 @@ import com.bruni.carscan.feature.settings.PaywallViewModel
 import com.bruni.carscan.feature.settings.SettingsEffect
 import com.bruni.carscan.feature.settings.SettingsScreen
 import com.bruni.carscan.feature.settings.SettingsViewModel
+import com.bruni.carscan.feature.trip.TripDetailIntent
+import com.bruni.carscan.feature.trip.TripDetailScreen
+import com.bruni.carscan.feature.trip.TripDetailViewModel
+import com.bruni.carscan.feature.trip.TripListEffect
+import com.bruni.carscan.feature.trip.TripListViewModel
 import com.bruni.carscan.feature.trip.TripScreen
 import com.bruni.carscan.nav.AppSettingsOpener
 import com.bruni.carscan.nav.CarScanTab
@@ -237,7 +242,31 @@ private fun CarScanNavHost(navController: NavHostController, activeVehicleName: 
 
         composable<Route.Dtc> { DtcScreen() }
         composable<Route.Hud> { HudScreen() }
-        composable<Route.Trips> { TripScreen() }
+
+        composable<Route.Trips> {
+            val viewModel: TripListViewModel = koinViewModel()
+
+            LaunchedEffect(viewModel) {
+                viewModel.effect.collect { effect ->
+                    when (effect) {
+                        is TripListEffect.OpenTrip -> navController.navigate(Route.TripDetail(effect.tripId))
+                    }
+                }
+            }
+
+            TripScreen(viewModel = viewModel)
+        }
+
+        composable<Route.TripDetail> { entry ->
+            val route = entry.toRoute<Route.TripDetail>()
+            val viewModel: TripDetailViewModel = koinViewModel()
+
+            LaunchedEffect(route.tripId) {
+                viewModel.onIntent(TripDetailIntent.Load(route.tripId))
+            }
+
+            TripDetailScreen(viewModel = viewModel)
+        }
 
         composable<Route.Settings> {
             val viewModel: SettingsViewModel = koinViewModel()

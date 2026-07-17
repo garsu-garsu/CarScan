@@ -41,6 +41,10 @@ sealed interface Route {
     @Serializable
     data object Trips : Route
 
+    /** One trip's detail: its route on a map, and the harsh-driving events on it. */
+    @Serializable
+    data class TripDetail(val tripId: String) : Route
+
     @Serializable
     data object Settings : Route
 

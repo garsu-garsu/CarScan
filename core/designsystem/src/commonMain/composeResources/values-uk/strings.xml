@@ -240,4 +240,10 @@
     <string name="trip_source_auto">Auto</string>
     <string name="trip_recording">Recording…</string>
     <string name="trip_empty_auto">No auto-detected trips yet.</string>
+
+    <string name="trip_event_harsh_accel">Різке прискорення</string>
+    <string name="trip_event_harsh_brake">Різке гальмування</string>
+    <string name="trip_event_harsh_start">Різкий старт</string>
+    <string name="trip_event_harsh_stop">Різка зупинка</string>
+    <string name="trip_event_harsh_corner">Різкий поворот</string>
 </resources>

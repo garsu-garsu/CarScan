@@ -1,6 +1,7 @@
 package com.bruni.carscan.feature.trip
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -78,7 +79,9 @@ internal fun TripScreen(
             if (state.trips.isEmpty()) {
                 item { EmptyState(state.filter) }
             } else {
-                items(state.trips, key = { it.id }) { row -> TripCard(row, units) }
+                items(state.trips, key = { it.id }) { row ->
+                    TripCard(row, units) { onIntent(TripIntent.OpenTrip(row.id)) }
+                }
             }
         }
 
@@ -120,9 +123,9 @@ private fun EmptyState(filter: TripFilter) {
 }
 
 @Composable
-private fun TripCard(row: TripRow, units: UnitReadout) {
+private fun TripCard(row: TripRow, units: UnitReadout, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),

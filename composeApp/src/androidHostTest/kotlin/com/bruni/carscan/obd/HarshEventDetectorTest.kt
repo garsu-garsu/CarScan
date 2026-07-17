@@ -253,4 +253,5 @@ private class FakeEventTripRepository : TripRepository {
     }
 
     override suspend fun events(tripId: String): List<TripEvent> = recorded.filter { it.tripId == tripId }
+    override suspend fun track(tripId: String): List<com.bruni.carscan.core.data.GpsPoint> = emptyList()
 }

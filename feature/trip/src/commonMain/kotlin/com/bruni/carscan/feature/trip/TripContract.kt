@@ -28,4 +28,12 @@ data class TripListState(
 sealed interface TripIntent {
     data class SetFilter(val filter: TripFilter) : TripIntent
     data object Refresh : TripIntent
+
+    /** A trip's card was tapped. */
+    data class OpenTrip(val tripId: String) : TripIntent
+}
+
+sealed interface TripListEffect {
+    /** Features never depend on each other: the screen asks, and `:composeApp` navigates. */
+    data class OpenTrip(val tripId: String) : TripListEffect
 }

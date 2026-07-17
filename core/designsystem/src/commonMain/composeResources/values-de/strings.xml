@@ -233,4 +233,10 @@
     <string name="trip_source_auto">Auto</string>
     <string name="trip_recording">Recording…</string>
     <string name="trip_empty_auto">No auto-detected trips yet.</string>
+
+    <string name="trip_event_harsh_accel">Starke Beschleunigung</string>
+    <string name="trip_event_harsh_brake">Starkes Bremsen</string>
+    <string name="trip_event_harsh_start">Harter Start</string>
+    <string name="trip_event_harsh_stop">Harter Stopp</string>
+    <string name="trip_event_harsh_corner">Scharfe Kurve</string>
 </resources>

@@ -6,4 +6,5 @@ import org.koin.dsl.module
 
 val tripModule: Module = module {
     viewModel { TripListViewModel(get(), get()) }
+    viewModel { TripDetailViewModel(get(), get()) }
 }

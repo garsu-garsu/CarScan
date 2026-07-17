@@ -58,6 +58,9 @@ data class TripEvent(
  */
 class SignalSeries(val signalId: String, val values: FloatArray)
 
+/** One fix on a trip's route — just enough for a map polyline point. */
+data class GpsPoint(val lat: Double, val lon: Double)
+
 interface TripRepository {
     val isRecording: Boolean
 
@@ -104,6 +107,13 @@ interface TripRepository {
 
     /** Every harsh-driving event for a trip, in ts order — the order a marker list draws in. */
     suspend fun events(tripId: String): List<TripEvent>
+
+    /**
+     * The trip's route, one point per second that had a fix — trip_gps's NaN holes (see
+     * GpsWriter) are skipped rather than kept as gaps, since a map polyline has no use for one.
+     * Empty if no GPS was ever recorded for this trip.
+     */
+    suspend fun track(tripId: String): List<GpsPoint>
 }
 
 class DefaultTripRepository(
@@ -253,6 +263,18 @@ class DefaultTripRepository(
                 lat = it.lat, lon = it.lon,
             )
         }
+
+    override suspend fun track(tripId: String): List<GpsPoint> {
+        val points = mutableListOf<GpsPoint>()
+        for (chunk in db.tripGpsQueries.selectTrip(tripId).executeAsList()) {
+            for (i in 0 until chunk.n.toInt()) {
+                val lat = chunk.lat[i]
+                val lon = chunk.lon[i]
+                if (!lat.isNaN() && !lon.isNaN()) points += GpsPoint(lat, lon)
+            }
+        }
+        return points
+    }
 }
 
 private fun Trip.toSummary() = TripSummary(

@@ -312,4 +312,51 @@ class TripRepositoryTest {
         assertEquals(37.0, events[0].lat, 1e-9)
         assertEquals(127.0, events[0].lon, 1e-9)
     }
+
+    // --- GPS track ---------------------------------------------------------------
+
+    /**
+     * TripMap's whole contract with storage: the columnar trip_gps chunks (see GpsWriter) come
+     * back flattened into one in-order list of points, and a NaN hole — a second GpsWriter never
+     * got a fix for — is skipped rather than kept as a point a polyline would have to skip itself.
+     */
+    @Test
+    fun `track flattens trip_gps chunks in order and skips NaN holes`() = runTest {
+        db.seedVehicle()
+        val repo = repo(backgroundScope)
+        val id = repo.start(VEHICLE, startedMs = 0)
+
+        db.tripGpsQueries.upsert(
+            trip_id = id, chunk_index = 0, t0_s = 0, n = 3,
+            lat = doubleArrayOf(37.0, Double.NaN, 37.002),
+            lon = doubleArrayOf(127.0, Double.NaN, 127.002),
+            alt = floatArrayOf(0f, 0f, 0f), speed = floatArrayOf(0f, 0f, 0f), bearing = floatArrayOf(0f, 0f, 0f),
+        )
+        db.tripGpsQueries.upsert(
+            trip_id = id, chunk_index = 1, t0_s = 600, n = 2,
+            lat = doubleArrayOf(37.01, 37.02),
+            lon = doubleArrayOf(127.01, 127.02),
+            alt = floatArrayOf(0f, 0f), speed = floatArrayOf(0f, 0f), bearing = floatArrayOf(0f, 0f),
+        )
+
+        assertEquals(
+            listOf(
+                GpsPoint(37.0, 127.0),
+                GpsPoint(37.002, 127.002),
+                GpsPoint(37.01, 127.01),
+                GpsPoint(37.02, 127.02),
+            ),
+            repo.track(id),
+        )
+    }
+
+    @Test
+    fun `track is empty when no GPS was ever recorded for the trip`() = runTest {
+        db.seedVehicle()
+        val repo = repo(backgroundScope)
+        val id = repo.start(VEHICLE, startedMs = 0)
+        repo.stop(endedMs = 1_000)
+
+        assertEquals(emptyList(), repo.track(id))
+    }
 }

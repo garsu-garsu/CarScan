@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 /**
  * The trip list: every recorded drive, newest first, filterable by how it was recorded.
  *
- * No one-shot events yet — this pass is list-only, no detail navigation — so the effect type is
- * [Nothing], same reasoning as `LiveViewModel`.
+ * Tapping a trip asks to open its detail via [TripListEffect.OpenTrip] — this VM never navigates
+ * itself, same reasoning as `DashboardViewModel`'s `OpenLiveChart`.
  */
 class TripListViewModel(
     private val trips: TripRepository,
     settings: SettingsRepository,
-) : MviViewModel<TripListState, TripIntent, Nothing>(TripListState(loading = true)) {
+) : MviViewModel<TripListState, TripIntent, TripListEffect>(TripListState(loading = true)) {
 
     /** Every trip, unfiltered — [TripListState.trips] is this, narrowed by [TripListState.filter]. */
     private var allRows: List<TripRow> = emptyList()
@@ -31,6 +31,7 @@ class TripListViewModel(
         when (intent) {
             is TripIntent.SetFilter -> setState { copy(filter = intent.filter, trips = allRows.filteredBy(intent.filter)) }
             TripIntent.Refresh -> load()
+            is TripIntent.OpenTrip -> emitEffect(TripListEffect.OpenTrip(intent.tripId))
         }
     }
 

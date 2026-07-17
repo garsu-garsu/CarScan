@@ -280,4 +280,11 @@
     <string name="trip_source_auto">Auto</string>
     <string name="trip_recording">Recording…</string>
     <string name="trip_empty_auto">No auto-detected trips yet.</string>
+
+    <!-- Trip detail: the map legend, and each harsh-driving marker's title. -->
+    <string name="trip_event_harsh_accel">Harsh acceleration</string>
+    <string name="trip_event_harsh_brake">Harsh braking</string>
+    <string name="trip_event_harsh_start">Harsh start</string>
+    <string name="trip_event_harsh_stop">Harsh stop</string>
+    <string name="trip_event_harsh_corner">Harsh cornering</string>
 </resources>

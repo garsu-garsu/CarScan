@@ -1,5 +1,6 @@
 package com.bruni.carscan.feature.trip
 
+import app.cash.turbine.test
 import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.ActiveTrip
 import com.bruni.carscan.core.data.SettingsRepository
@@ -99,6 +100,18 @@ class TripListViewModelTest {
         assertEquals(null, vm.state.value.trips.single().durationMs)
     }
 
+    /** Tapping a trip card never navigates itself — it asks, and `:composeApp` navigates. */
+    @Test
+    fun `opening a trip emits an OpenTrip effect with that trip's id`() = runTest {
+        trips.seed(trip("a", startedMs = 1_000, source = "OBD"))
+        val vm = viewModel()
+
+        vm.effect.test {
+            vm.onIntent(TripIntent.OpenTrip("a"))
+            assertEquals(TripListEffect.OpenTrip("a"), awaitItem())
+        }
+    }
+
     private fun trip(
         id: String,
         startedMs: Long,
@@ -144,6 +157,7 @@ private class FakeTrips : TripRepository {
     override suspend fun delete(tripId: String) = Unit
     override suspend fun recordEvent(event: com.bruni.carscan.core.data.TripEvent) = Unit
     override suspend fun events(tripId: String): List<com.bruni.carscan.core.data.TripEvent> = emptyList()
+    override suspend fun track(tripId: String): List<com.bruni.carscan.core.data.GpsPoint> = emptyList()
 }
 
 private class FakeSettings : SettingsRepository {

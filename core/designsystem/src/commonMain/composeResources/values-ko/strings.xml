@@ -218,4 +218,10 @@
     <string name="trip_source_auto">Auto</string>
     <string name="trip_recording">Recording…</string>
     <string name="trip_empty_auto">No auto-detected trips yet.</string>
+
+    <string name="trip_event_harsh_accel">급가속</string>
+    <string name="trip_event_harsh_brake">급제동</string>
+    <string name="trip_event_harsh_start">급출발</string>
+    <string name="trip_event_harsh_stop">급정지</string>
+    <string name="trip_event_harsh_corner">급회전</string>
 </resources>
