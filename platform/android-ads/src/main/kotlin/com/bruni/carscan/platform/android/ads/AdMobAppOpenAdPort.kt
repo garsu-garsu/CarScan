@@ -8,6 +8,8 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Real AdMob app-open ad. Device-tested only, same reason as [AdMobRewardedAdPort]: there is no
@@ -57,19 +59,25 @@ class AdMobAppOpenAdPort(private val context: Context) : AppOpenAdPort {
         ad = null
 
         val shown = CompletableDeferred<Boolean>()
-        loaded.fullScreenContentCallback = object : FullScreenContentCallback() {
-            override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                preload()
-                if (!shown.isCompleted) shown.complete(false)
+        // AdMob drives the ad through a WebView, and every WebView call must be on the main
+        // thread. This port is invoked from the app-wide Dispatchers.Default scope
+        // (AppOpenAdManager.onStart), so hop to Main before handing off to the SDK — otherwise
+        // show() throws "A WebView method was called on thread 'DefaultDispatcher-worker-N'".
+        withContext(Dispatchers.Main) {
+            loaded.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    preload()
+                    if (!shown.isCompleted) shown.complete(false)
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    preload()
+                    if (!shown.isCompleted) shown.complete(true)
+                }
             }
 
-            override fun onAdDismissedFullScreenContent() {
-                preload()
-                if (!shown.isCompleted) shown.complete(true)
-            }
+            loaded.show(activity)
         }
-
-        loaded.show(activity)
         return shown.await()
     }
 }
