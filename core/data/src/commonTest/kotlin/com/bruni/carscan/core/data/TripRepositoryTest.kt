@@ -208,6 +208,28 @@ class TripRepositoryTest {
         assertEquals(listOf(second, first), repo.trips(VEHICLE).map { it.id })
     }
 
+    /**
+     * DrivingDetector's path: a GPS-only trip started with no adapter connected has no vehicle
+     * to attach to. A null FK is allowed — see Trip.sq — and the trip must still show up in
+     * allTrips() (the trip-list screen filters by source, not by vehicle).
+     */
+    @Test
+    fun `starting a trip with a null vehicle and source GPS persists and lists with that source`() = runTest {
+        val repo = repo(backgroundScope)
+
+        val id = repo.start(vehicleId = null, startedMs = 0, source = "GPS")
+        repo.stop(endedMs = 1_000)
+        advanceUntilIdle()
+
+        val summary = repo.summary(id)!!
+        assertNull(summary.vehicleId)
+        assertEquals("GPS", summary.source)
+
+        val listed = repo.allTrips().single()
+        assertNull(listed.vehicleId)
+        assertEquals("GPS", listed.source)
+    }
+
     @Test
     fun `allTrips lists every vehicle's trips newest first`() = runTest {
         db.seedVehicle(VEHICLE)

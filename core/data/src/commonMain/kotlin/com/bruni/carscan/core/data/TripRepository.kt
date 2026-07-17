@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.asStateFlow
 /** A trip's summary. All values are in native/SI units: metres, millilitres, watt-hours, km/h. */
 data class TripSummary(
     val id: String,
-    val vehicleId: String,
+    /** Null for a GPS-only trip (source = "GPS") started with no vehicle to attach to. */
+    val vehicleId: String?,
     val startedMs: Long,
     val endedMs: Long?,
     val distanceM: Double,
@@ -50,8 +51,14 @@ interface TripRepository {
     /** The trip currently being recorded, if any. Null when nothing is recording. */
     val activeTrip: StateFlow<ActiveTrip?>
 
-    /** Inserts a trip and starts recording into it. Returns its (UUID) id. */
-    suspend fun start(vehicleId: String, startedMs: Long): String
+    /**
+     * Inserts a trip and starts recording into it. Returns its (UUID) id.
+     *
+     * [vehicleId] is null for a GPS-only trip DrivingDetector starts with no adapter connected —
+     * there is no vehicle to attach it to. [source] tags who recorded it ("OBD" or "GPS"); it
+     * defaults to "OBD" because every existing caller before DrivingDetector is the OBD recorder.
+     */
+    suspend fun start(vehicleId: String?, startedMs: Long, source: String = "OBD"): String
 
     /** Hands a sample to the writer. Never suspends — the poller must not block on disk. */
     fun offer(sample: SensorSample)
@@ -94,12 +101,12 @@ class DefaultTripRepository(
 
     override val isRecording: Boolean get() = writer.isRecording
 
-    override suspend fun start(vehicleId: String, startedMs: Long): String {
+    override suspend fun start(vehicleId: String?, startedMs: Long, source: String): String {
         val id = newId()
         db.tripQueries.insertOrIgnore(
             id = id, vehicle_id = vehicleId, started_ms = startedMs, ended_ms = null,
             distance_m = 0.0, fuel_ml = 0.0, energy_wh = 0.0,
-            max_speed_kmh = 0.0, idle_ms = 0, sample_count = 0, source = "OBD",
+            max_speed_kmh = 0.0, idle_ms = 0, sample_count = 0, source = source,
         )
         writer.start(id, startedMs)
         _activeTrip.value = ActiveTrip(id, startedMs)

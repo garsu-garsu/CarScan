@@ -170,6 +170,10 @@
     <string name="settings_acq_monitoring">Monitoring</string>
     <!-- Untranslated: copied from English. -->
     <string name="settings_acq_hud">HUD</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_auto_drive_detect_speed">Driving detection speed</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_background_tracking">Track trips in the background</string>
     <string name="settings_about">정보 및 라이선스</string>
     <string name="settings_vehicle">차량</string>
     <string name="settings_premium">프리미엄</string>

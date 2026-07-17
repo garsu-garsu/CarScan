@@ -186,6 +186,10 @@
     <string name="settings_acq_monitoring">Monitoring</string>
     <!-- Untranslated: copied from English. -->
     <string name="settings_acq_hud">HUD</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_auto_drive_detect_speed">Driving detection speed</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_background_tracking">Track trips in the background</string>
     <string name="settings_about">Про застосунок і ліцензії</string>
     <string name="settings_vehicle">Автомобіль</string>
     <!-- Untranslated — copied from English; see StringResourceParityTest. -->

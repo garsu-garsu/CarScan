@@ -163,6 +163,8 @@ private class FakeSettingsRepository(activeVehicleId: String?) : SettingsReposit
     override suspend fun setGaugeStyle(style: String) = Unit
     override suspend fun setAutoReconnect(enabled: Boolean) = Unit
     override suspend fun setAcquisitionSource(source: AcquisitionSource) = Unit
+    override suspend fun setAutoDriveDetectSpeedKmh(kmh: Int) = Unit
+    override suspend fun setBackgroundTracking(enabled: Boolean) = Unit
 }
 
 private class FakeVehicleRepository(vararg vehicles: Pair<String, Vehicle>) : VehicleRepository {

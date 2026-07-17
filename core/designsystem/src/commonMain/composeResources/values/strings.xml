@@ -215,6 +215,8 @@
     <string name="settings_acq_dashboard">Dashboard</string>
     <string name="settings_acq_monitoring">Monitoring</string>
     <string name="settings_acq_hud">HUD</string>
+    <string name="settings_auto_drive_detect_speed">Driving detection speed</string>
+    <string name="settings_background_tracking">Track trips in the background</string>
     <string name="settings_about">About &amp; Licenses</string>
     <string name="settings_vehicle">Vehicle</string>
     <string name="settings_premium">Premium</string>

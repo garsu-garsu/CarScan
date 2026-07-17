@@ -16,6 +16,10 @@ data class SettingsState(
     val autoReconnect: Boolean = true,
     /** Which screen's signals the poller falls back to off the dashboard — see `Settings`. */
     val acquisitionSource: AcquisitionSource = AcquisitionSource.DASHBOARD,
+    /** The GPS speed DrivingDetector treats as "driving" — see `Settings`. */
+    val autoDriveDetectSpeedKmh: Int = 20,
+    /** The opt-in for background trip tracking — see `Settings`. */
+    val backgroundTracking: Boolean = false,
 )
 
 sealed interface SettingsIntent {
@@ -27,6 +31,8 @@ sealed interface SettingsIntent {
     data class SetRecordTrips(val enabled: Boolean) : SettingsIntent
     data class SetAutoReconnect(val enabled: Boolean) : SettingsIntent
     data class SetAcquisitionSource(val source: AcquisitionSource) : SettingsIntent
+    data class SetAutoDriveDetectSpeedKmh(val kmh: Int) : SettingsIntent
+    data class SetBackgroundTracking(val enabled: Boolean) : SettingsIntent
 
     /** The About & Licenses row. Features never navigate themselves — see [SettingsEffect]. */
     data object OpenAbout : SettingsIntent

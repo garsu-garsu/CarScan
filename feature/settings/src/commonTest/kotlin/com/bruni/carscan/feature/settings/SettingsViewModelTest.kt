@@ -117,6 +117,28 @@ class SettingsViewModelTest {
         vm.state.value.acquisitionSource shouldBe AcquisitionSource.MONITORING
     }
 
+    @Test
+    fun `SetAutoDriveDetectSpeedKmh reaches the repository`() = runTest(dispatcher) {
+        val repo = FakeSettingsRepository()
+        val vm = SettingsViewModel(repo)
+
+        vm.onIntent(SettingsIntent.SetAutoDriveDetectSpeedKmh(30))
+        runCurrent()
+
+        vm.state.value.autoDriveDetectSpeedKmh shouldBe 30
+    }
+
+    @Test
+    fun `SetBackgroundTracking reaches the repository`() = runTest(dispatcher) {
+        val repo = FakeSettingsRepository()
+        val vm = SettingsViewModel(repo)
+
+        vm.onIntent(SettingsIntent.SetBackgroundTracking(true))
+        runCurrent()
+
+        vm.state.value.backgroundTracking shouldBe true
+    }
+
     /**
      * Features never call a `NavController` themselves — see `App.kt`'s KDoc. The About row is
      * no exception: it emits an effect and leaves the navigation to the composition root.

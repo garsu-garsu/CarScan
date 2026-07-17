@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.bruni.carscan.core.units.Quantity
 import com.bruni.carscan.core.units.SpeedUnit
@@ -54,6 +55,14 @@ data class Settings(
      * curated themselves.
      */
     val acquisitionSource: AcquisitionSource = AcquisitionSource.DASHBOARD,
+    /** The GPS speed DrivingDetector treats as "driving" — see its class KDoc. */
+    val autoDriveDetectSpeedKmh: Int = 20,
+    /**
+     * Opt-in for the background foreground-service tracking a later step builds. Defaults to
+     * **off**: unlike [recordTrips] and [autoReconnect], a background service is a permission and
+     * a persistent notification the user has to actively choose, not something to spring on them.
+     */
+    val backgroundTracking: Boolean = false,
 ) {
     /**
      * The speed preference, *read out of* [units].
@@ -96,6 +105,12 @@ interface SettingsRepository {
 
     /** See [Settings.acquisitionSource]. */
     suspend fun setAcquisitionSource(source: AcquisitionSource)
+
+    /** See [Settings.autoDriveDetectSpeedKmh]. */
+    suspend fun setAutoDriveDetectSpeedKmh(kmh: Int)
+
+    /** See [Settings.backgroundTracking]. */
+    suspend fun setBackgroundTracking(enabled: Boolean)
 }
 
 /** Whether the app follows the system's light/dark setting, or overrides it. */
@@ -116,6 +131,8 @@ private val THEME_MODE = stringPreferencesKey("theme_mode")
 private val GAUGE_STYLE = stringPreferencesKey("gauge_style")
 private val AUTO_RECONNECT = booleanPreferencesKey("auto_reconnect")
 private val ACQUISITION_SOURCE = stringPreferencesKey("acquisition_source")
+private val AUTO_DRIVE_SPEED = intPreferencesKey("auto_drive_speed")
+private val BACKGROUND_TRACKING = booleanPreferencesKey("background_tracking")
 
 class DefaultSettingsRepository(
     private val store: DataStore<Preferences>,
@@ -142,6 +159,8 @@ class DefaultSettingsRepository(
             acquisitionSource = prefs[ACQUISITION_SOURCE]
                 ?.let { name -> AcquisitionSource.entries.firstOrNull { it.name == name } }
                 ?: defaults.acquisitionSource,
+            autoDriveDetectSpeedKmh = prefs[AUTO_DRIVE_SPEED] ?: defaults.autoDriveDetectSpeedKmh,
+            backgroundTracking = prefs[BACKGROUND_TRACKING] ?: defaults.backgroundTracking,
         )
     }
 
@@ -196,5 +215,13 @@ class DefaultSettingsRepository(
 
     override suspend fun setAcquisitionSource(source: AcquisitionSource) {
         store.edit { it[ACQUISITION_SOURCE] = source.name }
+    }
+
+    override suspend fun setAutoDriveDetectSpeedKmh(kmh: Int) {
+        store.edit { it[AUTO_DRIVE_SPEED] = kmh }
+    }
+
+    override suspend fun setBackgroundTracking(enabled: Boolean) {
+        store.edit { it[BACKGROUND_TRACKING] = enabled }
     }
 }

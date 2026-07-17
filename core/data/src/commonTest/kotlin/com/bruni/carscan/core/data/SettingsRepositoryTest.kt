@@ -36,6 +36,8 @@ class SettingsRepositoryTest {
         assertEquals("MODERN_ARC", settings.gaugeStyle)
         assertTrue(settings.autoReconnect)
         assertEquals(AcquisitionSource.DASHBOARD, settings.acquisitionSource)
+        assertEquals(20, settings.autoDriveDetectSpeedKmh)
+        assertFalse(settings.backgroundTracking)
     }
 
     @Test
@@ -48,6 +50,8 @@ class SettingsRepositoryTest {
         repo.setGaugeStyle("CLASSIC_ANALOG")
         repo.setAutoReconnect(false)
         repo.setAcquisitionSource(AcquisitionSource.MONITORING)
+        repo.setAutoDriveDetectSpeedKmh(30)
+        repo.setBackgroundTracking(true)
 
         val settings = repo.settings.first()
         assertTrue(settings.recordTrips)
@@ -58,6 +62,8 @@ class SettingsRepositoryTest {
         assertEquals("CLASSIC_ANALOG", settings.gaugeStyle)
         assertFalse(settings.autoReconnect)
         assertEquals(AcquisitionSource.MONITORING, settings.acquisitionSource)
+        assertEquals(30, settings.autoDriveDetectSpeedKmh)
+        assertTrue(settings.backgroundTracking)
     }
 
     /** A preferences file from a newer build must not brick the app — see the theme mode test. */

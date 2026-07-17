@@ -130,7 +130,7 @@ private class FakeTrips : TripRepository {
 
     override val isRecording: Boolean get() = false
     override val activeTrip: StateFlow<ActiveTrip?> = MutableStateFlow(null).asStateFlow()
-    override suspend fun start(vehicleId: String, startedMs: Long): String = "trip-1"
+    override suspend fun start(vehicleId: String?, startedMs: Long, source: String): String = "trip-1"
     override fun offer(sample: SensorSample) = Unit
     override suspend fun stop(endedMs: Long) = Unit
     override suspend fun trips(vehicleId: String): List<TripSummary> = seeded
@@ -160,4 +160,6 @@ private class FakeSettings : SettingsRepository {
     override suspend fun setGaugeStyle(style: String) = Unit
     override suspend fun setAutoReconnect(enabled: Boolean) = Unit
     override suspend fun setAcquisitionSource(source: AcquisitionSource) = Unit
+    override suspend fun setAutoDriveDetectSpeedKmh(kmh: Int) = Unit
+    override suspend fun setBackgroundTracking(enabled: Boolean) = Unit
 }

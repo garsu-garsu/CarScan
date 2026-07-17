@@ -60,6 +60,14 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
     override suspend fun setAcquisitionSource(source: AcquisitionSource) {
         state.value = state.value.copy(acquisitionSource = source)
     }
+
+    override suspend fun setAutoDriveDetectSpeedKmh(kmh: Int) {
+        state.value = state.value.copy(autoDriveDetectSpeedKmh = kmh)
+    }
+
+    override suspend fun setBackgroundTracking(enabled: Boolean) {
+        state.value = state.value.copy(backgroundTracking = enabled)
+    }
 }
 
 /** Scriptable billing fake: hands back a fixed price map, or throws to simulate an offline store. */

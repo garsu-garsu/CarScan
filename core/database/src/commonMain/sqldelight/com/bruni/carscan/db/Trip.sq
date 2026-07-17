@@ -6,7 +6,9 @@
 -- watt-hours, km/h. Display conversion happens once, at the presentation edge.
 CREATE TABLE trip (
     id            TEXT    NOT NULL PRIMARY KEY,
-    vehicle_id    TEXT    NOT NULL REFERENCES vehicle(id) ON DELETE CASCADE,
+    -- Nullable: a GPS-only trip (source = 'GPS') that DrivingDetector started with no adapter
+    -- connected has no vehicle to attach to. NULL is not a violation of the FK.
+    vehicle_id    TEXT    REFERENCES vehicle(id) ON DELETE CASCADE,
     started_ms    INTEGER NOT NULL,
     ended_ms      INTEGER,
     distance_m    REAL    NOT NULL DEFAULT 0.0,

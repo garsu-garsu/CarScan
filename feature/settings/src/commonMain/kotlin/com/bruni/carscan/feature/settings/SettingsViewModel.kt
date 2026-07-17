@@ -27,6 +27,8 @@ class SettingsViewModel(
                     recordTrips = current.recordTrips,
                     autoReconnect = current.autoReconnect,
                     acquisitionSource = current.acquisitionSource,
+                    autoDriveDetectSpeedKmh = current.autoDriveDetectSpeedKmh,
+                    backgroundTracking = current.backgroundTracking,
                 )
             }
         }
@@ -40,6 +42,8 @@ class SettingsViewModel(
         is SettingsIntent.SetRecordTrips -> setRecordTrips(intent.enabled)
         is SettingsIntent.SetAutoReconnect -> setAutoReconnect(intent.enabled)
         is SettingsIntent.SetAcquisitionSource -> setAcquisitionSource(intent.source)
+        is SettingsIntent.SetAutoDriveDetectSpeedKmh -> setAutoDriveDetectSpeedKmh(intent.kmh)
+        is SettingsIntent.SetBackgroundTracking -> setBackgroundTracking(intent.enabled)
         SettingsIntent.OpenAbout -> emitEffect(SettingsEffect.OpenAbout)
         SettingsIntent.OpenVehicle -> emitEffect(SettingsEffect.OpenGarage)
         SettingsIntent.OpenPremium -> emitEffect(SettingsEffect.OpenPaywall)
@@ -71,5 +75,13 @@ class SettingsViewModel(
 
     private fun setAcquisitionSource(source: AcquisitionSource) {
         scope.launch { settings.setAcquisitionSource(source) }
+    }
+
+    private fun setAutoDriveDetectSpeedKmh(kmh: Int) {
+        scope.launch { settings.setAutoDriveDetectSpeedKmh(kmh) }
+    }
+
+    private fun setBackgroundTracking(enabled: Boolean) {
+        scope.launch { settings.setBackgroundTracking(enabled) }
     }
 }

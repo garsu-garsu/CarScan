@@ -49,7 +49,9 @@ import com.bruni.carscan.core.designsystem.generated.resources.settings_acq_dash
 import com.bruni.carscan.core.designsystem.generated.resources.settings_acq_hud
 import com.bruni.carscan.core.designsystem.generated.resources.settings_acq_monitoring
 import com.bruni.carscan.core.designsystem.generated.resources.settings_acquisition_source
+import com.bruni.carscan.core.designsystem.generated.resources.settings_auto_drive_detect_speed
 import com.bruni.carscan.core.designsystem.generated.resources.settings_auto_reconnect
+import com.bruni.carscan.core.designsystem.generated.resources.settings_background_tracking
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_classic_analog
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_modern_arc
@@ -65,6 +67,7 @@ import com.bruni.carscan.core.designsystem.generated.resources.settings_quantity
 import com.bruni.carscan.core.designsystem.generated.resources.settings_quantity_torque
 import com.bruni.carscan.core.designsystem.generated.resources.settings_quantity_volume
 import com.bruni.carscan.core.designsystem.generated.resources.settings_record_trips
+import com.bruni.carscan.core.designsystem.generated.resources.unit_kmh
 import com.bruni.carscan.core.designsystem.generated.resources.settings_theme
 import com.bruni.carscan.core.designsystem.generated.resources.settings_theme_dark
 import com.bruni.carscan.core.designsystem.generated.resources.settings_theme_light
@@ -229,6 +232,30 @@ fun SettingsScreen(
 
         item {
             SettingsCard {
+                // The speed DrivingDetector treats as "driving" — see its class KDoc.
+                OptionRow(
+                    icon = Icons.Rounded.Speed,
+                    label = stringResource(Res.string.settings_auto_drive_detect_speed),
+                    options = DRIVE_DETECT_SPEED_OPTIONS_KMH.map { kmh ->
+                        Option(
+                            label = "$kmh ${stringResource(Res.string.unit_kmh)}",
+                            selected = state.autoDriveDetectSpeedKmh == kmh,
+                            onClick = { onIntent(SettingsIntent.SetAutoDriveDetectSpeedKmh(kmh)) },
+                        )
+                    },
+                )
+                RowDivider()
+                SwitchRow(
+                    icon = Icons.Rounded.FiberManualRecord,
+                    label = stringResource(Res.string.settings_background_tracking),
+                    checked = state.backgroundTracking,
+                    onCheckedChange = { onIntent(SettingsIntent.SetBackgroundTracking(it)) },
+                )
+            }
+        }
+
+        item {
+            SettingsCard {
                 NavigationRow(
                     icon = Icons.Rounded.DirectionsCar,
                     label = stringResource(Res.string.settings_vehicle),
@@ -270,6 +297,9 @@ private fun IconBadge(icon: ImageVector) {
         Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
     }
 }
+
+/** The choices offered for `Settings.autoDriveDetectSpeedKmh` — see `DrivingDetector`. */
+private val DRIVE_DETECT_SPEED_OPTIONS_KMH = listOf(10, 15, 20, 25, 30, 40)
 
 private data class Option(val label: String, val selected: Boolean, val onClick: () -> Unit)
 

@@ -39,6 +39,7 @@ import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.BundledSignalsetSource
 import com.bruni.carscan.obd.BundledVehicleCatalog
 import com.bruni.carscan.obd.DefaultSignalsetProvider
+import com.bruni.carscan.obd.DrivingDetector
 import com.bruni.carscan.obd.ElmObdConnector
 import com.bruni.carscan.obd.GpsRecorder
 import com.bruni.carscan.obd.KtorSignalsetDownloader
@@ -134,6 +135,20 @@ fun appModule(): Module = module {
     // TripRepository.activeTrip, so it needs no clock or connection state of its own. The
     // LocationSource/ReverseGeocoder it consumes are bound per platform (Android: fused location).
     single { GpsRecorder(db = get(), trips = get(), location = get(), geocoder = get()) }
+
+    // Detects driving from GPS speed alone and records a GPS-only trip when nothing else is —
+    // see the class KDoc. Registered and started the same way as TripRecorder/AutoConnector.
+    single {
+        DrivingDetector(
+            location = get(),
+            source = get(),
+            connector = get(),
+            adapters = get(),
+            trips = get(),
+            settings = get(),
+            nowMs = { Clock.System.now().toEpochMilliseconds() },
+        )
+    }
 
     single { DashboardClock.system() }
 
