@@ -112,7 +112,10 @@ private fun SeriesList(
         LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             // Keyed on the MetricKey, so a row further down the list keeps its own identity (and
             // its accumulated stats) as the list is scrolled and recomposed.
-            items(state.rows, key = { it.key }) { row ->
+            // A String key, not the MetricKey itself: LazyColumn persists item keys in a Bundle
+            // for scroll-state restoration, and a MetricKey (a sealed data class) is not Bundleable
+            // — passing it crashes the moment the list is measured. toString() is stable and unique.
+            items(state.rows, key = { it.key.toString() }) { row ->
                 SeriesRow(
                     row = row,
                     bookmarked = row.key in state.bookmarked,
