@@ -70,7 +70,7 @@ enum class UnitId(val quantity: Quantity, val labelKey: String) {
  * consumption falls.
  *
  * Two consequences, and both are load-bearing:
- * - a **difference** in such a unit is meaningless, so [UnitConverter.convertDelta] refuses one;
+ * - a **difference** in such a unit is meaningless, so [DefaultUnitConverter.convertDelta] refuses one;
  * - a **mean** of such values is not the mean consumption, which is why aggregation exists only
  *   as [ConsumptionAggregate] and never as a list of readings.
  */

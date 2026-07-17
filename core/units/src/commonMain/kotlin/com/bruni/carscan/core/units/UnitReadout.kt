@@ -25,7 +25,7 @@ data class Readout(val text: String, val labelKey: String?)
 class UnitReadout(
     locale: String? = null,
     private val prefs: UnitPreferences = UnitPreferences.METRIC,
-    private val converter: UnitConverter = DefaultUnitConverter,
+    private val converter: DefaultUnitConverter = DefaultUnitConverter,
 ) {
     private val numbers = NumberFormatter(locale)
 
@@ -53,7 +53,7 @@ class UnitReadout(
     /**
      * A **difference** between two readings — a temperature rise, a speed increase.
      *
-     * Goes through [UnitConverter.convertDelta], so the affine offset is not applied: a rise of
+     * Goes through [DefaultUnitConverter.convertDelta], so the affine offset is not applied: a rise of
      * 10 °C is drawn as 18, not 50.
      */
     fun forDelta(value: Double, from: UnitId, decimals: Int): Readout {

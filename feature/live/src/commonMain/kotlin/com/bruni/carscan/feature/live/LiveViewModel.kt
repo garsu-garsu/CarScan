@@ -12,7 +12,6 @@ import com.bruni.carscan.core.model.MetricKey
 import com.bruni.carscan.core.model.SensorSample
 import com.bruni.carscan.core.model.asDoubleOrNull
 import com.bruni.carscan.core.units.DefaultUnitConverter
-import com.bruni.carscan.core.units.UnitConverter
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import com.bruni.carscan.core.units.toUnitId
@@ -33,7 +32,7 @@ class LiveViewModel(
     settings: SettingsRepository,
     private val vehicle: ActiveVehicle,
     private val poller: VisibleSignals,
-    private val converter: UnitConverter = DefaultUnitConverter,
+    private val converter: DefaultUnitConverter = DefaultUnitConverter,
     private val capacity: Int = LIVE_PLOT_DEFAULT_CAPACITY,
 ) : MviViewModel<LiveUiState, LiveIntent, Nothing>(LiveUiState()) {
 

@@ -13,7 +13,7 @@ class UnitConverterTest {
     // ---- Trap 1: temperature is affine, so a difference does not convert like a value ----
 
     /**
-     * The whole reason [UnitConverter.convertDelta] exists as a separate function. 10 °C as a
+     * The whole reason [DefaultUnitConverter.convertDelta] exists as a separate function. 10 °C as a
      * *reading* is 50 °F; 10 °C as a *difference* is 18 °F. Feeding a ΔT to the absolute
      * converter is the bug this API is shaped to make unspellable.
      */

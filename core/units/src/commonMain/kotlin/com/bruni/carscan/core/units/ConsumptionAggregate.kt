@@ -13,7 +13,7 @@ package com.bruni.carscan.core.units
  * weights are gone. Every average over any range is instead `SUM(fuel) / SUM(distance)`, which is
  * exactly this type — and trips already store `fuel_ml` and `distance_m`, so nothing is lost.
  *
- * Convert at *display* time ([UnitConverter.convert] from [UnitId.L_PER_100KM]), never before.
+ * Convert at *display* time ([DefaultUnitConverter.convert] from [UnitId.L_PER_100KM]), never before.
  */
 data class ConsumptionAggregate(val fuelLitres: Double, val distanceKm: Double) {
 

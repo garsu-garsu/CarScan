@@ -3,7 +3,7 @@ package com.bruni.carscan.core.units
 /**
  * Converts a value between two units of the same [Quantity].
  *
- * The interface has two functions rather than one because **a value and a difference do not
+ * It has two functions rather than one because **a value and a difference do not
  * convert the same way.** Temperature is affine: 10 °C is 50 °F, but a *rise* of 10 °C is a rise
  * of 18 °F. Handing a ΔT to [convert] is a real bug that ships, so the two cases are different
  * functions and the compiler makes you say which one you meant.
@@ -24,7 +24,7 @@ package com.bruni.carscan.core.units
  * the bounds in the native unit puts the needle at the wrong angle *and* prints a dial in the
  * wrong unit — a gauge that is wrong in a way that looks entirely plausible.
  */
-interface UnitConverter {
+object DefaultUnitConverter {
 
     /**
      * Converts an absolute reading — a coolant temperature, a road speed, a boost pressure.
@@ -33,7 +33,11 @@ interface UnitConverter {
      *   sensible number to return, and returning one anyway is how a dashboard ends up showing a
      *   confident lie.
      */
-    fun convert(value: Double, from: UnitId, to: UnitId): Double
+    fun convert(value: Double, from: UnitId, to: UnitId): Double {
+        requireSameQuantity(from, to)
+        if (from == to) return value
+        return fromBase(toBase(value, from), to)
+    }
 
     /**
      * Converts a **difference** between two readings — a temperature rise, a speed increase.
@@ -41,19 +45,7 @@ interface UnitConverter {
      * @throws IllegalArgumentException if either unit is an inverse ([UnitId.isInverse]): the
      *   difference of two mpg readings is not an mpg, and no conversion of it means anything.
      */
-    fun convertDelta(value: Double, from: UnitId, to: UnitId): Double
-}
-
-/** The single implementation. Stateless, so a single instance serves the whole app. */
-object DefaultUnitConverter : UnitConverter {
-
-    override fun convert(value: Double, from: UnitId, to: UnitId): Double {
-        requireSameQuantity(from, to)
-        if (from == to) return value
-        return fromBase(toBase(value, from), to)
-    }
-
-    override fun convertDelta(value: Double, from: UnitId, to: UnitId): Double {
+    fun convertDelta(value: Double, from: UnitId, to: UnitId): Double {
         requireSameQuantity(from, to)
         require(!from.isInverse && !to.isInverse) {
             "a difference in $from/$to is not a meaningful quantity: these units are inverses of " +

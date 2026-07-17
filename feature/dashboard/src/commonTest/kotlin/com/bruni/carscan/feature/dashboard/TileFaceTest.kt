@@ -1,13 +1,31 @@
 package com.bruni.carscan.feature.dashboard
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.designsystem.theme.GaugeThemes
 import io.kotest.matchers.doubles.shouldBeGreaterThan
 import io.kotest.matchers.doubles.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.test.Test
+
+/**
+ * WCAG contrast between two opaque colours, `1.0` (identical) to `21.0` (black on white).
+ *
+ * Lives in test source: it exists only to make "the needle is invisible" an assertion these tests
+ * can check, and nothing in production reads it.
+ */
+fun contrastRatio(a: Color, b: Color): Double {
+    val la = a.luminance() + 0.05
+    val lb = b.luminance() + 0.05
+    return (max(la, lb) / min(la, lb)).toDouble()
+}
+
+/** WCAG AA for large text and graphical objects. A needle below this cannot be read at a glance. */
+const val MIN_LEGIBLE_CONTRAST: Double = 3.0
 
 /**
  * The gauge nobody can see.
