@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- The trip-logging foreground service and its wake lock are declared here
-         in M7. Note for that milestone: on API 34+ a Wi-Fi-only user who denied
-         Bluetooth will hit a SecurityException from startForeground unless
-         CHANGE_NETWORK_STATE / CHANGE_WIFI_STATE are declared. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <!-- Grantable only via the OS's "Allow all the time" app-settings screen, not a runtime
+         dialog on API 30+ — see MainActivity's bluetoothPermissions() for why it is not
+         requested there. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+        <service
+            android:name=".TripTrackingService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+    </application>
 </manifest>

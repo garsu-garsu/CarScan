@@ -9,6 +9,7 @@ import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.di.carScanModules
 import com.bruni.carscan.obd.AcquisitionController
 import com.bruni.carscan.obd.AutoConnector
+import com.bruni.carscan.obd.BackgroundTrackingManager
 import com.bruni.carscan.obd.DrivingDetector
 import com.bruni.carscan.obd.GpsRecorder
 import com.bruni.carscan.obd.TripRecorder
@@ -60,9 +61,12 @@ class CarScanApplication : Application() {
 
         // Detects driving from GPS speed alone and records a GPS-only trip when nothing else
         // is — see DrivingDetector's class KDoc. Started the same way as the recorder and the
-        // auto-connector above, so it runs while the app is open; a foreground service that
-        // keeps it running in the background is a separate, later step.
+        // auto-connector above, so it runs for as long as the process is alive.
         get<DrivingDetector>().start(get<CoroutineScope>())
+
+        // Keeps the process (and, with it, DrivingDetector/GpsRecorder) alive in the background
+        // once the user opts in via Settings — see the class KDoc.
+        get<BackgroundTrackingManager>().start(get<CoroutineScope>())
 
         // Picks up a lapsed subscription or a store-side refund promptly, rather than only the
         // next time the user makes a purchase. isPremium itself needs no network call to be

@@ -54,5 +54,14 @@ private fun bluetoothPermissions(): Array<String> {
     // Foreground location for the trip route + start/arrival address. Also what a BLE scan needs
     // on API <=30, which is why it was already requested there; now it is asked for on every
     // version. A refusal is fine — GPS just records nothing, see FusedLocationSource.
-    return bt + Manifest.permission.ACCESS_FINE_LOCATION
+    var permissions = bt + Manifest.permission.ACCESS_FINE_LOCATION
+
+    // The trip-tracking foreground service's ongoing notification needs this on API 33+, or the
+    // service still runs but silently with no notification shown. Background location itself is
+    // NOT requested here — API 30+ only grants ACCESS_BACKGROUND_LOCATION via the "Allow all the
+    // time" option in the app's own OS settings screen, not a normal runtime dialog.
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        permissions += Manifest.permission.POST_NOTIFICATIONS
+    }
+    return permissions
 }

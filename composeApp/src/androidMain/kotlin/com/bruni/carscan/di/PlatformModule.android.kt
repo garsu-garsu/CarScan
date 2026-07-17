@@ -21,9 +21,13 @@ import com.bruni.carscan.core.data.LocationSource
 import com.bruni.carscan.core.data.ReverseGeocoder
 import com.bruni.carscan.core.transport.ble.BleTransportFactory
 import com.bruni.carscan.core.transport.spp.SppTransportFactory
+import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.platform.android.service.AndroidLoggingServiceController
 import com.bruni.carscan.platform.android.service.AndroidReverseGeocoder
 import com.bruni.carscan.platform.android.service.FusedLocationSource
+import com.bruni.carscan.platform.android.service.LoggingServiceController
 import com.bruni.carscan.nav.AppSettingsOpener
+import com.bruni.carscan.obd.BackgroundTrackingManager
 import com.bruni.carscan.obd.DefaultTransports
 import com.bruni.carscan.obd.Transports
 import com.bruni.carscan.platform.android.ads.AdMobAppOpenAdPort
@@ -62,6 +66,12 @@ actual fun platformModule(): Module = module {
             spp = SppTransportFactory(androidContext()),
         )
     }
+
+    // Foreground service that keeps DrivingDetector/GpsRecorder alive once the user leaves the
+    // app, and the manager that starts/stops it from the backgroundTracking setting — see both
+    // classes' KDoc.
+    single<LoggingServiceController> { AndroidLoggingServiceController(androidContext()) }
+    single { BackgroundTrackingManager(get<SettingsRepository>(), get<LoggingServiceController>()) }
 
     single<AppSettingsOpener> {
         val context = androidContext()

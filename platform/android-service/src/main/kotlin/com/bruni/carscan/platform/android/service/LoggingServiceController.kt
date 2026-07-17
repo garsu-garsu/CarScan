@@ -1,6 +1,6 @@
 package com.bruni.carscan.platform.android.service
 
-/** Placeholder. The foreground trip-logging service lands in M7. */
+/** Starts/stops the foreground service that keeps trip logging alive in the background. */
 interface LoggingServiceController {
     fun start()
     fun stop()
