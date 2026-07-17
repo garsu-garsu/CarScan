@@ -16,6 +16,12 @@ val localProperties = Properties().apply {
 }
 val admobAppId: String = localProperties.getProperty("admob.app.id") ?: TEST_ADMOB_APP_ID
 
+// The Google Maps SDK key for the trip-detail map. Unlike AdMob there is no public test key —
+// the same real key is used in every build — so it comes only from the gitignored local.properties
+// (`maps.api.key=...`). Absent, the map renders blank tiles rather than crashing; the route
+// polyline and event markers still draw.
+val mapsApiKey: String = localProperties.getProperty("maps.api.key") ?: ""
+
 android {
     namespace = "com.bruni.carscan"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -29,6 +35,8 @@ android {
 
         // Test app id by default → debug never touches the real ad account.
         manifestPlaceholders["admobAppId"] = TEST_ADMOB_APP_ID
+        // Same key in every build — see mapsApiKey above.
+        manifestPlaceholders["mapsApiKey"] = mapsApiKey
     }
 
     buildFeatures {

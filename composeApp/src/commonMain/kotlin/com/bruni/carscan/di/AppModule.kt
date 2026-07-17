@@ -42,6 +42,7 @@ import com.bruni.carscan.obd.DefaultSignalsetProvider
 import com.bruni.carscan.obd.DrivingDetector
 import com.bruni.carscan.obd.ElmObdConnector
 import com.bruni.carscan.obd.GpsRecorder
+import com.bruni.carscan.obd.HarshEventDetector
 import com.bruni.carscan.obd.KtorSignalsetDownloader
 import com.bruni.carscan.obd.SignalsetDownloader
 import com.bruni.carscan.obd.SignalsetSource
@@ -149,6 +150,11 @@ fun appModule(): Module = module {
             nowMs = { Clock.System.now().toEpochMilliseconds() },
         )
     }
+
+    // Detects harsh-driving maneuvers (hard accel/brake/corner) from the same GPS stream as
+    // GpsRecorder, plus a gyro reading for cornering — see the class KDoc. Registered and started
+    // the same way as GpsRecorder/DrivingDetector. GyroSource is bound per platform.
+    single { HarshEventDetector(location = get(), gyro = get(), trips = get()) }
 
     single { DashboardClock.system() }
 

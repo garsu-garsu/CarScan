@@ -36,6 +36,19 @@ data class TripSummary(
 /** The trip currently being recorded, if any. */
 data class ActiveTrip(val id: String, val startedMs: Long)
 
+enum class HarshEventType { HARSH_ACCEL, HARSH_BRAKE, HARSH_START, HARSH_STOP, HARSH_CORNER }
+
+/** One harsh-driving maneuver HarshEventDetector caught, at its peak severity. */
+data class TripEvent(
+    val id: String,
+    val tripId: String,
+    val tsMs: Long,
+    val type: HarshEventType,
+    val severityMs2: Double,
+    val lat: Double,
+    val lon: Double,
+)
+
 /**
  * One signal across a whole trip, stitched back out of its chunks.
  *
@@ -85,6 +98,12 @@ interface TripRepository {
     suspend fun import(trip: TripSummary, series: List<SignalSeries>)
 
     suspend fun delete(tripId: String)
+
+    /** Stores one harsh-driving maneuver, already at its debounced peak severity. */
+    suspend fun recordEvent(event: TripEvent)
+
+    /** Every harsh-driving event for a trip, in ts order — the order a marker list draws in. */
+    suspend fun events(tripId: String): List<TripEvent>
 }
 
 class DefaultTripRepository(
@@ -217,6 +236,23 @@ class DefaultTripRepository(
     override suspend fun delete(tripId: String) {
         db.tripQueries.deleteById(tripId)
     }
+
+    override suspend fun recordEvent(event: TripEvent) {
+        db.tripEventQueries.insert(
+            id = event.id, trip_id = event.tripId, ts_ms = event.tsMs,
+            type = event.type.name, severity = event.severityMs2,
+            lat = event.lat, lon = event.lon,
+        )
+    }
+
+    override suspend fun events(tripId: String): List<TripEvent> =
+        db.tripEventQueries.selectForTrip(tripId).executeAsList().map {
+            TripEvent(
+                id = it.id, tripId = it.trip_id, tsMs = it.ts_ms,
+                type = HarshEventType.valueOf(it.type), severityMs2 = it.severity,
+                lat = it.lat, lon = it.lon,
+            )
+        }
 }
 
 private fun Trip.toSummary() = TripSummary(

@@ -17,12 +17,14 @@ import com.bruni.carscan.core.monetization.EntitlementCache
 import com.bruni.carscan.core.monetization.FullScreenAdGate
 import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.core.monetization.RewardedAdPort
+import com.bruni.carscan.core.data.GyroSource
 import com.bruni.carscan.core.data.LocationSource
 import com.bruni.carscan.core.data.ReverseGeocoder
 import com.bruni.carscan.core.transport.ble.BleTransportFactory
 import com.bruni.carscan.core.transport.spp.SppTransportFactory
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.platform.android.service.AndroidLoggingServiceController
+import com.bruni.carscan.platform.android.service.AndroidGyroSource
 import com.bruni.carscan.platform.android.service.AndroidReverseGeocoder
 import com.bruni.carscan.platform.android.service.FusedLocationSource
 import com.bruni.carscan.platform.android.service.LoggingServiceController
@@ -58,6 +60,9 @@ actual fun platformModule(): Module = module {
     // lives in commonMain and knows only the ports.
     single<LocationSource> { FusedLocationSource(androidContext()) }
     single<ReverseGeocoder> { AndroidReverseGeocoder(androidContext()) }
+    // Yaw rate about the car's vertical axis, so HarshEventDetector can catch a hard corner the
+    // GPS bearing is too coarse to see. Same androidMain-only home as the GPS ports above.
+    single<GyroSource> { AndroidGyroSource(androidContext()) }
 
     // All three transports. Android is the only platform where that sentence is true.
     single<Transports> {

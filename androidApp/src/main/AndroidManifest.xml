@@ -40,6 +40,12 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="${admobAppId}" />
 
+        <!-- Google Maps SDK key for the trip-detail map — from maps.api.key in local.properties.
+             Blank when unset: the map draws no tiles but does not crash. -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${mapsApiKey}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

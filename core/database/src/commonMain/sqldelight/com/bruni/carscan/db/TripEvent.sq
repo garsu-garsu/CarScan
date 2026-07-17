@@ -1,0 +1,27 @@
+-- Harsh-driving events detected during a trip (accel/brake/corner). One row per
+-- maneuver, not per sample — HarshEventDetector debounces a sustained maneuver down
+-- to a single event at its peak severity before this is ever called.
+CREATE TABLE trip_event (
+    id       TEXT NOT NULL PRIMARY KEY,
+    trip_id  TEXT NOT NULL REFERENCES trip(id) ON DELETE CASCADE,
+    ts_ms    INTEGER NOT NULL,
+    type     TEXT NOT NULL,      -- HARSH_ACCEL / HARSH_BRAKE / HARSH_START / HARSH_STOP / HARSH_CORNER
+    severity REAL NOT NULL,      -- peak |acceleration| in m/s^2, for ranking/marker sizing
+    lat      REAL NOT NULL,
+    lon      REAL NOT NULL
+);
+
+CREATE INDEX trip_event_trip ON trip_event(trip_id, ts_ms);
+
+insert:
+INSERT INTO trip_event(id, trip_id, ts_ms, type, severity, lat, lon)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+selectForTrip:
+SELECT * FROM trip_event WHERE trip_id = ? ORDER BY ts_ms;
+
+countForTrip:
+SELECT count(*) FROM trip_event WHERE trip_id = ?;
+
+deleteForTrip:
+DELETE FROM trip_event WHERE trip_id = ?;

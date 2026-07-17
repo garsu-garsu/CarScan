@@ -12,6 +12,7 @@ import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.BackgroundTrackingManager
 import com.bruni.carscan.obd.DrivingDetector
 import com.bruni.carscan.obd.GpsRecorder
+import com.bruni.carscan.obd.HarshEventDetector
 import com.bruni.carscan.obd.TripRecorder
 import com.bruni.carscan.platform.android.ads.ActivityTracker
 import com.bruni.carscan.platform.android.ads.AdsInitializer
@@ -63,6 +64,10 @@ class CarScanApplication : Application() {
         // is — see DrivingDetector's class KDoc. Started the same way as the recorder and the
         // auto-connector above, so it runs for as long as the process is alive.
         get<DrivingDetector>().start(get<CoroutineScope>())
+
+        // Detects harsh-driving maneuvers (hard accel/brake/corner) off the same GPS stream as
+        // the recorder above — see HarshEventDetector's class KDoc. Started the same way.
+        get<HarshEventDetector>().start(get<CoroutineScope>())
 
         // Keeps the process (and, with it, DrivingDetector/GpsRecorder) alive in the background
         // once the user opts in via Settings — see the class KDoc.

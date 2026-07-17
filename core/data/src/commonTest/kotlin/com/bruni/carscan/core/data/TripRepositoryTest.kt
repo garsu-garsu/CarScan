@@ -284,4 +284,32 @@ class TripRepositoryTest {
         assertEquals(127.0276, summary.endLon)
         assertEquals("Gangnam Station", summary.endAddress)
     }
+
+    // --- Harsh-driving events ----------------------------------------------------
+
+    /**
+     * HarshEventDetector's whole contract with storage: record one, read it back for
+     * its trip, in timestamp order — a marker list is drawn chronologically, not by
+     * insertion order (which a debounce window can reorder across types).
+     */
+    @Test
+    fun `recorded events read back for their trip, in ts order`() = runTest {
+        db.seedVehicle()
+        val repo = repo(backgroundScope)
+        val id = repo.start(VEHICLE, startedMs = 0)
+
+        repo.recordEvent(
+            TripEvent(id = "e2", tripId = id, tsMs = 2_000, type = HarshEventType.HARSH_BRAKE, severityMs2 = 4.0, lat = 37.1, lon = 127.1),
+        )
+        repo.recordEvent(
+            TripEvent(id = "e1", tripId = id, tsMs = 1_000, type = HarshEventType.HARSH_ACCEL, severityMs2 = 3.2, lat = 37.0, lon = 127.0),
+        )
+
+        val events = repo.events(id)
+        assertEquals(listOf("e1", "e2"), events.map { it.id })
+        assertEquals(HarshEventType.HARSH_ACCEL, events[0].type)
+        assertEquals(3.2, events[0].severityMs2, 1e-9)
+        assertEquals(37.0, events[0].lat, 1e-9)
+        assertEquals(127.0, events[0].lon, 1e-9)
+    }
 }
