@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import com.bruni.carscan.core.data.AcquisitionBaseline
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.AdapterRepository
 import com.bruni.carscan.core.data.DashboardLayoutRepository
@@ -26,6 +27,7 @@ import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.LiveViewModel
 import com.bruni.carscan.feature.live.liveModule
 import com.bruni.carscan.nav.AppSettingsOpener
+import com.bruni.carscan.obd.AcquisitionController
 import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.ElmObdConnector
 import com.bruni.carscan.obd.FakeTransports
@@ -81,6 +83,8 @@ class KoinGraphTest {
         koin.get<VehicleSessionRepository>() shouldNotBe null
         koin.get<TripRecorder>() shouldNotBe null
         koin.get<AutoConnector>() shouldNotBe null
+        koin.get<AcquisitionBaseline>() shouldNotBe null
+        koin.get<AcquisitionController>() shouldNotBe null
     }
 
     /**

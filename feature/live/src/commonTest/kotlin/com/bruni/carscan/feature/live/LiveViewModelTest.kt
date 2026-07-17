@@ -1,6 +1,7 @@
 package com.bruni.carscan.feature.live
 
 import app.cash.turbine.test
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.data.Settings
@@ -367,6 +368,7 @@ private class FakeSettings : SettingsRepository {
     override suspend fun setThemeMode(mode: ThemeMode) = Unit
     override suspend fun setGaugeStyle(style: String) = Unit
     override suspend fun setAutoReconnect(enabled: Boolean) = Unit
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) = Unit
 }
 
 private class FakeTrips : TripRepository {

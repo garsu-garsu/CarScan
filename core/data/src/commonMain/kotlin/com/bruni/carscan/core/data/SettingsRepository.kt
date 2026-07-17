@@ -48,6 +48,12 @@ data class Settings(
      * first one the user remembered to configure.
      */
     val autoReconnect: Boolean = true,
+    /**
+     * Which screen's signals the poller keeps polling while no data screen is in the foreground
+     * — see `AcquisitionController`. Defaults to the dashboard, since that is the layout the user
+     * curated themselves.
+     */
+    val acquisitionSource: AcquisitionSource = AcquisitionSource.DASHBOARD,
 ) {
     /**
      * The speed preference, *read out of* [units].
@@ -87,10 +93,20 @@ interface SettingsRepository {
     /** [style] is the stable key described on [Settings.gaugeStyle]. */
     suspend fun setGaugeStyle(style: String)
     suspend fun setAutoReconnect(enabled: Boolean)
+
+    /** See [Settings.acquisitionSource]. */
+    suspend fun setAcquisitionSource(source: AcquisitionSource)
 }
 
 /** Whether the app follows the system's light/dark setting, or overrides it. */
 enum class ThemeMode { SYSTEM, LIGHT, DARK }
+
+/**
+ * Which screen's signals the poller falls back to while the user is on a non-communicating page
+ * (home, trips, settings, connect) — see `AcquisitionController` in `:composeApp`. A data screen
+ * that is actually in the foreground always wins; this only matters the rest of the time.
+ */
+enum class AcquisitionSource { DASHBOARD, MONITORING, HUD }
 
 private val RECORD_TRIPS = booleanPreferencesKey("record_trips")
 private val UNIT_PREFS = stringPreferencesKey("unit_prefs")
@@ -99,6 +115,7 @@ private val ACTIVE_VEHICLE = stringPreferencesKey("active_vehicle_id")
 private val THEME_MODE = stringPreferencesKey("theme_mode")
 private val GAUGE_STYLE = stringPreferencesKey("gauge_style")
 private val AUTO_RECONNECT = booleanPreferencesKey("auto_reconnect")
+private val ACQUISITION_SOURCE = stringPreferencesKey("acquisition_source")
 
 class DefaultSettingsRepository(
     private val store: DataStore<Preferences>,
@@ -121,6 +138,10 @@ class DefaultSettingsRepository(
                 ?: defaults.themeMode,
             gaugeStyle = prefs[GAUGE_STYLE] ?: defaults.gaugeStyle,
             autoReconnect = prefs[AUTO_RECONNECT] ?: defaults.autoReconnect,
+            // Same fallback-to-default reasoning as themeMode above.
+            acquisitionSource = prefs[ACQUISITION_SOURCE]
+                ?.let { name -> AcquisitionSource.entries.firstOrNull { it.name == name } }
+                ?: defaults.acquisitionSource,
         )
     }
 
@@ -171,5 +192,9 @@ class DefaultSettingsRepository(
 
     override suspend fun setAutoReconnect(enabled: Boolean) {
         store.edit { it[AUTO_RECONNECT] = enabled }
+    }
+
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) {
+        store.edit { it[ACQUISITION_SOURCE] = source.name }
     }
 }

@@ -2,6 +2,7 @@ package com.bruni.carscan.feature.dashboard
 
 import app.cash.turbine.test
 import com.bruni.carscan.core.data.DashboardLayout
+import com.bruni.carscan.core.data.DefaultAcquisitionBaseline
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
 import com.bruni.carscan.core.model.DecodedValue
 import com.bruni.carscan.core.model.MetricKey
@@ -101,6 +102,7 @@ class DashboardViewModelTest {
     private val settings = FakeSettings()
     private val vehicle = FakeActiveVehicle(effective)
     private val poller = FakeVisibleSignals()
+    private val baseline = DefaultAcquisitionBaseline()
     private val clock = FakeClock()
 
     /** Driven by hand: no test here depends on a wall clock or on the real ticker. */
@@ -120,6 +122,7 @@ class DashboardViewModelTest {
         settings = settings,
         vehicle = vehicle,
         visibility = poller,
+        baseline = baseline,
         clock = clock,
         ticks = ticks,
     ).also { advanceUntilIdle() }
@@ -437,6 +440,7 @@ class DashboardViewModelTest {
         settings = settings,
         vehicle = vehicle,
         visibility = poller,
+        baseline = baseline,
         clock = clock,
         ticks = ticks,
     ).also { advanceUntilIdle() }
@@ -484,5 +488,43 @@ class DashboardViewModelTest {
     @Test
     fun `restoring an existing but empty layout does not reseed it`() = runTest(dispatcher) {
         viewModel().state.value.tiles shouldBe emptyList()
+    }
+
+    // --- the acquisition baseline mirrors the dashboard's tiles -----------------
+
+    /**
+     * `AcquisitionController` (in `:composeApp`) needs to know what the dashboard would poll even
+     * while nobody is looking at it, and it cannot depend on `:feature:dashboard` to ask. So the
+     * dashboard writes its own tile keys out to the shared [AcquisitionBaseline] port whenever the
+     * layout changes — restored, or edited.
+     */
+    @Test
+    fun `restoring a layout publishes its tile keys to the acquisition baseline`() =
+        runTest(dispatcher) {
+            val freshLayouts = FakeLayouts()
+            freshViewModel(freshLayouts)
+
+            baseline.dashboardSignals.value shouldBe setOf(
+                MetricKey.Metric(SuggestedMetric.SPEED),
+                MetricKey.Signal("RPM"),
+                MetricKey.Metric(SuggestedMetric.ENGINE_COOLANT_TEMPERATURE),
+                MetricKey.Metric(SuggestedMetric.ENGINE_LOAD),
+                MetricKey.Signal("IAT"),
+                MetricKey.Metric(SuggestedMetric.THROTTLE_POSITION),
+            )
+        }
+
+    @Test
+    fun `adding and removing a tile updates the acquisition baseline`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.onIntent(DashboardIntent.Add(SPEED_KEY))
+        advanceUntilIdle()
+
+        baseline.dashboardSignals.value shouldBe setOf(SPEED_KEY)
+
+        vm.onIntent(DashboardIntent.Remove(vm.state.value.tiles.single().id))
+        advanceUntilIdle()
+
+        baseline.dashboardSignals.value shouldBe emptySet()
     }
 }

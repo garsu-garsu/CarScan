@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ShowChart
 import androidx.compose.material.icons.rounded.Bluetooth
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.DarkMode
@@ -39,10 +40,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.allStringResources
 import com.bruni.carscan.core.designsystem.generated.resources.settings_about
+import com.bruni.carscan.core.designsystem.generated.resources.settings_acq_dashboard
+import com.bruni.carscan.core.designsystem.generated.resources.settings_acq_hud
+import com.bruni.carscan.core.designsystem.generated.resources.settings_acq_monitoring
+import com.bruni.carscan.core.designsystem.generated.resources.settings_acquisition_source
 import com.bruni.carscan.core.designsystem.generated.resources.settings_auto_reconnect
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_classic_analog
@@ -183,6 +189,40 @@ fun SettingsScreen(
                     label = stringResource(Res.string.settings_auto_reconnect),
                     checked = state.autoReconnect,
                     onCheckedChange = { onIntent(SettingsIntent.SetAutoReconnect(it)) },
+                )
+            }
+        }
+
+        item {
+            SettingsCard {
+                // Keeps the poller — and trip recording with it — alive on this screen's signals
+                // once the user navigates off it. See AcquisitionController.
+                OptionRow(
+                    icon = Icons.AutoMirrored.Rounded.ShowChart,
+                    label = stringResource(Res.string.settings_acquisition_source),
+                    options = listOf(
+                        Option(
+                            label = stringResource(Res.string.settings_acq_dashboard),
+                            selected = state.acquisitionSource == AcquisitionSource.DASHBOARD,
+                            onClick = {
+                                onIntent(SettingsIntent.SetAcquisitionSource(AcquisitionSource.DASHBOARD))
+                            },
+                        ),
+                        Option(
+                            label = stringResource(Res.string.settings_acq_monitoring),
+                            selected = state.acquisitionSource == AcquisitionSource.MONITORING,
+                            onClick = {
+                                onIntent(SettingsIntent.SetAcquisitionSource(AcquisitionSource.MONITORING))
+                            },
+                        ),
+                        Option(
+                            label = stringResource(Res.string.settings_acq_hud),
+                            selected = state.acquisitionSource == AcquisitionSource.HUD,
+                            onClick = {
+                                onIntent(SettingsIntent.SetAcquisitionSource(AcquisitionSource.HUD))
+                            },
+                        ),
+                    ),
                 )
             }
         }

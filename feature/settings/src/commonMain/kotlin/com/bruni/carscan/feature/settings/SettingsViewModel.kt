@@ -1,6 +1,7 @@
 package com.bruni.carscan.feature.settings
 
 import com.bruni.carscan.core.common.mvi.MviViewModel
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.units.Quantity
@@ -25,6 +26,7 @@ class SettingsViewModel(
                     keepScreenOn = current.keepScreenOn,
                     recordTrips = current.recordTrips,
                     autoReconnect = current.autoReconnect,
+                    acquisitionSource = current.acquisitionSource,
                 )
             }
         }
@@ -37,6 +39,7 @@ class SettingsViewModel(
         is SettingsIntent.SetKeepScreenOn -> setKeepScreenOn(intent.enabled)
         is SettingsIntent.SetRecordTrips -> setRecordTrips(intent.enabled)
         is SettingsIntent.SetAutoReconnect -> setAutoReconnect(intent.enabled)
+        is SettingsIntent.SetAcquisitionSource -> setAcquisitionSource(intent.source)
         SettingsIntent.OpenAbout -> emitEffect(SettingsEffect.OpenAbout)
         SettingsIntent.OpenVehicle -> emitEffect(SettingsEffect.OpenGarage)
         SettingsIntent.OpenPremium -> emitEffect(SettingsEffect.OpenPaywall)
@@ -64,5 +67,9 @@ class SettingsViewModel(
 
     private fun setAutoReconnect(enabled: Boolean) {
         scope.launch { settings.setAutoReconnect(enabled) }
+    }
+
+    private fun setAcquisitionSource(source: AcquisitionSource) {
+        scope.launch { settings.setAcquisitionSource(source) }
     }
 }

@@ -1,5 +1,6 @@
 package com.bruni.carscan.obd
 
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.SignalsetAvailability
@@ -161,6 +162,7 @@ private class FakeSettingsRepository(activeVehicleId: String?) : SettingsReposit
     override suspend fun setThemeMode(mode: ThemeMode) = Unit
     override suspend fun setGaugeStyle(style: String) = Unit
     override suspend fun setAutoReconnect(enabled: Boolean) = Unit
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) = Unit
 }
 
 private class FakeVehicleRepository(vararg vehicles: Pair<String, Vehicle>) : VehicleRepository {

@@ -1,6 +1,7 @@
 package com.bruni.carscan.feature.dashboard
 
 import com.bruni.carscan.core.common.mvi.MviViewModel
+import com.bruni.carscan.core.data.AcquisitionBaseline
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.DashboardLayout
 import com.bruni.carscan.core.data.DashboardLayoutRepository
@@ -84,6 +85,12 @@ class DashboardViewModel(
     private val settings: SettingsRepository,
     private val vehicle: ActiveVehicle,
     private val visibility: VisibleSignals,
+    /**
+     * Where this dashboard's tile keys are published for `AcquisitionController` (in
+     * `:composeApp`) to poll while nobody is actually looking at this screen — see
+     * [publishBaseline].
+     */
+    private val baseline: AcquisitionBaseline,
     private val clock: DashboardClock,
     private val ticks: Flow<Long> = tickerFlow(clock),
 ) : MviViewModel<DashboardState, DashboardIntent, DashboardEffect>(DashboardState()) {
@@ -219,7 +226,18 @@ class DashboardViewModel(
 
     private fun edit(change: List<DashboardTile>.() -> List<DashboardTile>) {
         tiles.value = tiles.value.change()
+        publishBaseline()
         scope.launch { persist() }
+    }
+
+    /**
+     * Tells [AcquisitionBaseline] what this dashboard would poll, so `AcquisitionController` can
+     * fall back to it while no data screen is in the foreground — see [VisibleSignals] for why the
+     * poller needs to be told this at all. Called everywhere [tiles] changes: here, and in
+     * [restore].
+     */
+    private fun publishBaseline() {
+        baseline.setDashboardSignals(tiles.value.map { it.key }.toSet())
     }
 
     private suspend fun persist() {
@@ -250,6 +268,7 @@ class DashboardViewModel(
             layoutJson = LayoutCodec.encode(defaultTiles()),
         )
         tiles.value = LayoutCodec.decode(layout!!.layoutJson)
+        publishBaseline()
         if (existing == null) layouts.save(layout!!)
     }
 

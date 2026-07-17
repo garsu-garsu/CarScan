@@ -1,5 +1,6 @@
 package com.bruni.carscan.feature.hud
 
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.data.Settings
@@ -81,6 +82,10 @@ class FakeSettings(initial: Settings = Settings()) : SettingsRepository {
 
     override suspend fun setAutoReconnect(enabled: Boolean) {
         state.value = state.value.copy(autoReconnect = enabled)
+    }
+
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) {
+        state.value = state.value.copy(acquisitionSource = source)
     }
 }
 

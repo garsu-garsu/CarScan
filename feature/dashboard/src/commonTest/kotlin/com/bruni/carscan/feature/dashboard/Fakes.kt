@@ -1,5 +1,6 @@
 package com.bruni.carscan.feature.dashboard
 
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.DashboardLayout
 import com.bruni.carscan.core.data.DashboardLayoutRepository
@@ -98,6 +99,10 @@ class FakeSettings(initial: Settings = Settings(activeVehicleId = VEHICLE_ID)) :
 
     override suspend fun setAutoReconnect(enabled: Boolean) {
         state.value = state.value.copy(autoReconnect = enabled)
+    }
+
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) {
+        state.value = state.value.copy(acquisitionSource = source)
     }
 }
 

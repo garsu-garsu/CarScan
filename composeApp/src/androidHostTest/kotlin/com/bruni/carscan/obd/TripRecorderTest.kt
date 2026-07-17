@@ -4,6 +4,7 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlPreparedStatement
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.ConnectionState
 import com.bruni.carscan.core.data.DefaultTripRepository
 import com.bruni.carscan.core.data.SampleSource
@@ -217,4 +218,5 @@ private class FakeSettings(recordTrips: Boolean) : SettingsRepository {
     override suspend fun setThemeMode(mode: ThemeMode) = Unit
     override suspend fun setGaugeStyle(style: String) = Unit
     override suspend fun setAutoReconnect(enabled: Boolean) = Unit
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) = Unit
 }

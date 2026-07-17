@@ -1,5 +1,6 @@
 package com.bruni.carscan.obd
 
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.AdapterQuirks
 import com.bruni.carscan.core.data.AdapterRepository
 import com.bruni.carscan.core.data.ConnectFailure
@@ -178,4 +179,5 @@ private class FakeAutoSettings(autoReconnect: Boolean) : SettingsRepository {
     override suspend fun setThemeMode(mode: ThemeMode) = Unit
     override suspend fun setGaugeStyle(style: String) = Unit
     override suspend fun setAutoReconnect(enabled: Boolean) = Unit
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) = Unit
 }

@@ -159,6 +159,14 @@
     <string name="settings_keep_screen_on">화면 켜짐 유지</string>
     <string name="settings_record_trips">주행 기록 저장</string>
     <string name="settings_auto_reconnect">Auto-reconnect to last scanner</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acquisition_source">Background data source</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acq_dashboard">Dashboard</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acq_monitoring">Monitoring</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acq_hud">HUD</string>
     <string name="settings_about">정보 및 라이선스</string>
     <string name="settings_vehicle">차량</string>
     <string name="settings_premium">프리미엄</string>

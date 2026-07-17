@@ -1,8 +1,10 @@
 package com.bruni.carscan.di
 
+import com.bruni.carscan.core.data.AcquisitionBaseline
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.AdapterRepository
 import com.bruni.carscan.core.data.DashboardLayoutRepository
+import com.bruni.carscan.core.data.DefaultAcquisitionBaseline
 import com.bruni.carscan.core.data.DefaultAdapterRepository
 import com.bruni.carscan.core.data.DefaultDashboardLayoutRepository
 import com.bruni.carscan.core.data.DefaultSettingsRepository
@@ -29,6 +31,7 @@ import com.bruni.carscan.feature.dashboard.DashboardClock
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.liveModule
 import com.bruni.carscan.feature.settings.settingsModule
+import com.bruni.carscan.obd.AcquisitionController
 import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.BundledSignalsetSource
 import com.bruni.carscan.obd.BundledVehicleCatalog
@@ -99,6 +102,13 @@ fun appModule(): Module = module {
 
     single<VehicleSessionRepository> { DefaultVehicleSessionRepository(get(), get()) }
 
+    single<AcquisitionBaseline> { DefaultAcquisitionBaseline() }
+
+    // Keeps the poller on the selected acquisition source's signals while no data screen is in
+    // the foreground — see the class KDoc. Registered alongside TripRecorder/AutoConnector
+    // because it is started the same way, from CarScanApplication, at launch.
+    single { AcquisitionController(settings = get(), baseline = get(), visibility = get()) }
+
     single {
         TripRecorder(
             source = get(),
@@ -125,7 +135,7 @@ fun appModule(): Module = module {
     // Spelled out rather than `viewModelOf(::DashboardViewModel)`, for the reason :feature:live
     // gives: the reflective form resolves *every* constructor parameter and ignores Kotlin's
     // defaults, so it would demand a binding for the ticker flow and fail at runtime.
-    viewModel { DashboardViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { DashboardViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }
 
 /** The whole graph: this module, the platform's, and each feature's. */

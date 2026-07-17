@@ -35,6 +35,7 @@ class SettingsRepositoryTest {
         assertEquals(ThemeMode.SYSTEM, settings.themeMode)
         assertEquals("MODERN_ARC", settings.gaugeStyle)
         assertTrue(settings.autoReconnect)
+        assertEquals(AcquisitionSource.DASHBOARD, settings.acquisitionSource)
     }
 
     @Test
@@ -46,6 +47,7 @@ class SettingsRepositoryTest {
         repo.setThemeMode(ThemeMode.DARK)
         repo.setGaugeStyle("CLASSIC_ANALOG")
         repo.setAutoReconnect(false)
+        repo.setAcquisitionSource(AcquisitionSource.MONITORING)
 
         val settings = repo.settings.first()
         assertTrue(settings.recordTrips)
@@ -55,7 +57,16 @@ class SettingsRepositoryTest {
         assertEquals(ThemeMode.DARK, settings.themeMode)
         assertEquals("CLASSIC_ANALOG", settings.gaugeStyle)
         assertFalse(settings.autoReconnect)
+        assertEquals(AcquisitionSource.MONITORING, settings.acquisitionSource)
     }
+
+    /** A preferences file from a newer build must not brick the app — see the theme mode test. */
+    @Test
+    fun `an unrecognised stored acquisition source falls back to the default instead of throwing`() =
+        runTest {
+            store.edit { it[stringPreferencesKey("acquisition_source")] = "COCKPIT" }
+            assertEquals(AcquisitionSource.DASHBOARD, repo.settings.first().acquisitionSource)
+        }
 
     /** A preferences file from a newer build must not brick the app — see the unit test below. */
     @Test

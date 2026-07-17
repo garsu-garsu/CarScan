@@ -7,6 +7,7 @@ import com.bruni.carscan.core.monetization.Entitlements
 import com.bruni.carscan.core.monetization.FullScreenAdGate
 import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.di.carScanModules
+import com.bruni.carscan.obd.AcquisitionController
 import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.GpsRecorder
 import com.bruni.carscan.obd.TripRecorder
@@ -45,6 +46,11 @@ class CarScanApplication : Application() {
         // AutoConnector's KDoc. Started the same way as the recorder above: before anything on
         // screen could have raced it into a manual connect.
         get<AutoConnector>().start(get<CoroutineScope>())
+
+        // Keeps the poller (and, with it, trip recording) alive once the user leaves the
+        // dashboard — see the class KDoc. Started the same way as the recorder and the
+        // auto-connector above.
+        get<AcquisitionController>().start(get<CoroutineScope>())
 
         // Records the trip's GPS route + start/arrival address. Like the recorder above it just
         // watches TripRepository.activeTrip until a trip actually starts, so it costs nothing on a

@@ -1,5 +1,6 @@
 package com.bruni.carscan.feature.settings
 
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
@@ -54,6 +55,10 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
 
     override suspend fun setAutoReconnect(enabled: Boolean) {
         state.value = state.value.copy(autoReconnect = enabled)
+    }
+
+    override suspend fun setAcquisitionSource(source: AcquisitionSource) {
+        state.value = state.value.copy(acquisitionSource = source)
     }
 }
 

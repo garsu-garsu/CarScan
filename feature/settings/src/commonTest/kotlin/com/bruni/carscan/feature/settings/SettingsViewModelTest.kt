@@ -1,6 +1,7 @@
 package com.bruni.carscan.feature.settings
 
 import app.cash.turbine.test
+import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.units.Quantity
@@ -103,6 +104,17 @@ class SettingsViewModelTest {
         runCurrent()
 
         vm.state.value.autoReconnect shouldBe false
+    }
+
+    @Test
+    fun `SetAcquisitionSource reaches the repository`() = runTest(dispatcher) {
+        val repo = FakeSettingsRepository()
+        val vm = SettingsViewModel(repo)
+
+        vm.onIntent(SettingsIntent.SetAcquisitionSource(AcquisitionSource.MONITORING))
+        runCurrent()
+
+        vm.state.value.acquisitionSource shouldBe AcquisitionSource.MONITORING
     }
 
     /**

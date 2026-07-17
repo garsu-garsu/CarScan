@@ -175,6 +175,14 @@
     <string name="settings_keep_screen_on">Не выключать экран</string>
     <string name="settings_record_trips">Записывать поездки</string>
     <string name="settings_auto_reconnect">Auto-reconnect to last scanner</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acquisition_source">Background data source</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acq_dashboard">Dashboard</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acq_monitoring">Monitoring</string>
+    <!-- Untranslated: copied from English. -->
+    <string name="settings_acq_hud">HUD</string>
     <string name="settings_about">О приложении и лицензии</string>
     <string name="settings_vehicle">Автомобиль</string>
     <!-- Untranslated — copied from English; see StringResourceParityTest. -->

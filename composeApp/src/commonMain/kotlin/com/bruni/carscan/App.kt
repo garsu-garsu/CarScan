@@ -61,6 +61,8 @@ import com.bruni.carscan.nav.CarScanTab
 import com.bruni.carscan.nav.Route
 import com.bruni.carscan.nav.decodeMetricKeyRoute
 import com.bruni.carscan.nav.encodeForRoute
+import com.bruni.carscan.obd.AcquisitionController
+import com.bruni.carscan.obd.AcquisitionScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -92,6 +94,10 @@ fun App(bannerAdUnitId: String? = null) {
 
     val interstitialAd: InterstitialAdPort = koinInject()
     val adGate: FullScreenAdGate = koinInject()
+
+    // Keeps the poller alive on whichever data screen the user chose as their acquisition source,
+    // once they navigate away from it — see AcquisitionController's KDoc.
+    val acquisitionController: AcquisitionController = koinInject()
 
     val darkTheme = when (settings.themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
@@ -129,6 +135,20 @@ fun App(bannerAdUnitId: String? = null) {
                     // must not burn a session slot or reset the spacing interval.
                     if (interstitialAd.show()) adGate.record()
                 }
+            }
+
+            // Tells AcquisitionController which data screen, if any, is actually in the
+            // foreground — see its KDoc. Every other destination (home, trips, settings, connect,
+            // garage, paywall, about, dtc) hands acquisition back to the chosen background source.
+            LaunchedEffect(entry) {
+                acquisitionController.setForeground(
+                    when {
+                        entry?.destination?.hasRoute(Route.Dashboard::class) == true -> AcquisitionScreen.DASHBOARD
+                        entry?.destination?.hasRoute(Route.Live::class) == true -> AcquisitionScreen.MONITORING
+                        entry?.destination?.hasRoute(Route.Hud::class) == true -> AcquisitionScreen.HUD
+                        else -> null
+                    },
+                )
             }
 
             // Connect is a thing you finish, not a place you go: it is the start destination, and it
