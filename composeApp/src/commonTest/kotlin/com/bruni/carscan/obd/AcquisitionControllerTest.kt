@@ -1,6 +1,7 @@
 package com.bruni.carscan.obd
 
 import com.bruni.carscan.core.data.AcquisitionSource
+import com.bruni.carscan.core.data.BookmarkRepository
 import com.bruni.carscan.core.data.DefaultAcquisitionBaseline
 import com.bruni.carscan.core.data.STANDARD_CORE_SIGNALS
 import com.bruni.carscan.core.data.Settings
@@ -35,7 +36,7 @@ class AcquisitionControllerTest {
         val settings = FakeAcquisitionSettings(AcquisitionSource.DASHBOARD)
         val baseline = DefaultAcquisitionBaseline().apply { setDashboardSignals(setOf(speedKey)) }
         val visibility = FakeVisibleSignals()
-        val controller = AcquisitionController(settings, baseline, visibility)
+        val controller = AcquisitionController(settings, baseline, visibility, FakeBookmarkRepository())
 
         controller.setForeground(null)
         controller.start(backgroundScope)
@@ -50,7 +51,7 @@ class AcquisitionControllerTest {
             val settings = FakeAcquisitionSettings(AcquisitionSource.DASHBOARD)
             val baseline = DefaultAcquisitionBaseline()   // never told about any tiles
             val visibility = FakeVisibleSignals()
-            val controller = AcquisitionController(settings, baseline, visibility)
+            val controller = AcquisitionController(settings, baseline, visibility, FakeBookmarkRepository())
 
             controller.setForeground(null)
             controller.start(backgroundScope)
@@ -60,17 +61,53 @@ class AcquisitionControllerTest {
         }
 
     @Test
-    fun `the monitoring source polls the standard core signals`() = runTest {
+    fun `the monitoring source polls exactly the bookmarked signals`() = runTest {
         val settings = FakeAcquisitionSettings(AcquisitionSource.MONITORING)
         val baseline = DefaultAcquisitionBaseline().apply { setDashboardSignals(setOf(speedKey)) }
         val visibility = FakeVisibleSignals()
-        val controller = AcquisitionController(settings, baseline, visibility)
+        val rpmKey = MetricKey.Signal("RPM")
+        val bookmarks = FakeBookmarkRepository(setOf(speedKey, rpmKey))
+        val controller = AcquisitionController(settings, baseline, visibility, bookmarks)
 
         controller.setForeground(null)
         controller.start(backgroundScope)
         runCurrent()
 
+        visibility.calls.last() shouldBe setOf(speedKey, rpmKey)
+    }
+
+    @Test
+    fun `the monitoring source falls back to the standard core signals when there are no bookmarks`() =
+        runTest {
+            val settings = FakeAcquisitionSettings(AcquisitionSource.MONITORING)
+            val baseline = DefaultAcquisitionBaseline().apply { setDashboardSignals(setOf(speedKey)) }
+            val visibility = FakeVisibleSignals()
+            val controller = AcquisitionController(settings, baseline, visibility, FakeBookmarkRepository())
+
+            controller.setForeground(null)
+            controller.start(backgroundScope)
+            runCurrent()
+
+            visibility.calls.last() shouldBe STANDARD_CORE_SIGNALS
+        }
+
+    @Test
+    fun `adding a bookmark while on a non-data screen re-drives setVisible`() = runTest {
+        val settings = FakeAcquisitionSettings(AcquisitionSource.MONITORING)
+        val baseline = DefaultAcquisitionBaseline()
+        val visibility = FakeVisibleSignals()
+        val bookmarks = FakeBookmarkRepository()
+        val controller = AcquisitionController(settings, baseline, visibility, bookmarks)
+
+        controller.setForeground(null)
+        controller.start(backgroundScope)
+        runCurrent()
         visibility.calls.last() shouldBe STANDARD_CORE_SIGNALS
+
+        bookmarks.setBookmarks(setOf(speedKey))
+        runCurrent()
+
+        visibility.calls.last() shouldBe setOf(speedKey)
     }
 
     /**
@@ -83,7 +120,7 @@ class AcquisitionControllerTest {
         val settings = FakeAcquisitionSettings(AcquisitionSource.DASHBOARD)
         val baseline = DefaultAcquisitionBaseline().apply { setDashboardSignals(setOf(speedKey)) }
         val visibility = FakeVisibleSignals()
-        val controller = AcquisitionController(settings, baseline, visibility)
+        val controller = AcquisitionController(settings, baseline, visibility, FakeBookmarkRepository())
 
         controller.setForeground(AcquisitionScreen.DASHBOARD)
         controller.start(backgroundScope)
@@ -97,7 +134,7 @@ class AcquisitionControllerTest {
         val settings = FakeAcquisitionSettings(AcquisitionSource.DASHBOARD)
         val baseline = DefaultAcquisitionBaseline().apply { setDashboardSignals(setOf(speedKey)) }
         val visibility = FakeVisibleSignals()
-        val controller = AcquisitionController(settings, baseline, visibility)
+        val controller = AcquisitionController(settings, baseline, visibility, FakeBookmarkRepository())
 
         controller.setForeground(null)
         controller.start(backgroundScope)
@@ -116,6 +153,21 @@ private class FakeVisibleSignals : VisibleSignals {
     override fun setVisible(keys: Set<MetricKey>) {
         calls += keys
     }
+}
+
+private class FakeBookmarkRepository(initial: Set<MetricKey> = emptySet()) : BookmarkRepository {
+    private val state = MutableStateFlow(initial)
+    override val bookmarks: Flow<Set<MetricKey>> = state
+
+    fun setBookmarks(keys: Set<MetricKey>) {
+        state.value = keys
+    }
+
+    override suspend fun toggle(key: MetricKey) {
+        state.value = if (key in state.value) state.value - key else state.value + key
+    }
+
+    override suspend fun isBookmarked(key: MetricKey): Boolean = key in state.value
 }
 
 private class FakeAcquisitionSettings(source: AcquisitionSource) : SettingsRepository {

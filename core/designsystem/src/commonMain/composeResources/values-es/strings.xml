@@ -118,7 +118,7 @@
     <string name="dashboard_add_tile">Añadir indicador</string>
     <string name="dashboard_hud">HUD</string>
 
-    <string name="live_title">En directo</string>
+    <string name="live_title">Monitoreo</string>
     <string name="trips_title">Viajes</string>
     <string name="live_pause">Pausar</string>
     <string name="live_resume">Reanudar</string>

@@ -8,6 +8,7 @@ import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import com.bruni.carscan.core.data.AcquisitionBaseline
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.AdapterRepository
+import com.bruni.carscan.core.data.BookmarkRepository
 import com.bruni.carscan.core.data.DashboardLayoutRepository
 import com.bruni.carscan.core.data.ObdConnector
 import com.bruni.carscan.core.data.SampleSource
@@ -78,6 +79,7 @@ class KoinGraphTest {
 
         koin.get<AdapterRepository>() shouldNotBe null
         koin.get<SettingsRepository>() shouldNotBe null
+        koin.get<BookmarkRepository>() shouldNotBe null
         koin.get<TripRepository>() shouldNotBe null
         koin.get<DashboardLayoutRepository>() shouldNotBe null
         koin.get<VehicleSessionRepository>() shouldNotBe null

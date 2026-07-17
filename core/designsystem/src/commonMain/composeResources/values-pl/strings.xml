@@ -118,7 +118,7 @@
     <string name="dashboard_add_tile">Dodaj wskaźnik</string>
     <string name="dashboard_hud">HUD</string>
 
-    <string name="live_title">Na żywo</string>
+    <string name="live_title">Monitorowanie</string>
     <string name="trips_title">Przejazdy</string>
     <string name="live_pause">Wstrzymaj</string>
     <string name="live_resume">Wznów</string>

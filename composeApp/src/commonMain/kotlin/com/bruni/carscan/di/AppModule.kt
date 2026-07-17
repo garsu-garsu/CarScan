@@ -3,9 +3,11 @@ package com.bruni.carscan.di
 import com.bruni.carscan.core.data.AcquisitionBaseline
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.AdapterRepository
+import com.bruni.carscan.core.data.BookmarkRepository
 import com.bruni.carscan.core.data.DashboardLayoutRepository
 import com.bruni.carscan.core.data.DefaultAcquisitionBaseline
 import com.bruni.carscan.core.data.DefaultAdapterRepository
+import com.bruni.carscan.core.data.DefaultBookmarkRepository
 import com.bruni.carscan.core.data.DefaultDashboardLayoutRepository
 import com.bruni.carscan.core.data.DefaultSettingsRepository
 import com.bruni.carscan.core.data.DefaultSignalsetCache
@@ -75,6 +77,7 @@ fun appModule(): Module = module {
 
     single<AdapterRepository> { DefaultAdapterRepository(get()) }
     single<SettingsRepository> { DefaultSettingsRepository(get()) }
+    single<BookmarkRepository> { DefaultBookmarkRepository(get()) }
     single<DashboardLayoutRepository> { DefaultDashboardLayoutRepository(get()) }
     single<TripRepository> { DefaultTripRepository(get(), get()) }
     single<VehicleRepository> { DefaultVehicleRepository(get()) }
@@ -107,7 +110,9 @@ fun appModule(): Module = module {
     // Keeps the poller on the selected acquisition source's signals while no data screen is in
     // the foreground — see the class KDoc. Registered alongside TripRecorder/AutoConnector
     // because it is started the same way, from CarScanApplication, at launch.
-    single { AcquisitionController(settings = get(), baseline = get(), visibility = get()) }
+    single {
+        AcquisitionController(settings = get(), baseline = get(), visibility = get(), bookmarks = get())
+    }
 
     single {
         TripRecorder(

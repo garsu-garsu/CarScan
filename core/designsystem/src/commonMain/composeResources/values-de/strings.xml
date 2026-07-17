@@ -119,7 +119,7 @@
     <string name="dashboard_add_tile">Anzeige hinzufügen</string>
     <string name="dashboard_hud">HUD</string>
 
-    <string name="live_title">Live</string>
+    <string name="live_title">Überwachung</string>
     <string name="trips_title">Fahrten</string>
     <string name="live_pause">Pause</string>
     <string name="live_resume">Fortsetzen</string>

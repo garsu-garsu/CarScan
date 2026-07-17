@@ -2,6 +2,7 @@ package com.bruni.carscan.obd
 
 import com.bruni.carscan.core.data.AcquisitionBaseline
 import com.bruni.carscan.core.data.AcquisitionSource
+import com.bruni.carscan.core.data.BookmarkRepository
 import com.bruni.carscan.core.data.STANDARD_CORE_SIGNALS
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.VisibleSignals
@@ -39,6 +40,7 @@ class AcquisitionController(
     private val settings: SettingsRepository,
     private val baseline: AcquisitionBaseline,
     private val visibility: VisibleSignals,
+    private val bookmarks: BookmarkRepository,
 ) {
 
     private val foreground = MutableStateFlow<AcquisitionScreen?>(null)
@@ -50,24 +52,32 @@ class AcquisitionController(
 
     fun start(scope: CoroutineScope) {
         scope.launch {
-            combine(foreground, settings.settings, baseline.dashboardSignals) { fg, prefs, dashboardSignals ->
+            combine(
+                foreground,
+                settings.settings,
+                baseline.dashboardSignals,
+                bookmarks.bookmarks,
+            ) { fg, prefs, dashboardSignals, bookmarkedSignals ->
                 // A data screen in the foreground owns setVisible itself; this must emit nothing
                 // that would make the collector below call it a second time on top.
-                if (fg != null) null else baselineFor(prefs.acquisitionSource, dashboardSignals)
+                if (fg != null) null else baselineFor(prefs.acquisitionSource, dashboardSignals, bookmarkedSignals)
             }
                 .distinctUntilChanged()
                 .collect { keys -> keys?.let(visibility::setVisible) }
         }
     }
 
-    private fun baselineFor(source: AcquisitionSource, dashboardSignals: Set<MetricKey>): Set<MetricKey> =
+    private fun baselineFor(
+        source: AcquisitionSource,
+        dashboardSignals: Set<MetricKey>,
+        bookmarkedSignals: Set<MetricKey>,
+    ): Set<MetricKey> =
         when (source) {
             // An empty dashboard polls nothing on its own — see DashboardViewModel.restore — so
             // this is the same fallback that seeds a brand-new layout.
             AcquisitionSource.DASHBOARD -> dashboardSignals.ifEmpty { STANDARD_CORE_SIGNALS }
-            // Bookmarks land in a later milestone; the standard core set is the confirmed
-            // no-bookmark default for both of these until then.
-            AcquisitionSource.MONITORING -> STANDARD_CORE_SIGNALS
+            AcquisitionSource.MONITORING -> bookmarkedSignals.ifEmpty { STANDARD_CORE_SIGNALS }
+            // HUD stays on the standard core set for now.
             AcquisitionSource.HUD -> STANDARD_CORE_SIGNALS
         }
 }

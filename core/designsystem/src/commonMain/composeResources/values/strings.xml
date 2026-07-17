@@ -157,7 +157,7 @@
     <string name="dashboard_hud">HUD</string>
 
     <!-- Live chart -->
-    <string name="live_title">Live</string>
+    <string name="live_title">Monitoring</string>
     <string name="trips_title">Trips</string>
     <string name="live_pause">Pause</string>
     <string name="live_resume">Resume</string>

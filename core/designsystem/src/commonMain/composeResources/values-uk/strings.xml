@@ -118,7 +118,7 @@
     <string name="dashboard_add_tile">Додати датчик</string>
     <string name="dashboard_hud">HUD</string>
 
-    <string name="live_title">Наживо</string>
+    <string name="live_title">Моніторинг</string>
     <string name="trips_title">Поїздки</string>
     <string name="live_pause">Пауза</string>
     <string name="live_resume">Продовжити</string>
