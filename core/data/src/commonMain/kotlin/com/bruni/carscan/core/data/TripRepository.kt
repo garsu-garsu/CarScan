@@ -59,6 +59,9 @@ interface TripRepository {
     suspend fun stop(endedMs: Long)
 
     suspend fun trips(vehicleId: String): List<TripSummary>
+
+    /** Every trip, across every vehicle, newest first — the trip-list screen's filter is by source, not by vehicle. */
+    suspend fun allTrips(): List<TripSummary>
     suspend fun summary(tripId: String): TripSummary?
     suspend fun signalIds(tripId: String): List<String>
 
@@ -120,6 +123,9 @@ class DefaultTripRepository(
 
     override suspend fun trips(vehicleId: String): List<TripSummary> =
         db.tripQueries.selectForVehicle(vehicleId).executeAsList().map(Trip::toSummary)
+
+    override suspend fun allTrips(): List<TripSummary> =
+        db.tripQueries.selectAll().executeAsList().map(Trip::toSummary)
 
     override suspend fun summary(tripId: String): TripSummary? =
         db.tripQueries.selectById(tripId).executeAsOneOrNull()?.toSummary()

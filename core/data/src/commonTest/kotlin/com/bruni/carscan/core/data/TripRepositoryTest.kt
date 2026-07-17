@@ -208,6 +208,19 @@ class TripRepositoryTest {
         assertEquals(listOf(second, first), repo.trips(VEHICLE).map { it.id })
     }
 
+    @Test
+    fun `allTrips lists every vehicle's trips newest first`() = runTest {
+        db.seedVehicle(VEHICLE)
+        db.seedVehicle("veh-2")
+        val repo = repo(backgroundScope)
+
+        val first = repo.start(VEHICLE, startedMs = 1_000); repo.stop(2_000)
+        val second = repo.start("veh-2", startedMs = 9_000); repo.stop(10_000)
+        advanceUntilIdle()
+
+        assertEquals(listOf(second, first), repo.allTrips().map { it.id })
+    }
+
     // --- activeTrip --------------------------------------------------------------
 
     /**

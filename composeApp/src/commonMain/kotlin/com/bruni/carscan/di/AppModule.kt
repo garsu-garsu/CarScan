@@ -33,6 +33,7 @@ import com.bruni.carscan.feature.dashboard.DashboardClock
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.liveModule
 import com.bruni.carscan.feature.settings.settingsModule
+import com.bruni.carscan.feature.trip.tripModule
 import com.bruni.carscan.obd.AcquisitionController
 import com.bruni.carscan.obd.AutoConnector
 import com.bruni.carscan.obd.BundledSignalsetSource
@@ -152,6 +153,7 @@ fun carScanModules(): List<Module> = listOf(
     settingsModule,
     garageModule,
     hudModule,
+    tripModule,
 )
 
 /**

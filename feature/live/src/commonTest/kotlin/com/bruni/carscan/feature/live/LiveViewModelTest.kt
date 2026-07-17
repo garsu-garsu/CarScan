@@ -416,6 +416,7 @@ private class FakeTrips : TripRepository {
     override fun offer(sample: SensorSample) = Unit
     override suspend fun stop(endedMs: Long) = Unit
     override suspend fun trips(vehicleId: String): List<TripSummary> = emptyList()
+    override suspend fun allTrips(): List<TripSummary> = emptyList()
     override suspend fun summary(tripId: String): TripSummary? = null
     override suspend fun signalIds(tripId: String): List<String> = series.keys.map { it.second }
     override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit

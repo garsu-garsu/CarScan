@@ -230,4 +230,10 @@
     <string name="paywall_already_premium">You already have Premium</string>
     <string name="paywall_restore">Restore purchases</string>
 
+    <string name="trip_filter_all">All</string>
+    <string name="trip_filter_my_car">My car</string>
+    <string name="trip_filter_auto">Auto-detected</string>
+    <string name="trip_source_auto">Auto</string>
+    <string name="trip_recording">Recording…</string>
+    <string name="trip_empty_auto">No auto-detected trips yet.</string>
 </resources>

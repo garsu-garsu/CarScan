@@ -27,6 +27,8 @@ import com.bruni.carscan.feature.connect.connectModule
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
 import com.bruni.carscan.feature.live.LiveViewModel
 import com.bruni.carscan.feature.live.liveModule
+import com.bruni.carscan.feature.trip.TripListViewModel
+import com.bruni.carscan.feature.trip.tripModule
 import com.bruni.carscan.nav.AppSettingsOpener
 import com.bruni.carscan.obd.AcquisitionController
 import com.bruni.carscan.obd.AutoConnector
@@ -121,10 +123,11 @@ class KoinGraphTest {
         koin.get<ConnectViewModel>() shouldNotBe null
         koin.get<DashboardViewModel>() shouldNotBe null
         koin.get<LiveViewModel>() shouldNotBe null
+        koin.get<TripListViewModel>() shouldNotBe null
     }
 
     private fun start(): Koin = koinApplication {
-        modules(appModule(), testPlatformModule(), connectModule, liveModule)
+        modules(appModule(), testPlatformModule(), connectModule, liveModule, tripModule)
     }.koin.also { koin = it }
 
     /** The shape of [platformModule], with the four things that need a `Context` faked out. */
