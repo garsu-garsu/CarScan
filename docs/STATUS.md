@@ -4,7 +4,7 @@
 > 세션이 끊기거나(토큰 한도 등) 새 세션에서 재개할 때의 단일 진실 공급원.
 > 전체 설계는 `C:\Users\Mureung\.claude\plans\lucky-forging-pascal.md`.
 
-**마지막 갱신**: 2026-07-15 / **M0~M5 완료 + M6 대부분 + M7 차량 선택·신호셋 다운로드·HUD 완료**. 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 + 온디맨드 다운로드·ETag 캐시 + 앞유리 HUD까지 됨. 남은 것: 실제 광고·결제 배선(스토어 계정 필요), 실기기 검증.
+**마지막 갱신**: 2026-08-08 / **M0~M7 사실상 완료**. 실제 AdMob 광고(배너·전면·앱오픈·리워드)와 실제 Play Billing 결제(실가격 페이월)가 Koin에 완전히 배선됨(2026-07-16). 모니터링 화면 리디자인, GPS 전용 주행기록, 백그라운드 주행 추적(옵트인), 급가속 감지, 트립 상세 지도(2026-07-17)까지 완료. 오늘 R8 축소를 켜고(APK 21.3MB→5.7MB) 백그라운드 위치 권한을 제거해 출시 빌드 형태를 갖췄다. 남은 것은 코드가 아니라 **스토어·설정 작업** — 아래 "출시까지 남은 것" 참고 — 과 실기기 검증.
 
 ---
 
@@ -44,14 +44,34 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 | **M4** 게이지·라이브차트 | ✅ | designsystem 134 |
 | **M5** units·theme·i18n·connect·dashboard·live | ✅ | units 140 · connect 21 · dashboard 58 · live 25 |
 | **M5** :composeApp 조립 + ElmObdConnector | ✅ | composeApp 24 — **APK 16MB 빌드됨** |
-| **M6** 설정·About/라이선스·i18n·수익화 모델·빌드 게이트 | 🔶 대부분 | settings 7 · monetization 신규 |
-| **M6** 실제 광고·결제 배선 + Play 내부 테스트 | ⬜ 보류(스토어 계정 필요) | |
+| **M6** 설정·About/라이선스·i18n·수익화 모델·빌드 게이트 | ✅ | settings 7 · monetization |
+| **M6** 실제 광고·결제 배선 | ✅ (2026-07-16) | AdMob 배너/전면/앱오픈/리워드 + Play Billing 실가격 페이월, Koin 완전 배선 |
+| **M6** 홈 리디자인 + 전체 OBDb 카탈로그(654종) + 차고 검색 | ✅ (2026-07-16) | |
 | **M7** 차량 선택(차고) + 차종별 OBDb 신호셋 로딩 | ✅ | garage · composeApp 신호셋 로딩 |
 | **M7** 신호셋 다운로드 계층(번들+온디맨드 캐시) | ✅ | cache 5 · downloader/provider 11 · garage 5 |
 | **M7** HUD(앞유리 게이지) | ✅ | hud 6 |
+| **M7** 모니터링 리디자인(신호 리스트·실시간 통계·상세 그래프·북마크) | ✅ (2026-07-17) | Live→Monitoring 이름 변경 |
+| **M7** 주행기록: 목록/출처 필터, GPS 전용 트립, 백그라운드 추적(옵트인), 급가속 감지, 트립 상세 지도 | ✅ (2026-07-17) | |
+| **출시 준비** R8 축소(21.3MB→5.7MB), 백그라운드 위치 권한 제거 | ✅ (2026-08-08) | |
+| **출시 준비** 서명 키·Play Console 상품·개인정보처리방침 등 | 🔶 진행 중 | 아래 "출시까지 남은 것" |
 | **M7** 실기기 검증 | ⬜ 다음 | DTC·안드로이드 오토는 **제외** |
 
-**총 700개 이상 테스트, 실패 0. 재현된 변이 40건 이상.**
+**총 907개 테스트(20개 모듈), 실패 2 + 무한 정지 1. 재현된 변이 40건 이상.** (2026-08-08 실측)
+
+> ⚠️ **`:core:transport` 가 초록이 아니다.** 오래 "실패 0"이라고 적혀 있었지만 지금은 아니다. 셋 다
+> 조용한 머신에서 `--rerun-tasks` 로 재현했으므로 부하 탓이 아니다. 오늘 작업(1.0.0·R8·매니페스트)은
+> 코틀린 코드를 한 줄도 건드리지 않았으므로 **이 셋은 7/15 이후 45개 커밋 어딘가에서 들어온 기존 문제**다.
+>
+> - `BleObdTransportTest > a reply that arrives before the consumer collects is not lost`
+>   → `TurbineAssertionError: No value produced in 3s`. **이건 계약 위반이다** — 아래 "정정된 오류"의
+>   "구독 전에 도착한 바이트가 조용히 버려진다"가 바로 이 증상이고, BLE 구현이 그걸 지키는지 확인하라고
+>   적어둔 그 항목이다.
+> - `BleObdTransportTest > open subscribes to notifications before it returns` → `expected:<1> but was:<0>`
+> - `SppObdTransportTest > a second concurrent collector is rejected instead of silently stealing bytes`
+>   → **영원히 안 끝난다.** 스레드 덤프상 `SppObdTransportTest.kt:136` 의 `runBlocking` 에서 31분 파킹.
+>   `runBlocking` 에 타임아웃이 없어서 테스트 태스크 자체가 안 끝나고, `--continue` 도 소용없다.
+>   **CI를 붙이면 CI가 통째로 멈춘다.** 전체 스위트를 돌리려면 지금은
+>   `-x :core:transport:testAndroidHostTest` 로 제외해야 한다.
 
 ### M7 완료된 것 / 다음
 - **완료(스켈레톤 B)**: `:feature:garage` 차량 선택 화면(설정→"차량" 행 진입, 선택 시 Vehicle 행 기록 + activeVehicleId 설정), 큐레이션 4종 번들 에셋(Kia-EV6·Ioniq-5·Elantra·Ford-F-150, OBDb main에서 실시간 페치·커밋 SHA 고정·BY-SA 저작자표시), `BundledSignalsetSource` 확장(선택 차량 → 표준∪차종 신호셋 union, **forever-cache 제거로 차량 변경 시 옛 신호셋 반환 버그 차단**), 카탈로그·VehicleRepository DI 배선. 다운스트림(대시보드 타일 피커·poller)은 이미 union을 소비하므로 코드 변경 0.
@@ -59,13 +79,25 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 - **안드로이드 오토 제외** — 템플릿이 커스텀 게이지 렌더링 불가 + OBD 미승인 카테고리. 차 안 게이지는 **HUD**로.
 - **신호셋 다운로드 계층 완료**: `SignalsetProvider`(번들→캐시→다운로드 우선순위), `SignalsetCache`(signalset 테이블 위 리포지토리), `KtorSignalsetDownloader`(raw.githubusercontent OBDb, 조건부 GET+ETag→304 재검증). **다운로드는 차량 선택 시점(온라인)에, 연결 시점(어댑터 Wi-Fi=오프라인)엔 캐시/번들만** — Wi-Fi 어댑터 시나리오 대응. 다운로드 전용 카탈로그 7종 추가(RAV4·Civic·Model3·Golf·Mach-E·Niro·Kona, 전부 OBDb 실재 확인). 저장 테이블은 M3에 이미 있던 것 그대로 활용.
 - **HUD 완료**: `:feature:hud` — 속도(크게)+RPM을 우리 게이지(`Gauge`+`GaugeThemes.Hud` 고대비 팔레트, 검은 배경) 재사용해 그림. **좌우 반전**(`graphicsLayer scaleX=-1`, 앞유리 반사용), 밝기 최대·화면 켜둠·가로 고정은 플랫폼 expect/actual(android=Activity window 플래그, ios=밝기+idleTimer, jvm=no-op). **라이브러리 안 씀** — Compose/KMP용 HUD 라이브러리가 없고, 있는 건 안드로이드 View 위젯이라 게이지처럼 직접 조합. 폴러 굶김 방지 `visibility.setVisible` 호출. 대시보드 "HUD" 액션으로 진입(탭 아님=전체화면). 죽어있던 `keepScreenOn` 설정의 첫 소비자.
-- **다음**: 실기기 검증.
 - **아직 없는 것(후속)**: 전체 OBDb 카탈로그 인덱스(742종 열거), 카탈로그의 호스팅 갱신(현재 카탈로그는 소스 하드코딩), 연식별 신호셋 variant 선택(현재 default.json만).
 - **번역**: de·es·pt-BR·ru·uk 양호, ko·pl 원어민 검수 권장(garage_* · garage_download_* 새 용어).
 
-### M6 완료된 것 / 보류된 것
-- **완료**: 설정 화면(수량별 단위·게이지 스타일·테마·화면 켜둠·기록 토글), About/라이선스 화면(**OBDb CC BY-SA 4.0 저작자표시 — 스토어 업로드 법적 관문**), 8개 로케일 신규 문자열 21개(파리티 게이트 통과), 수익화 엔타이틀먼트 모델(`:core:monetization` — 영구/구독/유예/보류/환불 규칙, 오프라인 정확성, 순수 리졸버), 데이터 위생 빌드 게이트.
-- **보류(사용자 입력 필요)**: 실제 AdMob/Play Billing 배선은 실 앱 ID·Play Console 상품·서명 키가 필요하고 **공개 레포에 커밋 불가**. `:platform:android-ads` 는 컴파일되는 no-op 스텁까지만. DI에도 아직 연결 안 함(소비자 없음). 스토어 계정 준비되면 진행.
+### 모니터링 리디자인 + 주행기록 기능 (2026-07-17)
+- **모니터링 리디자인**(구 "실시간" 화면 개명): 신호 리스트 + 실시간 통계 + 상세 그래프 + 북마크. 화면을 벗어나도 즐겨찾는 소스는 계속 폴링.
+- **GPS 전용 주행기록**: 스캐너 미연결 상태에서도 GPS 속도만으로 주행 감지(`DrivingDetector`) → 트립 기록. 트립 목록에 출처(스캐너/GPS) 필터 추가.
+- **백그라운드 주행 추적**(옵트인): `TripTrackingService` — location 타입 포그라운드 서비스로 앱을 벗어나도 `DrivingDetector`/`GpsRecorder`를 살려둠. 설정에서 켠 사용자만.
+- **급가속/급제동/급코너 감지**(`HarshEventDetector`, 자이로 yaw rate 사용) + **트립 상세 화면**(Google Maps로 경로 + 이벤트 마커 표시).
+- 다음날(7/18) 앱오픈 광고가 메인 스레드가 아닌 곳에서 `show()`를 호출해 크래시 나는 걸 수정(d373e8f) — AdMob은 메인 스레드 강제, 호스트 테스트로는 못 잡음.
+
+### 출시 준비: R8 축소 + 백그라운드 위치 권한 제거 (2026-08-08)
+- `versionName`을 `1.0.0`으로, R8 코드 축소 켬 → APK **21.3MB → 5.7MB**. 리소스 축소는 **의도적으로 끔** — Compose Multiplatform 리소스가 `res/`가 아니라 `assets/`에 있어서 shrinker가 사용 여부를 못 보고 문자열을 전부 지워버림.
+- `androidApp/proguard-rules.pro` 신규 — kotlinx 직렬화(OBDb 시그널셋 DTO, 저장된 대시보드)와 `@Serializable` 네비게이션 라우트(직렬 이름=클래스 이름)만 리플렉션으로 풀리므로 그 둘만 keep.
+- **`ACCESS_BACKGROUND_LOCATION` 권한 제거.** location 타입 포그라운드 서비스가 떠 있는 동안은 이미 이 권한 없이도 while-in-use 위치를 앱 전체에 준다 — 주행기록이 필요로 하는 시간 창(서비스가 도는 동안)과 정확히 일치. `ACCESS_BACKGROUND_LOCATION`은 그 서비스가 없을 때만 의미가 있는데 이 앱은 그 경로를 아예 안 탐. 없애서 Play 리뷰 위치 선언서 + 데모 영상 제출 의무를 피함.
+- APK 안에서 직접 확인: `catalog.json`, 번들 OBDb 신호셋, 8개 로케일 문자열 파일 전부 생존. (난독화 깨짐은 런타임에만 드러나므로 실기기 확인은 여전히 별도 필요.)
+
+### M6 완료된 것
+- 설정 화면(수량별 단위·게이지 스타일·테마·화면 켜둠·기록 토글), About/라이선스 화면(**OBDb CC BY-SA 4.0 저작자표시 — 스토어 업로드 법적 관문**), 8개 로케일 신규 문자열 21개(파리티 게이트 통과), 수익화 엔타이틀먼트 모델(`:core:monetization` — 영구/구독/유예/보류/환불 규칙, 오프라인 정확성, 순수 리졸버), 데이터 위생 빌드 게이트.
+- **실제 AdMob/Play Billing 배선 완료(2026-07-16)** — 예전엔 여기 "보류(스토어 계정 필요)"라고 적혀 있었는데 그새 끝났다. `:platform:android-ads`가 `PlayBillingPort`·`AdMobInterstitialAdPort`·`AdMobAppOpenAdPort`·`AdMobRewardedAdPort`를 실제 구현으로 제공하고, `composeApp/src/androidMain/.../di/PlatformModule.android.kt`에서 전부 Koin에 바인딩됨. 배너 광고는 홈·연결·차고·주행기록 화면에, 전면·앱오픈 광고는 공용 빈도 제한(`FullScreenAdGate`) 하나로 묶임. 페이월 화면이 Play Billing 실가격을 그대로 보여줌. 실 AdMob 광고 단위 ID(퍼블리셔 pub-5820924146818119)는 gitignore된 `local.properties`에 있고, 디버그 빌드는 구글 테스트 ID를 씀. UMP 동의창 수집(`AdsConsent.gather()`)도 `MainActivity`에서 호출됨 — 단, **AdMob 콘솔에 GDPR 메시지 자체를 아직 설정 안 해서 동의창이 조용히 안 뜬다** (아래 "출시까지 남은 것" 참고).
 - **번역 품질**: de·es 자신 있음, pt-BR·pl 양호, ru·uk·ko 는 새로 만든 기술 용어에 원어민 검수 권장.
 
 ### 실기기 실행 — 첫 성공 (2026-07-15)
@@ -89,6 +121,24 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 
 ### 지금 막힌 것
 없음.
+
+---
+
+## 출시까지 남은 것
+
+코드는 사실상 다 됐다. 남은 건 대부분 **스토어 계정·설정·문서** 쪽이다.
+
+- **릴리스 서명 키스토어** — 별도로 지금 진행 중(진행 상황 확인 필요).
+- **Google Maps API 키가 없다.** `local.properties`의 `maps.api.key`가 비어 있으면 트립 상세 화면의 지도가 빈 타일로 렌더된다 (`androidApp/build.gradle.kts`가 없을 때 크래시 대신 빈 값으로 넘어가게 만들어 놨다 — 크래시는 안 나지만 지도는 안 보임).
+- **Play Console 인앱 상품 미생성**: `carscan_lifetime` / `carscan_sub_monthly` / `carscan_sub_yearly`. 코드(`:core:monetization`, `PlayBillingPort`)는 이 정확한 ID로 이미 조회한다 — 콘솔에 이 ID 그대로 상품을 만들어야 페이월이 실가격을 받아온다.
+- **개인정보처리방침 문서/URL이 저장소 어디에도 없다.** 앱이 위치 정보 + 광고를 쓰므로 스토어 등록에 필수.
+- **AdMob 콘솔에 GDPR 동의 메시지가 설정 안 됨.** 코드(`AdsConsent.gather()`)는 이미 UMP를 호출하지만, 콘솔에 메시지 자체가 없으면 SDK가 "필요 없음"으로 판단해 동의창이 조용히 안 뜬다. 콘솔에서 메시지를 만들어야 함.
+- **데이터 안전 양식(Data safety form), 스크린샷, 스토어 등록 정보(store listing)** 아직 없음.
+- **실제 ELM327 어댑터 연결 + 실차 신호 수신이 아직 한 번도 검증 안 됨.** 실기기에서 확인된 건 BLE 스캔·UI·DB뿐 — 실제 어댑터로 실제 차량 데이터를 받아본 적은 없다.
+- **iOS는 여전히 한 번도 컴파일된 적 없다.** macOS 호스트 필요.
+- **Google Play는 신규 앱에 AAB를 요구한다.** APK가 아니라 AAB로 빌드해서 올려야 함.
+- **targetSdk는 이미 36** — 2026-08-31 target-API 의무화 기한을 이미 충족했다. 이건 좋은 소식, 추가 작업 불필요.
+- **확인 필요(미검증 위험)**: `TripTrackingService`는 `CarScanApplication.onCreate()`에서 시작되고 `START_STICKY`를 반환한다. 안드로이드 12+는 백그라운드 상태에서의 포그라운드 서비스 기동을 제한하는데, OS가 프로세스를 죽였다가 sticky로 재시작할 때 이 제한에 걸려 `ForegroundServiceStartNotAllowedException`이 날 가능성이 있다. **아직 확인 안 됨** — 실기기에서 강제 종료 후 재시작 시나리오로 검증할 것.
 
 ---
 
