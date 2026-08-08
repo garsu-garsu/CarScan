@@ -1,8 +1,7 @@
 package com.bruni.carscan.core.data
 
-import kotlin.random.Random
-
-private const val HEX = "0123456789abcdef"
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * A random (version 4) UUID.
@@ -14,17 +13,5 @@ private const val HEX = "0123456789abcdef"
  * same row twice, so it can be made idempotent; with an integer key it cannot be,
  * at any layer above.
  */
-fun newUuid(random: Random = Random.Default): String {
-    val bytes = ByteArray(16)
-    random.nextBytes(bytes)
-    bytes[6] = ((bytes[6].toInt() and 0x0F) or 0x40).toByte() // version 4
-    bytes[8] = ((bytes[8].toInt() and 0x3F) or 0x80).toByte() // IETF variant
-
-    val sb = StringBuilder(36)
-    for (i in 0 until 16) {
-        if (i == 4 || i == 6 || i == 8 || i == 10) sb.append('-')
-        val v = bytes[i].toInt() and 0xFF
-        sb.append(HEX[v shr 4]).append(HEX[v and 0x0F])
-    }
-    return sb.toString()
-}
+@OptIn(ExperimentalUuidApi::class)
+fun newUuid(): String = Uuid.random().toString()

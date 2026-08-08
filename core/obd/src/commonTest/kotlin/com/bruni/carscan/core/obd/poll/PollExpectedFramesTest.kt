@@ -49,7 +49,6 @@ class PollExpectedFramesTest {
         // frame count that is too low truncates a multi-frame reply into a plausible lie.
         obd.first().expectedFrames shouldBe null
         obd.last().expectedFrames shouldBe 2
-        scheduler.capabilities.value.expectedFrames shouldBe true
     }
 
     @Test
@@ -62,8 +61,6 @@ class PollExpectedFramesTest {
         scheduler.submit(listOf(socCommand.pollEntry(Priority.CRITICAL)))
         backgroundScope.launch { scheduler.run() }
         advanceTimeBy(2_000)
-
-        scheduler.capabilities.value.expectedFrames shouldBe false
 
         // The `?` was about the suffix. The command itself works, and must still be polled.
         scheduler.unsupported.value shouldBe emptySet()

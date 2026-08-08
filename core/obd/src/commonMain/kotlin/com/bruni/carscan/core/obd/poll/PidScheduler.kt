@@ -134,10 +134,8 @@ class PidScheduler(
      */
     val unsupported: StateFlow<Set<String>> = _unsupported.asStateFlow()
 
-    private val _capabilities = MutableStateFlow(AdapterCapabilities())
-
-    /** **Persist against the adapter, not the vehicle** — this is a property of the hardware. */
-    val capabilities: StateFlow<AdapterCapabilities> = _capabilities.asStateFlow()
+    /** Cleared for good on the first `?` or `BUFFER FULL` in reply to a frame-count suffix. */
+    private var expectedFramesSupported = true
 
     fun submit(entries: List<PollEntry>) {
         control.trySend(Control.Submit(entries))
@@ -243,7 +241,7 @@ class PidScheduler(
             // `?` or `BUFFER FULL` in reply to `010C1` is the *adapter* saying it never learnt
             // the frame-count suffix — not the *car* saying it lacks the PID. Read it the other
             // way and five perfectly good commands get struck off the plan for good.
-            _capabilities.value = _capabilities.value.copy(expectedFrames = false)
+            expectedFramesSupported = false
             response = exchanger.exchange(ElmRequest(ascii))
         }
 
@@ -298,7 +296,7 @@ class PidScheduler(
     }
 
     private fun frameHint(scheduled: Scheduled): Int? =
-        if (_capabilities.value.expectedFrames && scheduled.command.rax != null) {
+        if (expectedFramesSupported && scheduled.command.rax != null) {
             scheduled.learnedFrames
         } else {
             null

@@ -70,17 +70,6 @@ data class PollerHealth(
 )
 
 /**
- * Adapter quirks learned at runtime, for the repository to persist.
- *
- * Re-learning these costs a round trip per session on the device that has the fewest
- * to spare, and the answer never changes for a given piece of hardware.
- */
-data class AdapterCapabilities(
-    /** Cleared for good on the first `?` or `BUFFER FULL` in reply to a frame-count suffix. */
-    val expectedFrames: Boolean = true,
-)
-
-/**
  * Where the scheduler gets "now" from. A parameter, so tests run on virtual time.
  *
  * **Two clocks, deliberately, because one clock cannot do both jobs.**

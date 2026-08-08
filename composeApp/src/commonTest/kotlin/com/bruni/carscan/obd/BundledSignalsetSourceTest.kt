@@ -9,7 +9,6 @@ import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.data.Vehicle
 import com.bruni.carscan.core.data.VehicleRepository
 import com.bruni.carscan.core.units.Quantity
-import com.bruni.carscan.core.units.SpeedUnit
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -151,8 +150,6 @@ private class FakeSettingsRepository(activeVehicleId: String?) : SettingsReposit
     override suspend fun setUnit(quantity: Quantity, unit: UnitId) = Unit
     override suspend fun setUnits(units: UnitPreferences) = Unit
 
-    @Deprecated("Use setUnit(Quantity.SPEED, …).", ReplaceWith("setUnit(Quantity.SPEED, unit)"))
-    override suspend fun setSpeedUnit(unit: SpeedUnit) = Unit
     override suspend fun setKeepScreenOn(enabled: Boolean) = Unit
 
     override suspend fun setActiveVehicleId(id: String?) {

@@ -25,7 +25,6 @@ data class Readout(val text: String, val labelKey: String?)
 class UnitReadout(
     locale: String? = null,
     private val prefs: UnitPreferences = UnitPreferences.METRIC,
-    private val converter: DefaultUnitConverter = DefaultUnitConverter,
 ) {
     private val numbers = NumberFormatter(locale)
 
@@ -47,7 +46,7 @@ class UnitReadout(
     /** An absolute value in a known unit, drawn in the preferred unit of that same quantity. */
     fun forValue(value: Double, from: UnitId, decimals: Int): Readout {
         val to = prefs[from.quantity]
-        return Readout(numbers.format(converter.convert(value, from, to), decimals), to.labelKey)
+        return Readout(numbers.format(DefaultUnitConverter.convert(value, from, to), decimals), to.labelKey)
     }
 
     /**
@@ -58,6 +57,6 @@ class UnitReadout(
      */
     fun forDelta(value: Double, from: UnitId, decimals: Int): Readout {
         val to = prefs[from.quantity]
-        return Readout(numbers.format(converter.convertDelta(value, from, to), decimals), to.labelKey)
+        return Readout(numbers.format(DefaultUnitConverter.convertDelta(value, from, to), decimals), to.labelKey)
     }
 }

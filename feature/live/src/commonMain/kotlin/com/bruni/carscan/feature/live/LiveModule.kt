@@ -9,9 +9,7 @@ import org.koin.dsl.module
  *
  *  * [SeriesCatalog] — over the active vehicle's `EffectiveSignalset` (label, range, native unit).
  *  * [VisibleSignals] — over `PidScheduler.setVisible`, which no feature can reach directly.
- *  * `Flow<UnitPreferences>` — the user's display units. `Settings` still carries the older
- *    `SpeedUnit` enum rather than `UnitPreferences`, so today that mapping has to happen at the
- *    binding; when `:core:data` catches up with `:core:units` it becomes a straight passthrough.
+ *  * `Flow<UnitPreferences>` — the user's display units, straight off `Settings.units`.
  */
 val liveModule: Module = module {
     // Spelled out rather than `viewModelOf(::LiveViewModel)`: that resolves *every* constructor

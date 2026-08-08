@@ -16,21 +16,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Names that ELM327 adapters tend to advertise under.
- *
- * A **hint for the UI to sort or highlight by — never a filter.** Plenty of clones
- * advertise nothing, or a name like `BLE-SPP` that no list could anticipate, and an
- * adapter picker that hides the user's adapter because we did not recognise its name is
- * a far worse product than one that shows a couple of extra headphones.
- */
-val LIKELY_ADAPTER_NAMES = listOf(
-    "OBD", "ELM", "Vgate", "vLinker", "OBDLink", "IOS-Vlink", "Viecar", "Konnwei", "VEEPEAK",
-)
-
-fun DiscoveredAdapter.looksLikeObdAdapter(): Boolean =
-    name?.let { name -> LIKELY_ADAPTER_NAMES.any { name.contains(it, ignoreCase = true) } } == true
-
-/**
  * Discovers and connects BLE adapters. Works on both platforms; on iOS it is the *only*
  * Bluetooth that works at all.
  */

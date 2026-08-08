@@ -13,7 +13,6 @@ import com.bruni.carscan.core.data.VisibleSignals
 import com.bruni.carscan.core.model.MetricKey
 import com.bruni.carscan.core.model.SensorSample
 import com.bruni.carscan.core.units.Quantity
-import com.bruni.carscan.core.units.SpeedUnit
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import com.bruni.carscan.core.vehicle.EffectiveSignalset
@@ -72,13 +71,6 @@ class FakeSettings(initial: Settings = Settings(activeVehicleId = VEHICLE_ID)) :
 
     override suspend fun setUnits(units: UnitPreferences) {
         state.value = state.value.copy(units = units)
-    }
-
-    override suspend fun setSpeedUnit(unit: SpeedUnit) {
-        setUnit(
-            Quantity.SPEED,
-            if (unit == SpeedUnit.MILES_PER_HOUR) UnitId.MPH else UnitId.KMH,
-        )
     }
 
     override suspend fun setKeepScreenOn(enabled: Boolean) {

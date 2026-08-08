@@ -2,7 +2,8 @@ package com.bruni.carscan.core.data
 
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.bruni.carscan.core.units.SpeedUnit
+import com.bruni.carscan.core.units.Quantity
+import com.bruni.carscan.core.units.UnitId
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -29,7 +30,7 @@ class SettingsRepositoryTest {
     @Test
     fun `the defaults are what a first-run user gets`() = runTest {
         val settings = repo.settings.first()
-        assertEquals(SpeedUnit.KM_PER_HOUR, settings.speedUnit)
+        assertEquals(UnitId.KMH, settings.units[Quantity.SPEED])
         assertTrue(settings.keepScreenOn)
         assertNull(settings.activeVehicleId)
         assertEquals(ThemeMode.SYSTEM, settings.themeMode)
@@ -43,7 +44,7 @@ class SettingsRepositoryTest {
     @Test
     fun `a changed setting is visible to the next read`() = runTest {
         repo.setRecordTrips(true)
-        repo.setSpeedUnit(SpeedUnit.MILES_PER_HOUR)
+        repo.setUnit(Quantity.SPEED, UnitId.MPH)
         repo.setActiveVehicleId("veh-1")
         repo.setKeepScreenOn(false)
         repo.setThemeMode(ThemeMode.DARK)
@@ -55,7 +56,7 @@ class SettingsRepositoryTest {
 
         val settings = repo.settings.first()
         assertTrue(settings.recordTrips)
-        assertEquals(SpeedUnit.MILES_PER_HOUR, settings.speedUnit)
+        assertEquals(UnitId.MPH, settings.units[Quantity.SPEED])
         assertEquals("veh-1", settings.activeVehicleId)
         assertFalse(settings.keepScreenOn)
         assertEquals(ThemeMode.DARK, settings.themeMode)
@@ -84,10 +85,10 @@ class SettingsRepositoryTest {
     /** The repository holds no state of its own; the store is the only truth. */
     @Test
     fun `a new repository over the same store reads what the old one wrote`() = runTest {
-        repo.setSpeedUnit(SpeedUnit.MILES_PER_HOUR)
+        repo.setUnit(Quantity.SPEED, UnitId.MPH)
         assertEquals(
-            SpeedUnit.MILES_PER_HOUR,
-            DefaultSettingsRepository(store).settings.first().speedUnit,
+            UnitId.MPH,
+            DefaultSettingsRepository(store).settings.first().units[Quantity.SPEED],
         )
     }
 
@@ -104,7 +105,7 @@ class SettingsRepositoryTest {
      */
     @Test
     fun `an unrecognised stored unit falls back to the default instead of throwing`() = runTest {
-        store.edit { it[stringPreferencesKey("speed_unit")] = "FURLONGS_PER_FORTNIGHT" }
-        assertEquals(SpeedUnit.KM_PER_HOUR, repo.settings.first().speedUnit)
+        store.edit { it[stringPreferencesKey("unit_prefs")] = "SPEED=FURLONGS_PER_FORTNIGHT" }
+        assertEquals(UnitId.KMH, repo.settings.first().units[Quantity.SPEED])
     }
 }

@@ -11,7 +11,6 @@ import com.bruni.carscan.core.data.Vehicle
 import com.bruni.carscan.core.data.VehicleCatalog
 import com.bruni.carscan.core.data.VehicleRepository
 import com.bruni.carscan.core.units.Quantity
-import com.bruni.carscan.core.units.SpeedUnit
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import kotlinx.coroutines.flow.Flow
@@ -61,11 +60,6 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
 
     override suspend fun setUnits(units: UnitPreferences) {
         state.value = state.value.copy(units = units)
-    }
-
-    @Deprecated("Use setUnit(Quantity.SPEED, …).", ReplaceWith("setUnit(Quantity.SPEED, unit)"))
-    override suspend fun setSpeedUnit(unit: SpeedUnit) {
-        setUnit(Quantity.SPEED, if (unit == SpeedUnit.MILES_PER_HOUR) UnitId.MPH else UnitId.KMH)
     }
 
     override suspend fun setKeepScreenOn(enabled: Boolean) {

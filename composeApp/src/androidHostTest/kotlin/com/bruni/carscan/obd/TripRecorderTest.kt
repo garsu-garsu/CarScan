@@ -18,7 +18,6 @@ import com.bruni.carscan.core.model.MetricKey
 import com.bruni.carscan.core.model.ObdUnit
 import com.bruni.carscan.core.model.SensorSample
 import com.bruni.carscan.core.units.Quantity
-import com.bruni.carscan.core.units.SpeedUnit
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import com.bruni.carscan.db.CarScanDb
@@ -211,8 +210,6 @@ private class FakeSettings(recordTrips: Boolean) : SettingsRepository {
     override suspend fun setUnit(quantity: Quantity, unit: UnitId) = Unit
     override suspend fun setUnits(units: UnitPreferences) = Unit
 
-    @Deprecated("Use setUnit(Quantity.SPEED, …).", ReplaceWith("setUnit(Quantity.SPEED, unit)"))
-    override suspend fun setSpeedUnit(unit: SpeedUnit) = Unit
     override suspend fun setKeepScreenOn(enabled: Boolean) = Unit
     override suspend fun setActiveVehicleId(id: String?) = Unit
     override suspend fun setThemeMode(mode: ThemeMode) = Unit

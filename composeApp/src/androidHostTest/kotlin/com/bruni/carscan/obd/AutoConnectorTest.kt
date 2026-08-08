@@ -16,7 +16,6 @@ import com.bruni.carscan.core.model.SensorSample
 import com.bruni.carscan.core.transport.DiscoveredAdapter
 import com.bruni.carscan.core.transport.TransportKind
 import com.bruni.carscan.core.units.Quantity
-import com.bruni.carscan.core.units.SpeedUnit
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import kotlinx.coroutines.flow.Flow
@@ -172,8 +171,6 @@ private class FakeAutoSettings(autoReconnect: Boolean) : SettingsRepository {
     override suspend fun setUnit(quantity: Quantity, unit: UnitId) = Unit
     override suspend fun setUnits(units: UnitPreferences) = Unit
 
-    @Deprecated("Use setUnit(Quantity.SPEED, …).", ReplaceWith("setUnit(Quantity.SPEED, unit)"))
-    override suspend fun setSpeedUnit(unit: SpeedUnit) = Unit
     override suspend fun setKeepScreenOn(enabled: Boolean) = Unit
     override suspend fun setActiveVehicleId(id: String?) = Unit
     override suspend fun setThemeMode(mode: ThemeMode) = Unit

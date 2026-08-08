@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.bruni.carscan.core.units.Quantity
-import com.bruni.carscan.core.units.SpeedUnit
 import com.bruni.carscan.core.units.UnitId
 import com.bruni.carscan.core.units.UnitPreferences
 import kotlinx.coroutines.flow.Flow
@@ -63,22 +62,7 @@ data class Settings(
      * a persistent notification the user has to actively choose, not something to spring on them.
      */
     val backgroundTracking: Boolean = false,
-) {
-    /**
-     * The speed preference, *read out of* [units].
-     *
-     * Deliberately not a constructor property: if it were, `copy(units = …)` would leave a stale
-     * speed behind it, and the app would hold two disagreeing answers to "km/h or mph?". There is
-     * one stored preference, and this is a view of it.
-     */
-    @Deprecated("Use units[Quantity.SPEED]; SpeedUnit cannot express the other eight quantities.")
-    val speedUnit: SpeedUnit
-        get() = if (units[Quantity.SPEED] == UnitId.MPH) {
-            SpeedUnit.MILES_PER_HOUR
-        } else {
-            SpeedUnit.KM_PER_HOUR
-        }
-}
+)
 
 interface SettingsRepository {
     val settings: Flow<Settings>
@@ -90,11 +74,6 @@ interface SettingsRepository {
     /** Replaces every unit at once — what the first-run locale defaults do. */
     suspend fun setUnits(units: UnitPreferences)
 
-    @Deprecated(
-        "Use setUnit(Quantity.SPEED, …).",
-        ReplaceWith("setUnit(Quantity.SPEED, unit)"),
-    )
-    suspend fun setSpeedUnit(unit: SpeedUnit)
     suspend fun setKeepScreenOn(enabled: Boolean)
     suspend fun setActiveVehicleId(id: String?)
     suspend fun setThemeMode(mode: ThemeMode)
@@ -178,17 +157,6 @@ class DefaultSettingsRepository(
 
     override suspend fun setUnits(units: UnitPreferences) {
         store.edit { it[UNIT_PREFS] = units.encode() }
-    }
-
-    @Deprecated(
-        "Use setUnit(Quantity.SPEED, …).",
-        ReplaceWith("setUnit(Quantity.SPEED, unit)"),
-    )
-    override suspend fun setSpeedUnit(unit: SpeedUnit) {
-        setUnit(
-            Quantity.SPEED,
-            if (unit == SpeedUnit.MILES_PER_HOUR) UnitId.MPH else UnitId.KMH,
-        )
     }
 
     override suspend fun setKeepScreenOn(enabled: Boolean) {
