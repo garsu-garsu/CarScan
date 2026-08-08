@@ -424,6 +424,7 @@ private class FakeTrips : TripRepository {
     override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
     override suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
     override suspend fun import(trip: TripSummary, series: List<SignalSeries>) = Unit
+    override suspend fun recoverStranded() = Unit
     override suspend fun delete(tripId: String) = Unit
     override suspend fun recordEvent(event: com.bruni.carscan.core.data.TripEvent) = Unit
     override suspend fun events(tripId: String): List<com.bruni.carscan.core.data.TripEvent> = emptyList()

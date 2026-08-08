@@ -49,6 +49,11 @@ SELECT * FROM trip_series WHERE trip_id = ? ORDER BY signal_id, chunk_index;
 selectSignalIds:
 SELECT DISTINCT signal_id FROM trip_series WHERE trip_id = ? ORDER BY signal_id;
 
+-- Seconds-since-start covered by this trip's samples, or no row at all if none were
+-- recorded. Same purpose and same no-BLOB read as trip_gps's `lastSecond`.
+lastSecond:
+SELECT t0_s + n FROM trip_series WHERE trip_id = ? ORDER BY t0_s DESC LIMIT 1;
+
 deleteForTrip:
 DELETE FROM trip_series WHERE trip_id = ?;
 

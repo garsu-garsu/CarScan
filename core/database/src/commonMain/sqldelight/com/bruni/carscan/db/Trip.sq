@@ -41,6 +41,13 @@ SELECT * FROM trip WHERE id = ?;
 selectForVehicle:
 SELECT * FROM trip WHERE vehicle_id = ? ORDER BY started_ms DESC;
 
+-- Trips with no end. Exactly one of these can be legitimate — the one being recorded
+-- right now — and only while the process that opened it is still alive. Every other
+-- one is a trip whose recorder died with its process, and `ended_ms` is written by
+-- SampleWriter.stop, which that process will never reach. See TripRepository.recoverStranded.
+selectUnfinished:
+SELECT * FROM trip WHERE ended_ms IS NULL;
+
 selectAll:
 SELECT * FROM trip ORDER BY started_ms DESC;
 

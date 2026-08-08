@@ -30,6 +30,12 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 selectTrip:
 SELECT * FROM trip_gps WHERE trip_id = ? ORDER BY chunk_index;
 
+-- Seconds-since-start covered by this trip's route, or no row at all if none was
+-- recorded. Reads one row and no BLOB: recovery only needs to know how far the route
+-- got, not what it was.
+lastSecond:
+SELECT t0_s + n FROM trip_gps WHERE trip_id = ? ORDER BY chunk_index DESC LIMIT 1;
+
 deleteForTrip:
 DELETE FROM trip_gps WHERE trip_id = ?;
 

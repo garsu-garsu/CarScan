@@ -147,12 +147,49 @@ class DrivingDetectorTest {
         advanceTimeBy(STOP_DEBOUNCE_MS / 2)
         runCurrent()
 
-        location.emit(fix(speedKmh = 25f)) // back above threshold — cancels the pending stop
+        // Back above threshold, and *still driving* — the fixes keep coming, as they do at 1 Hz
+        // from a phone in a moving car. Emitting one and then going silent for a whole debounce
+        // window would be the other case entirely (fixes stopped), which has its own test below.
+        repeat(7) {
+            location.emit(fix(speedKmh = 25f))
+            runCurrent()
+            advanceTimeBy(STOP_DEBOUNCE_MS / 6)
+            runCurrent()
+        }
+
+        assertTrue(trips.stopped.isEmpty())
+    }
+
+    /**
+     * The other half of the stuck-"Recording…" bug, and the half that needs no process death:
+     * fixes simply stop. A phone parked with the screen off, location permission revoked mid-drive,
+     * GPS lost in an underground car park — the flow goes quiet and never delivers the slow fix
+     * that used to be the only thing that armed the stop debounce, so the trip stayed open for as
+     * long as the process lived. Quiet must end a drive exactly the way slow does.
+     */
+    @Test
+    fun `a trip ends when fixes stop arriving altogether, with no slow fix to trigger it`() = runTest {
+        val trips = FakeTripRepository()
+        val source = FakeDetectorSampleSource()
+        val adapters = FakeDetectorAdapterRepository(remembered = null)
+        val connector = FakeDetectorObdConnector { ConnectOutcome.Failed(ConnectFailure.ADAPTER_UNREACHABLE) }
+        val location = FakeDetectorLocationSource()
+        val detector = DrivingDetector(
+            location, source, connector, adapters, trips, FakeDetectSettings(20),
+        ) { currentTime }
+
+        detector.start(backgroundScope)
         runCurrent()
+
+        location.emit(fix(speedKmh = 30f))
+        runCurrent()
+        assertEquals(1, trips.started.size)
+
+        // Nothing further ever arrives — not a slow fix, not a health change.
         advanceTimeBy(STOP_DEBOUNCE_MS)
         runCurrent()
 
-        assertTrue(trips.stopped.isEmpty())
+        assertEquals(1, trips.stopped.size)
     }
 
     @Test
@@ -290,6 +327,7 @@ private class FakeTripRepository : TripRepository {
     override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
     override suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
     override suspend fun import(trip: TripSummary, series: List<SignalSeries>) = Unit
+    override suspend fun recoverStranded() = Unit
     override suspend fun delete(tripId: String) = Unit
     override suspend fun recordEvent(event: com.bruni.carscan.core.data.TripEvent) = Unit
     override suspend fun events(tripId: String): List<com.bruni.carscan.core.data.TripEvent> = emptyList()

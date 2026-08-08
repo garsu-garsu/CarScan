@@ -2,6 +2,7 @@ package com.bruni.carscan
 
 import android.app.Application
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.bruni.carscan.core.data.TripRepository
 import com.bruni.carscan.core.monetization.AppOpenAdPort
 import com.bruni.carscan.core.monetization.Entitlements
 import com.bruni.carscan.core.monetization.FullScreenAdGate
@@ -18,6 +19,7 @@ import com.bruni.carscan.platform.android.ads.ActivityTracker
 import com.bruni.carscan.platform.android.ads.AdsInitializer
 import com.bruni.carscan.platform.android.ads.PlayBillingEntitlements
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -38,6 +40,12 @@ class CarScanApplication : Application() {
             androidContext(this@CarScanApplication)
             modules(carScanModules())
         }
+
+        // Before any of the recorders below can open a trip: close out the ones a previous
+        // process left open. `ended_ms` is only ever written by the process that started the
+        // trip, so a process the OS killed mid-drive leaves a row that reads "Recording…"
+        // forever — see TripRepository.recoverStranded.
+        get<CoroutineScope>().launch { get<TripRepository>().recoverStranded() }
 
         // The recorder must exist before the first sample does. It is the only subscriber that
         // puts anything on disk, and a sample that arrives before it is listening is a second of a

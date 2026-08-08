@@ -246,6 +246,7 @@ private class FakeEventTripRepository : TripRepository {
     override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
     override suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
     override suspend fun import(trip: TripSummary, series: List<SignalSeries>) = Unit
+    override suspend fun recoverStranded() = Unit
     override suspend fun delete(tripId: String) = Unit
 
     override suspend fun recordEvent(event: TripEvent) {

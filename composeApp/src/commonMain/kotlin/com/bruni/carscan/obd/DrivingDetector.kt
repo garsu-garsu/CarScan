@@ -60,7 +60,16 @@ class DrivingDetector(
                             isDriving = true
                             onDrivingStarted(health.connection)
                         }
-                    } else if (isDriving && stopJob == null) {
+                    }
+
+                    // Armed after *every* fix while driving, not only after a slow one, so the
+                    // window is "no fix at speed for STOP_DEBOUNCE_MS" rather than "a slow fix,
+                    // then quiet". Both end a drive that slowed down; only this one ends a drive
+                    // whose fixes stopped arriving at all — parked with the screen off, location
+                    // permission revoked, GPS lost indoors. The old shape needed a slow fix to
+                    // arm the timer, so when the fixes simply stopped nothing was ever scheduled
+                    // and the trip stayed open for as long as the process lived.
+                    if (isDriving && stopJob == null) {
                         stopJob = launch {
                             delay(STOP_DEBOUNCE_MS)
                             isDriving = false

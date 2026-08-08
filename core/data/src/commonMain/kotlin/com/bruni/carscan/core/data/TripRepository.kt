@@ -81,6 +81,26 @@ interface TripRepository {
 
     suspend fun stop(endedMs: Long)
 
+    /**
+     * Closes out every trip a previous process left open, and must be called once at startup,
+     * before anything can open a new one.
+     *
+     * `ended_ms` is only ever written by [stop], in the process that called [start]. Kill that
+     * process mid-drive — the OS reclaiming memory, a crash, the user swiping the app away — and
+     * the row stays open forever: nothing on the next launch was going to finish it, and the trip
+     * list showed it as "Recording…" for a trip nothing was recording.
+     *
+     * What it does with each one is decided by whether anything was actually recorded, **not** by
+     * distance: a GPS-only trip has no OBD speed samples, so its `distance_m` is 0.0 however far
+     * it went, and discarding on distance would delete every auto-detected drive in the history.
+     *
+     * - Nothing recorded at all — no route, no samples — is discarded. There is nothing to show,
+     *   and this is the false start (one spurious fix at speed) that the phantom rows came from.
+     * - Anything recorded is **finished, never deleted**, at the last second it has data for.
+     *   Losing a real drive because the app was killed would be far worse than showing a short one.
+     */
+    suspend fun recoverStranded()
+
     suspend fun trips(vehicleId: String): List<TripSummary>
 
     /** Every trip, across every vehicle, newest first — the trip-list screen's filter is by source, not by vehicle. */
@@ -148,6 +168,28 @@ class DefaultTripRepository(
         writer.stop(endedMs)
         _activeTrip.value = null
     }
+
+    override suspend fun recoverStranded() {
+        // The live trip, if this process already opened one, is the one row that is legitimately
+        // open — everything else in selectUnfinished belongs to a process that is gone.
+        val live = _activeTrip.value?.id
+        for (trip in db.tripQueries.selectUnfinished().executeAsList()) {
+            if (trip.id == live) continue
+            val lastSecond = lastRecordedSecond(trip.id)
+            if (lastSecond == null) db.tripQueries.deleteById(trip.id)
+            else db.tripQueries.finish(ended_ms = trip.started_ms + lastSecond * 1_000, id = trip.id)
+        }
+    }
+
+    /**
+     * Seconds-since-start of the last thing recorded for a trip, across both stores; null when
+     * neither has a single chunk, which is the "nothing was recorded" that [recoverStranded]
+     * discards on.
+     */
+    private fun lastRecordedSecond(tripId: String): Long? = listOfNotNull(
+        db.tripGpsQueries.lastSecond(tripId).executeAsOneOrNull(),
+        db.tripSeriesQueries.lastSecond(tripId).executeAsOneOrNull(),
+    ).maxOrNull()
 
     override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) {
         db.tripQueries.setStartLocation(start_lat = lat, start_lon = lon, start_address = address, id = tripId)

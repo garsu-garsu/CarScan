@@ -359,4 +359,73 @@ class TripRepositoryTest {
 
         assertEquals(emptyList(), repo.track(id))
     }
+
+    // --- Recovery after a process died mid-trip ------------------------------------
+    //
+    // `ended_ms` is only ever written by stop(), in the process that called start(). A process
+    // the OS kills mid-drive leaves the row open forever, and the trip list showed it as
+    // "Recording…" for a trip nothing was recording. Every test here models that death the same
+    // way a restart does: a *second* repository over the same database, having never seen the
+    // first one's trip.
+
+    @Test
+    fun `a trip left open by a dead process, with a route, is finished at its last recorded second`() = runTest {
+        val dead = repo(backgroundScope)
+        val id = dead.start(vehicleId = null, startedMs = 10_000, source = "GPS")
+        // 90 seconds of route, exactly as GpsWriter would have flushed it before the kill.
+        db.tripGpsQueries.upsert(
+            trip_id = id, chunk_index = 0, t0_s = 0, n = 90,
+            lat = DoubleArray(90) { 37.0 }, lon = DoubleArray(90) { 127.0 },
+            alt = FloatArray(90), speed = FloatArray(90) { 40f }, bearing = FloatArray(90),
+        )
+
+        repo(backgroundScope).recoverStranded()
+
+        // Kept, not deleted — a real drive must survive the app being killed — and ended at the
+        // last second it has data for rather than at some later wall clock.
+        assertEquals(10_000L + 90_000L, db.tripQueries.selectById(id).executeAsOne().ended_ms)
+    }
+
+    /**
+     * The phantom rows the bug produced: a false start (one spurious fix at speed) that recorded
+     * nothing before the process died. Discarding on *distance* would be wrong — a GPS-only trip
+     * has no OBD speed samples, so its distance_m is 0.0 however far it went — so the test drives
+     * the case that separates the two: a stranded GPS trip with a route is kept (above) and one
+     * with nothing at all is discarded.
+     */
+    @Test
+    fun `a trip left open by a dead process with nothing recorded is discarded`() = runTest {
+        val dead = repo(backgroundScope)
+        dead.start(vehicleId = null, startedMs = 10_000, source = "GPS")
+
+        repo(backgroundScope).recoverStranded()
+
+        assertEquals(0L, db.tripQueries.countAll().executeAsOne())
+    }
+
+    @Test
+    fun `recovery leaves the trip this process is recording alone`() = runTest {
+        db.seedVehicle()
+        val repo = repo(backgroundScope)
+        val id = repo.start(VEHICLE, startedMs = 10_000)
+
+        repo.recoverStranded()
+
+        assertTrue(repo.isRecording)
+        assertNull(db.tripQueries.selectById(id).executeAsOneOrNull()?.ended_ms)
+        assertEquals(1L, db.tripQueries.countAll().executeAsOne())
+    }
+
+    @Test
+    fun `recovery leaves an already finished trip untouched`() = runTest {
+        db.seedVehicle()
+        val dead = repo(backgroundScope)
+        val id = dead.start(VEHICLE, startedMs = 10_000)
+        dead.stop(endedMs = 12_000)
+        advanceUntilIdle()
+
+        repo(backgroundScope).recoverStranded()
+
+        assertEquals(12_000L, db.tripQueries.selectById(id).executeAsOne().ended_ms)
+    }
 }

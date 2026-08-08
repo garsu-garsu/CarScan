@@ -91,6 +91,9 @@ dependencies {
     // InterstitialAdPort, AppOpenAdPort, FullScreenAdGate, Entitlements — AppOpenAdManager and
     // CarScanApplication resolve these from Koin directly. Pure KMP; no AdMob type here.
     implementation(project(":core:monetization"))
+    // TripRepository.recoverStranded(), called once from CarScanApplication.onCreate — same
+    // reason :core:monetization is here: onCreate touches the port directly.
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
