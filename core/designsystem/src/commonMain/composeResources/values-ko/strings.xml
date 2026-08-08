@@ -120,9 +120,9 @@
     <string name="live_resume">계속</string>
     <string name="live_clear">지우기</string>
     <string name="live_no_series_selected">차트로 볼 신호를 선택하세요</string>
-    <string name="live_min">Min</string>
-    <string name="live_avg">Avg</string>
-    <string name="live_max">Max</string>
+    <string name="live_min">최소</string>
+    <string name="live_avg">평균</string>
+    <string name="live_max">최대</string>
 
     <string name="health_slowed_down">이 어댑터에 비해 게이지가 너무 많아 갱신이 느려집니다.</string>
 
@@ -161,19 +161,13 @@
     <string name="settings_theme_dark">다크</string>
     <string name="settings_keep_screen_on">화면 켜짐 유지</string>
     <string name="settings_record_trips">주행 기록 저장</string>
-    <string name="settings_auto_reconnect">Auto-reconnect to last scanner</string>
-    <!-- Untranslated: copied from English. -->
-    <string name="settings_acquisition_source">Background data source</string>
-    <!-- Untranslated: copied from English. -->
-    <string name="settings_acq_dashboard">Dashboard</string>
-    <!-- Untranslated: copied from English. -->
-    <string name="settings_acq_monitoring">Monitoring</string>
-    <!-- Untranslated: copied from English. -->
+    <string name="settings_auto_reconnect">마지막 스캐너에 자동 연결</string>
+    <string name="settings_acquisition_source">백그라운드 데이터 소스</string>
+    <string name="settings_acq_dashboard">대시보드</string>
+    <string name="settings_acq_monitoring">모니터링</string>
     <string name="settings_acq_hud">HUD</string>
-    <!-- Untranslated: copied from English. -->
-    <string name="settings_auto_drive_detect_speed">Driving detection speed</string>
-    <!-- Untranslated: copied from English. -->
-    <string name="settings_background_tracking">Track trips in the background</string>
+    <string name="settings_auto_drive_detect_speed">주행 감지 속도</string>
+    <string name="settings_background_tracking">백그라운드에서 주행 기록 저장</string>
     <string name="settings_about">정보 및 라이선스</string>
     <string name="settings_vehicle">차량</string>
     <string name="settings_premium">프리미엄</string>
@@ -212,12 +206,12 @@
     <string name="paywall_already_premium">이미 프리미엄을 이용 중입니다</string>
     <string name="paywall_restore">구매 복원</string>
 
-    <string name="trip_filter_all">All</string>
-    <string name="trip_filter_my_car">My car</string>
-    <string name="trip_filter_auto">Auto-detected</string>
-    <string name="trip_source_auto">Auto</string>
-    <string name="trip_recording">Recording…</string>
-    <string name="trip_empty_auto">No auto-detected trips yet.</string>
+    <string name="trip_filter_all">전체</string>
+    <string name="trip_filter_my_car">내 차</string>
+    <string name="trip_filter_auto">자동 감지</string>
+    <string name="trip_source_auto">자동</string>
+    <string name="trip_recording">기록 중…</string>
+    <string name="trip_empty_auto">자동 감지된 주행 기록이 아직 없습니다.</string>
 
     <string name="trip_event_harsh_accel">급가속</string>
     <string name="trip_event_harsh_brake">급제동</string>

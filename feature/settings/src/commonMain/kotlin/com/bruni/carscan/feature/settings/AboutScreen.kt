@@ -68,7 +68,7 @@ fun AboutScreen(modifier: Modifier = Modifier) {
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = stringResource(Res.string.about_version, APP_VERSION),
+                            text = stringResource(Res.string.about_version, appVersionName()),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -153,9 +153,6 @@ private fun IconBadge(icon: ImageVector) {
         Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
     }
 }
-
-// A placeholder until this is wired to the platform's own version string.
-private const val APP_VERSION = "1.0.0"
 
 private const val OBDB_SOURCE_URL = "https://github.com/OBDb"
 private const val OBDB_LICENSE_NAME = "CC BY-SA 4.0"
