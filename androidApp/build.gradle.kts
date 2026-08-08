@@ -22,6 +22,18 @@ val admobAppId: String = localProperties.getProperty("admob.app.id") ?: TEST_ADM
 // polyline and event markers still draw.
 val mapsApiKey: String = localProperties.getProperty("maps.api.key") ?: ""
 
+// Play upload signing. `local.properties` supplies the real upload keystore
+// (`release.storeFile`/`release.storePassword`/`release.keyAlias`/`release.keyPassword`) when one
+// exists. Without it, release falls back to the Android debug keystore so a minified release build
+// is still installable on a device for testing — that fallback is NOT valid for a Play upload,
+// which must be signed with the real upload key.
+val releaseStoreFile = localProperties.getProperty("release.storeFile")
+    ?.let { rootProject.file(it) }
+    ?: file(System.getProperty("user.home")).resolve(".android/debug.keystore")
+val releaseStorePassword = localProperties.getProperty("release.storePassword") ?: "android"
+val releaseKeyAlias = localProperties.getProperty("release.keyAlias") ?: "androiddebugkey"
+val releaseKeyPassword = localProperties.getProperty("release.keyPassword") ?: "android"
+
 android {
     namespace = "com.bruni.carscan"
     compileSdk = libs.versions.compileSdk.get().toInt()
@@ -43,9 +55,19 @@ android {
         compose = true
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = releaseStoreFile
+            storePassword = releaseStorePassword
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             // Compose Multiplatform resources live in assets/, not res/, so the resource shrinker
             // cannot see them being used and would strip every string in the app. Code shrinking
             // only.
