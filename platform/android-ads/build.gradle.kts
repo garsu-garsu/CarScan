@@ -7,7 +7,6 @@ plugins {
 // Google's public TEST ad unit ids. Debug builds always compile these in, so development never
 // serves or clicks a real ad (which risks an AdMob ban). Release builds use the real ids from a
 // gitignored `local.properties` (falling back to test when it's absent, e.g. on CI).
-val TEST_REWARDED = "ca-app-pub-3940256099942544/5224354917"
 val TEST_INTERSTITIAL = "ca-app-pub-3940256099942544/1033173712"
 val TEST_APP_OPEN = "ca-app-pub-3940256099942544/9257395921"
 val TEST_BANNER = "ca-app-pub-3940256099942544/9214589741"
@@ -25,7 +24,6 @@ android {
 
     defaultConfig {
         // Test ids by default → debug (and any variant without an override) never touches real ads.
-        buildConfigField("String", "REWARDED_AD_UNIT_ID", "\"$TEST_REWARDED\"")
         buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", "\"$TEST_INTERSTITIAL\"")
         buildConfigField("String", "APP_OPEN_AD_UNIT_ID", "\"$TEST_APP_OPEN\"")
         buildConfigField("String", "BANNER_AD_UNIT_ID", "\"$TEST_BANNER\"")
@@ -33,7 +31,6 @@ android {
 
     buildTypes {
         getByName("release") {
-            buildConfigField("String", "REWARDED_AD_UNIT_ID", realOr("admob.rewarded.adunit", TEST_REWARDED))
             buildConfigField("String", "INTERSTITIAL_AD_UNIT_ID", realOr("admob.interstitial.adunit", TEST_INTERSTITIAL))
             buildConfigField("String", "APP_OPEN_AD_UNIT_ID", realOr("admob.appopen.adunit", TEST_APP_OPEN))
             buildConfigField("String", "BANNER_AD_UNIT_ID", realOr("admob.banner.adunit", TEST_BANNER))

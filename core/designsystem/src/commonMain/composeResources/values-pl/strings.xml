@@ -8,7 +8,6 @@
     <!-- Untranslated: copied from English. -->
     <string name="home_no_vehicle">Select your vehicle</string>
 
-    <string name="common_ok">OK</string>
     <string name="common_cancel">Anuluj</string>
     <string name="common_retry">Spróbuj ponownie</string>
     <string name="common_settings">Ustawienia</string>
@@ -19,7 +18,6 @@
     <string name="adapter_kind_wifi">Wi-Fi</string>
     <string name="adapter_unnamed">Adapter bez nazwy</string>
 
-    <string name="connection_state_disconnected">Nie połączono</string>
     <string name="connection_state_connecting">Łączenie…</string>
     <string name="connection_state_connected">Połączono</string>
 
@@ -30,7 +28,6 @@
     <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Szukaj</string>
     <string name="connect_scanning">Szukanie…</string>
-    <string name="connect_stop">Zatrzymaj</string>
     <string name="connect_connect">Połącz</string>
     <string name="connect_disconnect">Rozłącz</string>
     <string name="connect_no_adapters">Nie znaleziono adapterów</string>
@@ -42,6 +39,7 @@
     <string name="connect_protocol">Protokół: %1$s</string>
     <string name="connect_genuine_stn">Oryginalny układ STN</string>
     <string name="connect_clone">Klon ELM327 — ograniczona przepustowość</string>
+    <string name="connect_proceed">Zacznij jazdę</string>
 
     <string name="error_ignition_off">Włącz zapłon i spróbuj ponownie.</string>
     <string name="error_bluetooth_permission">CarScan potrzebuje uprawnienia Bluetooth, aby znaleźć adapter.</string>
@@ -50,11 +48,6 @@
     <string name="error_wifi_not_joined">Najpierw połącz się z siecią Wi-Fi adaptera. Dopóki telefon jest do niej podłączony, nie ma internetu komórkowego.</string>
     <string name="error_adapter_unreachable">Adapter nie odpowiada. Sprawdź, czy jest podłączony.</string>
     <string name="error_init_failed">Adapter nie uruchomił się poprawnie.</string>
-
-    <string name="error_no_data">Ten samochód nie udostępnia tej wartości.</string>
-    <string name="error_bus">Utracono łączność z samochodem.</string>
-    <string name="error_adapter_overrun">Adapter nie nadąża.</string>
-    <string name="error_adapter_reset">Adapter uruchomił się ponownie. Sprawdź zasilanie gniazda OBD.</string>
 
     <string name="unit_rpm">obr/min</string>
     <string name="unit_kmh">km/h</string>
@@ -104,12 +97,10 @@
     <string name="gauge_engine_speed">Obroty silnika</string>
     <string name="gauge_vehicle_speed">Prędkość</string>
     <string name="gauge_coolant_temp">Płyn chłodzący</string>
-    <string name="gauge_intake_air_temp">Powietrze dolotowe</string>
     <string name="gauge_engine_load">Obciążenie silnika</string>
     <string name="gauge_throttle_position">Przepustnica</string>
     <string name="gauge_battery_voltage">Akumulator</string>
     <string name="gauge_fuel_level">Poziom paliwa</string>
-    <string name="gauge_boost_pressure">Doładowanie</string>
     <string name="gauge_mass_air_flow">Przepływ powietrza</string>
     <string name="gauge_state_of_charge">Naładowanie</string>
 
@@ -120,9 +111,6 @@
 
     <string name="live_title">Monitorowanie</string>
     <string name="trips_title">Przejazdy</string>
-    <string name="live_pause">Wstrzymaj</string>
-    <string name="live_resume">Wznów</string>
-    <string name="live_clear">Wyczyść</string>
     <string name="live_no_series_selected">Wybierz sygnał do wykresu</string>
     <string name="live_min">Min</string>
     <string name="live_avg">Avg</string>
@@ -137,25 +125,11 @@
         <item quantity="other">Twój adapter: %d zapytania/s</item>
     </plurals>
 
-    <plurals name="connect_adapters_found">
-        <item quantity="one">Znaleziono %d adapter</item>
-        <item quantity="few">Znaleziono %d adaptery</item>
-        <item quantity="many">Znaleziono %d adapterów</item>
-        <item quantity="other">Znaleziono %d adaptera</item>
-    </plurals>
-
     <plurals name="dashboard_tiles">
         <item quantity="one">%d wskaźnik</item>
         <item quantity="few">%d wskaźniki</item>
         <item quantity="many">%d wskaźników</item>
         <item quantity="other">%d wskaźnika</item>
-    </plurals>
-
-    <plurals name="live_window_seconds">
-        <item quantity="one">%d sekunda</item>
-        <item quantity="few">%d sekundy</item>
-        <item quantity="many">%d sekund</item>
-        <item quantity="other">%d sekundy</item>
     </plurals>
 
     <string name="settings_title">Ustawienia</string>

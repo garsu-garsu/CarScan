@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -58,6 +57,7 @@ import com.bruni.carscan.core.designsystem.generated.resources.connect_clone
 import com.bruni.carscan.core.designsystem.generated.resources.connect_connect
 import com.bruni.carscan.core.designsystem.generated.resources.connect_genuine_stn
 import com.bruni.carscan.core.designsystem.generated.resources.connect_no_adapters
+import com.bruni.carscan.core.designsystem.generated.resources.connect_proceed
 import com.bruni.carscan.core.designsystem.generated.resources.connect_protocol
 import com.bruni.carscan.core.designsystem.generated.resources.connect_scan
 import com.bruni.carscan.core.designsystem.generated.resources.connect_scanning
@@ -79,22 +79,6 @@ import com.bruni.carscan.core.transport.TransportKind
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
-
-/** Stable handles for the smoke tests, and the only place they are spelled. */
-object ConnectTags {
-    const val SCAN = "connect_scan"
-    const val THROUGHPUT = "connect_throughput"
-    const val PROTOCOL = "connect_protocol"
-    const val FAILURE = "connect_failure"
-    const val CHIP = "connect_chip"
-    const val BACK_TO_METHODS = "connect_back_to_methods"
-    const val WIFI_HOST = "connect_wifi_host"
-    const val WIFI_PORT = "connect_wifi_port"
-    const val WIFI_CONNECT = "connect_wifi_connect"
-
-    fun method(kind: TransportKind) = "connect_method_${kind.name}"
-    fun adapter(address: String) = "connect_adapter_$address"
-}
 
 @Composable
 fun ConnectScreen(
@@ -147,10 +131,7 @@ private fun LazyListScope.scanStep(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            TextButton(
-                onClick = { onIntent(ConnectIntent.BackToMethods) },
-                modifier = Modifier.testTag(ConnectTags.BACK_TO_METHODS),
-            ) {
+            TextButton(onClick = { onIntent(ConnectIntent.BackToMethods) }) {
                 Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = null)
                 Spacer(Modifier.width(4.dp))
                 Text(stringResource(Res.string.connect_change_method))
@@ -170,7 +151,6 @@ private fun LazyListScope.scanStep(
                 Button(
                     onClick = { onIntent(ConnectIntent.Scan) },
                     enabled = !state.isScanning && state.connectingTo == null,
-                    modifier = Modifier.testTag(ConnectTags.SCAN),
                 ) {
                     Text(
                         stringResource(
@@ -187,7 +167,7 @@ private fun LazyListScope.scanStep(
     }
 
     state.ready?.let { ready ->
-        item { ReadoutCard(ready, state.throughput) }
+        item { ReadoutCard(ready, state.throughput, onProceed = { onIntent(ConnectIntent.Proceed) }) }
     }
 
     state.connectingTo?.let { target ->
@@ -220,9 +200,7 @@ private fun LazyListScope.scanStep(
 private fun MethodCard(kind: TransportKind, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(ConnectTags.method(kind)),
+        modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
@@ -278,7 +256,7 @@ private fun WifiForm(onConnect: (host: String, port: Int) -> Unit) {
                 onValueChange = { host = it },
                 label = { Text(stringResource(Res.string.connect_wifi_host)) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().testTag(ConnectTags.WIFI_HOST),
+                modifier = Modifier.fillMaxWidth(),
             )
             OutlinedTextField(
                 value = portText,
@@ -286,12 +264,12 @@ private fun WifiForm(onConnect: (host: String, port: Int) -> Unit) {
                 label = { Text(stringResource(Res.string.connect_wifi_port)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth().testTag(ConnectTags.WIFI_PORT),
+                modifier = Modifier.fillMaxWidth(),
             )
             Button(
                 onClick = { port?.let { onConnect(host, it) } },
                 enabled = host.isNotBlank() && port != null,
-                modifier = Modifier.fillMaxWidth().testTag(ConnectTags.WIFI_CONNECT),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(Res.string.connect_connect))
             }
@@ -304,9 +282,7 @@ private fun WifiForm(onConnect: (host: String, port: Int) -> Unit) {
 private fun AdapterRow(adapter: DiscoveredAdapter, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(ConnectTags.adapter(adapter.address)),
+        modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
@@ -374,7 +350,11 @@ private fun ConnectingCard(target: DiscoveredAdapter) {
  * nothing watches the dashboard stutter and blames us.
  */
 @Composable
-private fun ReadoutCard(ready: ReadyReadout, throughput: ThroughputAdvice?) {
+private fun ReadoutCard(
+    ready: ReadyReadout,
+    throughput: ThroughputAdvice?,
+    onProceed: () -> Unit,
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
@@ -393,7 +373,6 @@ private fun ReadoutCard(ready: ReadyReadout, throughput: ThroughputAdvice?) {
                     if (ready.isStn) Res.string.connect_genuine_stn else Res.string.connect_clone,
                 ),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.testTag(ConnectTags.CHIP),
             )
 
             // Absent when ATDPN would not say. Better a missing line than the word "unknown".
@@ -401,7 +380,6 @@ private fun ReadoutCard(ready: ReadyReadout, throughput: ThroughputAdvice?) {
                 Text(
                     text = stringResource(Res.string.connect_protocol, protocol),
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.testTag(ConnectTags.PROTOCOL),
                 )
             }
 
@@ -418,8 +396,17 @@ private fun ReadoutCard(ready: ReadyReadout, throughput: ThroughputAdvice?) {
                 Text(
                     text = "$rate — " + stringResource(Res.string.connect_budget, tiles, advice.hz),
                     style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.testTag(ConnectTags.THROUGHPUT),
                 )
+            }
+
+            // The only way off this screen. Connect is not a tab and pops itself off the stack
+            // on the way out, so without this the sole exit is system Back — which leaves
+            // Connect on the stack and drops the user onto a scan screen mid-drive.
+            Button(
+                onClick = onProceed,
+                modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+            ) {
+                Text(stringResource(Res.string.connect_proceed))
             }
         }
     }
@@ -435,7 +422,7 @@ private fun ReadoutCard(ready: ReadyReadout, throughput: ThroughputAdvice?) {
 @Composable
 private fun FailureCard(failure: ConnectFailure, onIntent: (ConnectIntent) -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().testTag(ConnectTags.FAILURE),
+        modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
     ) {

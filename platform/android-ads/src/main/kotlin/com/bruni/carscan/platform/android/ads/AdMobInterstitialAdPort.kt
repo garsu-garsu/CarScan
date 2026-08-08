@@ -11,8 +11,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.coroutines.CompletableDeferred
 
 /**
- * Real AdMob interstitial. Device-tested only, same reason as [AdMobRewardedAdPort]: there is
- * no ad inventory on a JVM unit test host.
+ * Real AdMob interstitial. Device-tested only: there is no ad inventory on a JVM unit test host.
  *
  * [preload] keeps one ad ready at all times — it loads eagerly, and once an ad is shown or
  * fails to show, the next one is requested immediately so [FullScreenAdGate][com.bruni.carscan.core.monetization.FullScreenAdGate]'s
@@ -22,8 +21,8 @@ import kotlinx.coroutines.CompletableDeferred
  * module's `build.gradle.kts` — overridable per machine via the gitignored `local.properties`
  * key `admob.interstitial.adunit`.
  *
- * [show] needs a foreground Activity, read from [CurrentActivity] for the same reason
- * [AdMobRewardedAdPort] does — this port is a Koin singleton scoped to the whole app.
+ * [show] needs a foreground Activity, read from [CurrentActivity] — this port is a Koin
+ * singleton scoped to the whole app.
  */
 class AdMobInterstitialAdPort(private val context: Context) : InterstitialAdPort {
 

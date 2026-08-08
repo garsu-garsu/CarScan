@@ -12,8 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Real AdMob app-open ad. Device-tested only, same reason as [AdMobRewardedAdPort]: there is no
- * ad inventory on a JVM unit test host.
+ * Real AdMob app-open ad. Device-tested only: there is no ad inventory on a JVM unit test host.
  *
  * [preload] keeps one ad ready at all times, the same shape as [AdMobInterstitialAdPort] — it
  * loads eagerly, and once an ad is shown or fails to show, the next one is requested immediately.
@@ -22,8 +21,8 @@ import kotlinx.coroutines.withContext
  * module's `build.gradle.kts` — overridable per machine via the gitignored `local.properties`
  * key `admob.appopen.adunit`.
  *
- * [show] needs a foreground Activity, read from [CurrentActivity] for the same reason
- * [AdMobRewardedAdPort] does — this port is a Koin singleton scoped to the whole app.
+ * [show] needs a foreground Activity, read from [CurrentActivity] — this port is a Koin
+ * singleton scoped to the whole app.
  */
 class AdMobAppOpenAdPort(private val context: Context) : AppOpenAdPort {
 

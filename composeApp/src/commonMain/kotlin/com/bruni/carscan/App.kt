@@ -43,7 +43,6 @@ import com.bruni.carscan.feature.connect.ConnectViewModel
 import com.bruni.carscan.feature.dashboard.DashboardEffect
 import com.bruni.carscan.feature.dashboard.DashboardScreen
 import com.bruni.carscan.feature.dashboard.DashboardViewModel
-import com.bruni.carscan.feature.dtc.DtcScreen
 import com.bruni.carscan.feature.garage.GarageEffect
 import com.bruni.carscan.feature.garage.GarageScreen
 import com.bruni.carscan.feature.garage.GarageViewModel
@@ -158,7 +157,7 @@ fun App(bannerAdUnitId: String? = null) {
 
             // Tells AcquisitionController which data screen, if any, is actually in the
             // foreground — see its KDoc. Every other destination (home, trips, settings, connect,
-            // garage, paywall, about, dtc) hands acquisition back to the chosen background source.
+            // garage, paywall, about) hands acquisition back to the chosen background source.
             LaunchedEffect(entry) {
                 acquisitionController.setForeground(
                     when {
@@ -264,7 +263,6 @@ private fun CarScanNavHost(
             LiveScreen(viewModel = viewModel)
         }
 
-        composable<Route.Dtc> { DtcScreen() }
         composable<Route.Hud> { HudScreen() }
 
         composable<Route.Trips> {

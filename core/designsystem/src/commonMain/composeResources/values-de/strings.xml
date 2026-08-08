@@ -9,7 +9,6 @@
     <!-- Untranslated: copied from English. -->
     <string name="home_no_vehicle">Select your vehicle</string>
 
-    <string name="common_ok">OK</string>
     <string name="common_cancel">Abbrechen</string>
     <string name="common_retry">Erneut versuchen</string>
     <string name="common_settings">Einstellungen</string>
@@ -20,7 +19,6 @@
     <string name="adapter_kind_wifi">WLAN</string>
     <string name="adapter_unnamed">Unbenannter Adapter</string>
 
-    <string name="connection_state_disconnected">Nicht verbunden</string>
     <string name="connection_state_connecting">Verbindung wird hergestellt…</string>
     <string name="connection_state_connected">Verbunden</string>
 
@@ -31,7 +29,6 @@
     <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Suchen</string>
     <string name="connect_scanning">Suche läuft…</string>
-    <string name="connect_stop">Stopp</string>
     <string name="connect_connect">Verbinden</string>
     <string name="connect_disconnect">Trennen</string>
     <string name="connect_no_adapters">Keine Adapter gefunden</string>
@@ -43,6 +40,7 @@
     <string name="connect_protocol">Protokoll: %1$s</string>
     <string name="connect_genuine_stn">Echter STN-Chip</string>
     <string name="connect_clone">ELM327-Klon — begrenzter Durchsatz</string>
+    <string name="connect_proceed">Losfahren</string>
 
     <string name="error_ignition_off">Zündung einschalten und erneut versuchen.</string>
     <string name="error_bluetooth_permission">CarScan benötigt die Bluetooth-Berechtigung, um den Adapter zu finden.</string>
@@ -51,11 +49,6 @@
     <string name="error_wifi_not_joined">Verbinden Sie sich zuerst mit dem WLAN des Adapters. Solange diese Verbindung besteht, hat das Telefon keine mobilen Daten.</string>
     <string name="error_adapter_unreachable">Der Adapter antwortet nicht. Prüfen Sie, ob er eingesteckt ist.</string>
     <string name="error_init_failed">Der Adapter ist nicht korrekt gestartet.</string>
-
-    <string name="error_no_data">Dieses Fahrzeug liefert diesen Wert nicht.</string>
-    <string name="error_bus">Verbindung zum Fahrzeug verloren.</string>
-    <string name="error_adapter_overrun">Der Adapter kommt nicht hinterher.</string>
-    <string name="error_adapter_reset">Der Adapter wurde neu gestartet. Prüfen Sie die Stromversorgung der OBD-Buchse.</string>
 
     <string name="unit_rpm">U/min</string>
     <string name="unit_kmh">km/h</string>
@@ -105,12 +98,10 @@
     <string name="gauge_engine_speed">Motordrehzahl</string>
     <string name="gauge_vehicle_speed">Geschwindigkeit</string>
     <string name="gauge_coolant_temp">Kühlmittel</string>
-    <string name="gauge_intake_air_temp">Ansaugluft</string>
     <string name="gauge_engine_load">Motorlast</string>
     <string name="gauge_throttle_position">Drosselklappe</string>
     <string name="gauge_battery_voltage">Batterie</string>
     <string name="gauge_fuel_level">Tankfüllstand</string>
-    <string name="gauge_boost_pressure">Ladedruck</string>
     <string name="gauge_mass_air_flow">Luftmasse</string>
     <string name="gauge_state_of_charge">Ladung</string>
 
@@ -121,9 +112,6 @@
 
     <string name="live_title">Überwachung</string>
     <string name="trips_title">Fahrten</string>
-    <string name="live_pause">Pause</string>
-    <string name="live_resume">Fortsetzen</string>
-    <string name="live_clear">Löschen</string>
     <string name="live_no_series_selected">Signal für das Diagramm wählen</string>
     <string name="live_min">Min</string>
     <string name="live_avg">Avg</string>
@@ -136,19 +124,9 @@
         <item quantity="other">Ihr Adapter: %d Abfragen/s</item>
     </plurals>
 
-    <plurals name="connect_adapters_found">
-        <item quantity="one">%d Adapter gefunden</item>
-        <item quantity="other">%d Adapter gefunden</item>
-    </plurals>
-
     <plurals name="dashboard_tiles">
         <item quantity="one">%d Anzeige</item>
         <item quantity="other">%d Anzeigen</item>
-    </plurals>
-
-    <plurals name="live_window_seconds">
-        <item quantity="one">%d Sekunde</item>
-        <item quantity="other">%d Sekunden</item>
     </plurals>
 
     <string name="settings_title">Einstellungen</string>

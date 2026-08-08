@@ -8,7 +8,6 @@
     <!-- Untranslated: copied from English. -->
     <string name="home_no_vehicle">Select your vehicle</string>
 
-    <string name="common_ok">Aceptar</string>
     <string name="common_cancel">Cancelar</string>
     <string name="common_retry">Reintentar</string>
     <string name="common_settings">Ajustes</string>
@@ -19,7 +18,6 @@
     <string name="adapter_kind_wifi">Wi-Fi</string>
     <string name="adapter_unnamed">Adaptador sin nombre</string>
 
-    <string name="connection_state_disconnected">Sin conexión</string>
     <string name="connection_state_connecting">Conectando…</string>
     <string name="connection_state_connected">Conectado</string>
 
@@ -30,7 +28,6 @@
     <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Buscar</string>
     <string name="connect_scanning">Buscando…</string>
-    <string name="connect_stop">Detener</string>
     <string name="connect_connect">Conectar</string>
     <string name="connect_disconnect">Desconectar</string>
     <string name="connect_no_adapters">No se encontró ningún adaptador</string>
@@ -42,6 +39,7 @@
     <string name="connect_protocol">Protocolo: %1$s</string>
     <string name="connect_genuine_stn">Chip STN original</string>
     <string name="connect_clone">Clon de ELM327: rendimiento limitado</string>
+    <string name="connect_proceed">Empezar a conducir</string>
 
     <string name="error_ignition_off">Pon el contacto y vuelve a intentarlo.</string>
     <string name="error_bluetooth_permission">CarScan necesita permiso de Bluetooth para encontrar el adaptador.</string>
@@ -50,11 +48,6 @@
     <string name="error_wifi_not_joined">Conéctate primero a la red Wi-Fi del adaptador. Mientras el teléfono esté en ella, no tendrá datos móviles.</string>
     <string name="error_adapter_unreachable">El adaptador no responde. Comprueba que esté enchufado.</string>
     <string name="error_init_failed">El adaptador no se inició correctamente.</string>
-
-    <string name="error_no_data">Este coche no facilita ese valor.</string>
-    <string name="error_bus">Se perdió la comunicación con el coche.</string>
-    <string name="error_adapter_overrun">El adaptador no da abasto.</string>
-    <string name="error_adapter_reset">El adaptador se reinició. Comprueba la alimentación del conector OBD.</string>
 
     <string name="unit_rpm">rpm</string>
     <string name="unit_kmh">km/h</string>
@@ -104,12 +97,10 @@
     <string name="gauge_engine_speed">Régimen del motor</string>
     <string name="gauge_vehicle_speed">Velocidad</string>
     <string name="gauge_coolant_temp">Refrigerante</string>
-    <string name="gauge_intake_air_temp">Aire de admisión</string>
     <string name="gauge_engine_load">Carga del motor</string>
     <string name="gauge_throttle_position">Acelerador</string>
     <string name="gauge_battery_voltage">Batería</string>
     <string name="gauge_fuel_level">Nivel de combustible</string>
-    <string name="gauge_boost_pressure">Presión de turbo</string>
     <string name="gauge_mass_air_flow">Flujo de aire</string>
     <string name="gauge_state_of_charge">Carga</string>
 
@@ -120,9 +111,6 @@
 
     <string name="live_title">Monitoreo</string>
     <string name="trips_title">Viajes</string>
-    <string name="live_pause">Pausar</string>
-    <string name="live_resume">Reanudar</string>
-    <string name="live_clear">Borrar</string>
     <string name="live_no_series_selected">Elige una señal para el gráfico</string>
     <string name="live_min">Min</string>
     <string name="live_avg">Avg</string>
@@ -135,19 +123,9 @@
         <item quantity="other">Tu adaptador: %d consultas/s</item>
     </plurals>
 
-    <plurals name="connect_adapters_found">
-        <item quantity="one">%d adaptador encontrado</item>
-        <item quantity="other">%d adaptadores encontrados</item>
-    </plurals>
-
     <plurals name="dashboard_tiles">
         <item quantity="one">%d indicador</item>
         <item quantity="other">%d indicadores</item>
-    </plurals>
-
-    <plurals name="live_window_seconds">
-        <item quantity="one">%d segundo</item>
-        <item quantity="other">%d segundos</item>
     </plurals>
 
     <string name="settings_title">Ajustes</string>

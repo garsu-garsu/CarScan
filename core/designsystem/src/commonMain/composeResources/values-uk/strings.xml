@@ -8,7 +8,6 @@
     <!-- Untranslated: copied from English. -->
     <string name="home_no_vehicle">Select your vehicle</string>
 
-    <string name="common_ok">OK</string>
     <string name="common_cancel">Скасувати</string>
     <string name="common_retry">Спробувати ще раз</string>
     <string name="common_settings">Налаштування</string>
@@ -19,7 +18,6 @@
     <string name="adapter_kind_wifi">Wi-Fi</string>
     <string name="adapter_unnamed">Адаптер без назви</string>
 
-    <string name="connection_state_disconnected">Не підключено</string>
     <string name="connection_state_connecting">Підключення…</string>
     <string name="connection_state_connected">Підключено</string>
 
@@ -30,7 +28,6 @@
     <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Пошук</string>
     <string name="connect_scanning">Триває пошук…</string>
-    <string name="connect_stop">Зупинити</string>
     <string name="connect_connect">Підключити</string>
     <string name="connect_disconnect">Відключити</string>
     <string name="connect_no_adapters">Адаптерів не знайдено</string>
@@ -42,6 +39,7 @@
     <string name="connect_protocol">Протокол: %1$s</string>
     <string name="connect_genuine_stn">Оригінальний чип STN</string>
     <string name="connect_clone">Клон ELM327 — обмежена швидкість</string>
+    <string name="connect_proceed">Почати поїздку</string>
 
     <string name="error_ignition_off">Увімкніть запалювання та повторіть спробу.</string>
     <string name="error_bluetooth_permission">CarScan потрібен дозвіл на Bluetooth, щоб знайти адаптер.</string>
@@ -50,11 +48,6 @@
     <string name="error_wifi_not_joined">Спершу підключіться до мережі Wi-Fi адаптера. Поки телефон у ній, мобільний інтернет не працює.</string>
     <string name="error_adapter_unreachable">Адаптер не відповідає. Перевірте, чи він вставлений у роз’єм.</string>
     <string name="error_init_failed">Адаптер не запустився належним чином.</string>
-
-    <string name="error_no_data">Цей автомобіль не передає таке значення.</string>
-    <string name="error_bus">Зв’язок з автомобілем втрачено.</string>
-    <string name="error_adapter_overrun">Адаптер не встигає.</string>
-    <string name="error_adapter_reset">Адаптер перезапустився. Перевірте живлення роз’єму OBD.</string>
 
     <string name="unit_rpm">об/хв</string>
     <string name="unit_kmh">км/год</string>
@@ -104,12 +97,10 @@
     <string name="gauge_engine_speed">Оберти двигуна</string>
     <string name="gauge_vehicle_speed">Швидкість</string>
     <string name="gauge_coolant_temp">Охолоджувальна рідина</string>
-    <string name="gauge_intake_air_temp">Впускне повітря</string>
     <string name="gauge_engine_load">Навантаження двигуна</string>
     <string name="gauge_throttle_position">Дросель</string>
     <string name="gauge_battery_voltage">Акумулятор</string>
     <string name="gauge_fuel_level">Рівень пального</string>
-    <string name="gauge_boost_pressure">Наддув</string>
     <string name="gauge_mass_air_flow">Витрата повітря</string>
     <string name="gauge_state_of_charge">Заряд</string>
 
@@ -120,9 +111,6 @@
 
     <string name="live_title">Моніторинг</string>
     <string name="trips_title">Поїздки</string>
-    <string name="live_pause">Пауза</string>
-    <string name="live_resume">Продовжити</string>
-    <string name="live_clear">Очистити</string>
     <string name="live_no_series_selected">Виберіть сигнал для графіка</string>
     <string name="live_min">Min</string>
     <string name="live_avg">Avg</string>
@@ -137,25 +125,11 @@
         <item quantity="other">Ваш адаптер: %d запиту/с</item>
     </plurals>
 
-    <plurals name="connect_adapters_found">
-        <item quantity="one">Знайдено %d адаптер</item>
-        <item quantity="few">Знайдено %d адаптери</item>
-        <item quantity="many">Знайдено %d адаптерів</item>
-        <item quantity="other">Знайдено %d адаптера</item>
-    </plurals>
-
     <plurals name="dashboard_tiles">
         <item quantity="one">%d датчик</item>
         <item quantity="few">%d датчики</item>
         <item quantity="many">%d датчиків</item>
         <item quantity="other">%d датчика</item>
-    </plurals>
-
-    <plurals name="live_window_seconds">
-        <item quantity="one">%d секунда</item>
-        <item quantity="few">%d секунди</item>
-        <item quantity="many">%d секунд</item>
-        <item quantity="other">%d секунди</item>
     </plurals>
 
     <string name="settings_title">Налаштування</string>

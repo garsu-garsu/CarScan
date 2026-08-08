@@ -16,7 +16,6 @@ import com.bruni.carscan.core.monetization.Entitlements
 import com.bruni.carscan.core.monetization.EntitlementCache
 import com.bruni.carscan.core.monetization.FullScreenAdGate
 import com.bruni.carscan.core.monetization.InterstitialAdPort
-import com.bruni.carscan.core.monetization.RewardedAdPort
 import com.bruni.carscan.core.data.ConnectionState
 import com.bruni.carscan.core.data.GyroSource
 import com.bruni.carscan.core.data.LocationSource
@@ -36,7 +35,6 @@ import com.bruni.carscan.obd.DefaultTransports
 import com.bruni.carscan.obd.Transports
 import com.bruni.carscan.platform.android.ads.AdMobAppOpenAdPort
 import com.bruni.carscan.platform.android.ads.AdMobInterstitialAdPort
-import com.bruni.carscan.platform.android.ads.AdMobRewardedAdPort
 import com.bruni.carscan.platform.android.ads.PlayBillingEntitlements
 import com.bruni.carscan.platform.android.ads.PlayBillingPort
 import kotlinx.coroutines.CoroutineScope
@@ -116,7 +114,6 @@ actual fun platformModule(): Module = module {
             get<DefaultEntitlements>().updatePurchases(purchases)
         }
     }
-    single<RewardedAdPort> { AdMobRewardedAdPort(androidContext()) }
 
     // `CarScanApplication` calls `refresh()` once at startup, the same way it starts `TripRecorder`
     // — picks up a lapsed subscription or a store-side refund promptly rather than only the next

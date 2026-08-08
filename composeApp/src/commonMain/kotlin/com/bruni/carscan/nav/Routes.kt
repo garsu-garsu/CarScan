@@ -33,9 +33,6 @@ sealed interface Route {
     data class Live(val metricKey: String? = null) : Route
 
     @Serializable
-    data object Dtc : Route
-
-    @Serializable
     data object Hud : Route
 
     @Serializable

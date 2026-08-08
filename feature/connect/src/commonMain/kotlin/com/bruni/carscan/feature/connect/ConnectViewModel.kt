@@ -66,7 +66,6 @@ class ConnectViewModel(
         is ConnectIntent.ConnectWifi ->
             connect(DiscoveredAdapter(TransportKind.WIFI, "${intent.host}:${intent.port}"))
         ConnectIntent.Retry -> lastTarget?.let(::connect) ?: scan()
-        ConnectIntent.DismissFailure -> setState { copy(failure = null) }
         ConnectIntent.OpenSettings -> emitEffect(ConnectEffect.OpenAppSettings)
         ConnectIntent.Proceed -> emitEffect(ConnectEffect.NavigateToDashboard)
         ConnectIntent.Disconnect -> disconnect()

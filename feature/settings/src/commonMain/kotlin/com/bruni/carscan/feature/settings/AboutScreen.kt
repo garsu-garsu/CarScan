@@ -164,7 +164,6 @@ private val OSS_LICENSES = listOf(
     "Koin" to "Apache-2.0",
     "SQLDelight" to "Apache-2.0",
     "Ktor" to "Apache-2.0",
-    "Vico" to "Apache-2.0",
     "Compose Multiplatform" to "Apache-2.0",
     "kotlinx (coroutines, serialization, datetime)" to "Apache-2.0",
 )

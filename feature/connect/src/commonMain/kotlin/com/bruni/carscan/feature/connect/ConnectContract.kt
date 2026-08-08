@@ -62,7 +62,6 @@ sealed interface ConnectIntent {
 
     /** After a failure: try the same adapter again, or rescan if there wasn't one. */
     data object Retry : ConnectIntent
-    data object DismissFailure : ConnectIntent
 
     /** The permission deep-link. Only offered for [ConnectFailure.BLUETOOTH_PERMISSION]. */
     data object OpenSettings : ConnectIntent

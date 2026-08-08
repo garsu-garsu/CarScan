@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * `MobileAds.initialize()`, exactly once, no matter how many ad ports ask for it.
  *
- * Every AdMob port ([AdMobRewardedAdPort], [AdMobInterstitialAdPort], [AdMobAppOpenAdPort]) is
+ * Every AdMob port ([AdMobInterstitialAdPort], [AdMobAppOpenAdPort]) is
  * its own Koin singleton, constructed independently, and each needs the SDK initialized before
  * it can load an ad. Rather than have every constructor call `MobileAds.initialize()` itself,
  * this is the one place that does — call it once, at app start, before any ad port is used.

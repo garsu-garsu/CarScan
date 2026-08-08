@@ -8,7 +8,6 @@
     <string name="home_connect_hint">스캐너를 연결하고 시작하세요</string>
     <string name="home_no_vehicle">차량을 선택하세요</string>
 
-    <string name="common_ok">확인</string>
     <string name="common_cancel">취소</string>
     <string name="common_retry">다시 시도</string>
     <string name="common_settings">설정</string>
@@ -19,7 +18,6 @@
     <string name="adapter_kind_wifi">Wi-Fi</string>
     <string name="adapter_unnamed">이름 없는 어댑터</string>
 
-    <string name="connection_state_disconnected">연결 안 됨</string>
     <string name="connection_state_connecting">연결 중…</string>
     <string name="connection_state_connected">연결됨</string>
 
@@ -28,7 +26,6 @@
     <string name="connect_change_method">방식 변경</string>
     <string name="connect_scan">검색</string>
     <string name="connect_scanning">검색 중…</string>
-    <string name="connect_stop">중지</string>
     <string name="connect_connect">연결</string>
     <string name="connect_disconnect">연결 해제</string>
     <string name="connect_no_adapters">어댑터를 찾지 못했습니다</string>
@@ -38,6 +35,7 @@
     <string name="connect_protocol">프로토콜: %1$s</string>
     <string name="connect_genuine_stn">정품 STN 칩</string>
     <string name="connect_clone">ELM327 복제품 — 처리 속도 제한</string>
+    <string name="connect_proceed">주행 시작</string>
 
     <string name="error_ignition_off">시동을 켠 뒤 다시 시도하세요.</string>
     <string name="error_bluetooth_permission">어댑터를 찾으려면 블루투스 권한이 필요합니다.</string>
@@ -46,11 +44,6 @@
     <string name="error_wifi_not_joined">어댑터의 Wi-Fi 네트워크에 먼저 연결하세요. 연결되어 있는 동안에는 모바일 데이터를 쓸 수 없습니다.</string>
     <string name="error_adapter_unreachable">어댑터가 응답하지 않습니다. 제대로 꽂혀 있는지 확인하세요.</string>
     <string name="error_init_failed">어댑터가 정상적으로 시작되지 않았습니다.</string>
-
-    <string name="error_no_data">이 차량은 해당 값을 제공하지 않습니다.</string>
-    <string name="error_bus">차량과의 통신이 끊겼습니다.</string>
-    <string name="error_adapter_overrun">어댑터가 요청 속도를 따라가지 못합니다.</string>
-    <string name="error_adapter_reset">어댑터가 다시 시작되었습니다. OBD 단자의 전원을 확인하세요.</string>
 
     <string name="unit_rpm">rpm</string>
     <string name="unit_kmh">km/h</string>
@@ -100,12 +93,10 @@
     <string name="gauge_engine_speed">엔진 회전수</string>
     <string name="gauge_vehicle_speed">속도</string>
     <string name="gauge_coolant_temp">냉각수</string>
-    <string name="gauge_intake_air_temp">흡기</string>
     <string name="gauge_engine_load">엔진 부하</string>
     <string name="gauge_throttle_position">스로틀</string>
     <string name="gauge_battery_voltage">배터리</string>
     <string name="gauge_fuel_level">연료량</string>
-    <string name="gauge_boost_pressure">부스트 압력</string>
     <string name="gauge_mass_air_flow">공기 유량</string>
     <string name="gauge_state_of_charge">충전량</string>
 
@@ -116,9 +107,6 @@
 
     <string name="live_title">모니터링</string>
     <string name="trips_title">주행 기록</string>
-    <string name="live_pause">일시정지</string>
-    <string name="live_resume">계속</string>
-    <string name="live_clear">지우기</string>
     <string name="live_no_series_selected">차트로 볼 신호를 선택하세요</string>
     <string name="live_min">최소</string>
     <string name="live_avg">평균</string>
@@ -130,16 +118,8 @@
         <item quantity="other">내 어댑터: 초당 %d회 조회</item>
     </plurals>
 
-    <plurals name="connect_adapters_found">
-        <item quantity="other">어댑터 %d개를 찾았습니다</item>
-    </plurals>
-
     <plurals name="dashboard_tiles">
         <item quantity="other">게이지 %d개</item>
-    </plurals>
-
-    <plurals name="live_window_seconds">
-        <item quantity="other">%d초</item>
     </plurals>
 
     <string name="settings_title">설정</string>

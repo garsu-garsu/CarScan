@@ -21,9 +21,8 @@ import com.bruni.carscan.core.designsystem.gauge.valueToFraction
  * The live strip chart: the last [LivePlotState.capacity] samples, newest at the right edge,
  * redrawn at display rate however fast the samples arrive.
  *
- * Hand-written rather than Vico, which allocates per frame and is kept for the historical
- * charts where axes and zoom actually matter. Three things keep this cheap, and all three are
- * load-bearing:
+ * Hand-written rather than a chart library: every declarative one allocates per frame, which
+ * does not survive 20 Hz. Three things keep this cheap, and all three are load-bearing:
  *
  *  * the samples live in a preallocated [FloatRingBuffer], never a growing list;
  *  * the revision counter is read **inside** the draw lambda, so a new sample invalidates the

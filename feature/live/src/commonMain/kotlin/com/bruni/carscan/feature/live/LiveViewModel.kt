@@ -4,7 +4,6 @@ import com.bruni.carscan.core.common.mvi.MviViewModel
 import com.bruni.carscan.core.data.ActiveVehicle
 import com.bruni.carscan.core.data.BookmarkRepository
 import com.bruni.carscan.core.data.SettingsRepository
-import com.bruni.carscan.core.data.TripRepository
 import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.data.VisibleSignals
 import com.bruni.carscan.core.designsystem.chart.LIVE_PLOT_DEFAULT_CAPACITY
@@ -30,7 +29,6 @@ import kotlinx.coroutines.launch
  */
 class LiveViewModel(
     session: VehicleSessionRepository,
-    private val trips: TripRepository,
     settings: SettingsRepository,
     private val vehicle: ActiveVehicle,
     private val poller: VisibleSignals,
@@ -80,8 +78,6 @@ class LiveViewModel(
             LiveIntent.CloseDetail -> closeDetail()
             is LiveIntent.ToggleBookmark -> scope.launch { bookmarks.toggle(intent.key) }
             LiveIntent.ScreenVisible -> poller.setVisible(holders.keys.toSet())
-            is LiveIntent.ShowHistory -> loadHistory(intent.tripId, intent.signalId)
-            LiveIntent.HideHistory -> setState { copy(history = null) }
         }
     }
 
@@ -191,25 +187,6 @@ class LiveViewModel(
             setState { copy(units = units, detail = buildDetail(row, spec, units)) }
         } else {
             setState { copy(units = units) }
-        }
-    }
-
-    /** Off the 1 Hz columnar rollup. Samples above 1 Hz are never persisted and do not exist. */
-    private fun loadHistory(tripId: String, signalId: String) {
-        scope.launch {
-            val stored = trips.series(tripId, signalId) ?: return@launch
-            val spec = signalset?.seriesSpec(MetricKey.Signal(signalId))
-            val native = spec?.unit?.toUnitId()
-            val display = native?.let { state.value.units[it.quantity] }
-
-            val segments = stored.toSegments().map { segment ->
-                segment.map { point ->
-                    point.copy(value = convert(point.value.toDouble(), native, display).toFloat())
-                }
-            }
-            setState {
-                copy(history = HistoryUiState(tripId, spec?.label ?: signalId, display, segments))
-            }
         }
     }
 

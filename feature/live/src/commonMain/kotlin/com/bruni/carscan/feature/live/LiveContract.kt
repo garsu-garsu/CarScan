@@ -77,20 +77,10 @@ data class LiveUiState(
     val units: UnitPreferences = UnitPreferences.METRIC,
     /** The signal currently shown full-screen, or null when the list is showing. */
     val detail: DetailUiState? = null,
-    val history: HistoryUiState? = null,
 )
 
 /** One entry in the list / picker. The label is the signal's name, as OBDb gives it. */
 data class SeriesOption(val key: MetricKey, val label: String)
-
-/** A stored trip's trace. 1 Hz, off the columnar rollup — the raw samples do not exist. */
-data class HistoryUiState(
-    val tripId: String,
-    val label: String,
-    val displayUnit: UnitId?,
-    /** One line per run of consecutive readings. The space between two segments is a gap. */
-    val segments: List<List<HistoryPoint>>,
-)
 
 sealed interface LiveIntent {
     /** A row was tapped (or a deep link arrived pre-selected): open its detail. */
@@ -106,7 +96,4 @@ sealed interface LiveIntent {
      * over has to say so again, not just the first time this screen ever opened.
      */
     data object ScreenVisible : LiveIntent
-
-    data class ShowHistory(val tripId: String, val signalId: String) : LiveIntent
-    data object HideHistory : LiveIntent
 }

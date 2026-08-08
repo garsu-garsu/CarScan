@@ -36,7 +36,6 @@ kotlin {
             implementation(project(":feature:connect"))
             implementation(project(":feature:dashboard"))
             implementation(project(":feature:live"))
-            implementation(project(":feature:dtc"))
             implementation(project(":feature:hud"))
             implementation(project(":feature:trip"))
             implementation(project(":feature:settings"))

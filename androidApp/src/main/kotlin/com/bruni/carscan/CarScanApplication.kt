@@ -32,8 +32,8 @@ class CarScanApplication : Application() {
         // Exactly once, before any ad port loads a single ad — see AdsInitializer's KDoc.
         AdsInitializer.init(this)
 
-        // PlayBillingPort and AdMobRewardedAdPort are app-scoped singletons that still need a
-        // foreground Activity to launch a purchase sheet or an ad — see CurrentActivity's KDoc.
+        // PlayBillingPort and the full-screen ad ports are app-scoped singletons that still need
+        // a foreground Activity to launch a purchase sheet or an ad — see CurrentActivity's KDoc.
         registerActivityLifecycleCallbacks(ActivityTracker())
 
         startKoin {

@@ -20,7 +20,6 @@
     <string name="home_no_vehicle">Select your vehicle</string>
 
     <!-- Shared -->
-    <string name="common_ok">OK</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_retry">Try again</string>
     <string name="common_settings">Settings</string>
@@ -34,7 +33,6 @@
     <string name="adapter_unnamed">Unnamed adapter</string>
 
     <!-- ConnectionState -->
-    <string name="connection_state_disconnected">Not connected</string>
     <string name="connection_state_connecting">Connecting…</string>
     <string name="connection_state_connected">Connected</string>
 
@@ -46,7 +44,6 @@
     <string name="connect_change_method">Change method</string>
     <string name="connect_scan">Scan</string>
     <string name="connect_scanning">Scanning…</string>
-    <string name="connect_stop">Stop</string>
     <string name="connect_connect">Connect</string>
     <string name="connect_disconnect">Disconnect</string>
     <string name="connect_no_adapters">No adapters found</string>
@@ -66,6 +63,7 @@
     <string name="connect_genuine_stn">Genuine STN chip</string>
     <!-- A fact, not an insult — most adapters in the wild are clones. -->
     <string name="connect_clone">ELM327 clone — limited throughput</string>
+    <string name="connect_proceed">Start driving</string>
 
     <!-- ConnectFailure. Every one of these tells the user what to do, not what went wrong. -->
     <string name="error_ignition_off">Turn the ignition on and try again.</string>
@@ -75,12 +73,6 @@
     <string name="error_wifi_not_joined">Join the adapter\'s Wi-Fi network first. Your phone has no mobile data while it is connected to it.</string>
     <string name="error_adapter_unreachable">The adapter did not answer. Check that it is plugged in.</string>
     <string name="error_init_failed">The adapter did not start up correctly.</string>
-
-    <!-- Runtime faults the driver can act on. -->
-    <string name="error_no_data">This car does not report that value.</string>
-    <string name="error_bus">Lost contact with the car.</string>
-    <string name="error_adapter_overrun">The adapter could not keep up.</string>
-    <string name="error_adapter_reset">The adapter restarted. Check the power at the OBD socket.</string>
 
     <!--
         Unit symbols. Translated: these are not universal — "rpm" is "об/мин" in Russian and
@@ -141,12 +133,10 @@
     <string name="gauge_engine_speed">Engine speed</string>
     <string name="gauge_vehicle_speed">Speed</string>
     <string name="gauge_coolant_temp">Coolant</string>
-    <string name="gauge_intake_air_temp">Intake air</string>
     <string name="gauge_engine_load">Engine load</string>
     <string name="gauge_throttle_position">Throttle</string>
     <string name="gauge_battery_voltage">Battery</string>
     <string name="gauge_fuel_level">Fuel level</string>
-    <string name="gauge_boost_pressure">Boost</string>
     <string name="gauge_mass_air_flow">Air flow</string>
     <string name="gauge_state_of_charge">Charge</string>
 
@@ -159,9 +149,6 @@
     <!-- Live chart -->
     <string name="live_title">Monitoring</string>
     <string name="trips_title">Trips</string>
-    <string name="live_pause">Pause</string>
-    <string name="live_resume">Resume</string>
-    <string name="live_clear">Clear</string>
     <string name="live_no_series_selected">Pick a signal to chart</string>
     <string name="live_min">Min</string>
     <string name="live_avg">Avg</string>
@@ -175,19 +162,9 @@
         <item quantity="other">Your adapter: %d queries/sec</item>
     </plurals>
 
-    <plurals name="connect_adapters_found">
-        <item quantity="one">%d adapter found</item>
-        <item quantity="other">%d adapters found</item>
-    </plurals>
-
     <plurals name="dashboard_tiles">
         <item quantity="one">%d gauge</item>
         <item quantity="other">%d gauges</item>
-    </plurals>
-
-    <plurals name="live_window_seconds">
-        <item quantity="one">%d second</item>
-        <item quantity="other">%d seconds</item>
     </plurals>
 
     <!-- Settings screen -->

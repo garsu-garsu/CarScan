@@ -5,7 +5,7 @@ kotlin = "2.4.0"
 jvmToolchain = "17"
 
 # --- Android SDK -----------------------------------------------------------
-# compileSdk is 37 because Kable 0.44.0, Vico 2.5.2 and androidx.core 1.19.0 all
+# compileSdk is 37 because Kable 0.44.0 and androidx.core 1.19.0 both
 # refuse to be consumed by a module compiled against 36. compileSdk only decides
 # which APIs are on the compile classpath; targetSdk (runtime behaviour) stays 36.
 compileSdk = "37"
@@ -36,9 +36,6 @@ koin = "4.2.2"
 # AGP 9 (BaseExtension removed) — see sqldelight issues #5940 / #6078.
 sqldelight = "2.3.2"
 kable = "0.44.0"
-# groupId is com.patrykandpatrick (…rick). The old com.patryk group still
-# resolves on Central to an ancient version — do not use it.
-vico = "2.5.2"
 
 # --- Test ------------------------------------------------------------------
 turbine = "1.2.1"
@@ -101,9 +98,6 @@ jb-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation
 
 # --- Bluetooth Low Energy --------------------------------------------------
 kable-core = { module = "com.juul.kable:kable-core", version.ref = "kable" }
-
-# --- Charts (history / trip only — never the live strip) -------------------
-vico-multiplatform-m3 = { module = "com.patrykandpatrick.vico:multiplatform-m3", version.ref = "vico" }
 
 # --- AndroidX (:androidApp and :platform:* only) ---------------------------
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }

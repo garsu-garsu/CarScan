@@ -11,9 +11,9 @@ import org.jetbrains.compose.resources.StringResource
  * switches between, and the rest are reached the way they are actually used: Connect is where the
  * app starts and pops itself once an adapter answers, and Live also opens by tapping a gauge.
  *
- * **Trips, DTC and the HUD are deliberately not here.** Their screens are still placeholders, and
- * their labels have no string in any of the eight locales — a tab that is English-only and leads
- * nowhere is worse than one the user cannot see yet. They get a tab when they get a screen.
+ * **Trips and the HUD are deliberately not here.** Both are real screens, reached from Home —
+ * the HUD also from the dashboard. A bar wide enough for five tabs is a bar nobody can hit at
+ * a glance while driving, which is the only time this bar is used.
  *
  * Declaration order is display order.
  */

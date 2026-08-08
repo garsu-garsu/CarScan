@@ -37,7 +37,7 @@ Clean-ish layering over a Kotlin Multiplatform module graph. UI is Compose Multi
        │
   :composeApp                  App(), the single NavHost, Koin root
        │
-  :feature:{connect,dashboard,live,dtc,hud,trip,settings}
+  :feature:{connect,dashboard,live,hud,trip,settings}
        │                       features never depend on each other — a screen emits
        │                       Effect.Navigate and only :composeApp owns the NavController
   :core:designsystem   :core:data   :core:units
@@ -144,7 +144,7 @@ Stack: `kotlin.test` · [Turbine](https://github.com/cashapp/turbine) · `kotest
 | Wi-Fi | ktor-network | The only KMP option that opens a real TCP socket on iOS. |
 | OBD protocol | **Written from the spec** | No KMP library exists. The JVM ones are `InputStream`-based and cannot compile for iOS. |
 | Database | SQLDelight | Raw SQL — the write path needs explicit batching and transaction control. |
-| Charts | [Vico](https://github.com/patrykandpatrick/vico) (history) + hand-written Canvas (live) | No declarative chart library is free at 20 Hz. The live strip is a ring-buffer Canvas renderer; Vico handles historical charts where axes and zoom matter. |
+| Charts | Hand-written Canvas | No declarative chart library is free at 20 Hz. The live strip is a ring-buffer Canvas renderer. |
 | Gauges | Compose `Canvas` | Every Compose gauge library was abandoned in 2023–24. |
 | i18n | `compose.components.resources` | 8 locales: en · ru · de · pl · pt-BR · es · uk · ko |
 
@@ -170,7 +170,7 @@ Three things here are **forced, not preferred** — and they were verified on da
 - **AGP 9 compiles Kotlin itself** — applying `org.jetbrains.kotlin.android` anywhere is a hard build error. There is deliberately no catalog alias for it.
 - **SQLDelight must be ≥ 2.3.2.** 2.1.x cannot configure against AGP 9's new DSL at all.
 
-`compileSdk` is 37 (not 36) because Kable, Vico and androidx.core refuse to be consumed by a module compiled against 36. It only affects the compile classpath; `targetSdk` — which governs runtime behaviour — stays at 36.
+`compileSdk` is 37 (not 36) because Kable and androidx.core refuse to be consumed by a module compiled against 36. It only affects the compile classpath; `targetSdk` — which governs runtime behaviour — stays at 36.
 
 ---
 

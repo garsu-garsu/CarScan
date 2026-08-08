@@ -7,10 +7,7 @@ import com.bruni.carscan.core.data.BookmarkRepository
 import com.bruni.carscan.core.data.SessionHealth
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
-import com.bruni.carscan.core.data.SignalSeries
 import com.bruni.carscan.core.data.ThemeMode
-import com.bruni.carscan.core.data.TripRepository
-import com.bruni.carscan.core.data.TripSummary
 import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.data.VisibleSignals
 import com.bruni.carscan.core.designsystem.chart.LIVE_PLOT_DEFAULT_CAPACITY
@@ -53,7 +50,6 @@ private val COOLANT = MetricKey.Metric(SuggestedMetric.ENGINE_COOLANT_TEMPERATUR
 class LiveViewModelTest {
 
     private val session = FakeSession()
-    private val trips = FakeTrips()
     private val settings = FakeSettings()
     private val poller = RecordingPoller()
     private val bookmarks = FakeBookmarkRepository()
@@ -74,7 +70,7 @@ class LiveViewModelTest {
     @AfterTest
     fun tearDown() = Dispatchers.resetMain()
 
-    private fun viewModel() = LiveViewModel(session, trips, settings, vehicle, poller, bookmarks)
+    private fun viewModel() = LiveViewModel(session, settings, vehicle, poller, bookmarks)
 
     private fun LiveViewModel.row(key: MetricKey) = state.value.rows.first { it.key == key }
 
@@ -321,20 +317,6 @@ class LiveViewModelTest {
         assertEquals(0, assertNotNull(vm.state.value.detail).plot.samples.size)
         assertEquals(100.0, assertNotNull(vm.row(SPEED).latest))
     }
-
-    /** Loading a trip's stored series charts it with its gaps intact. */
-    @Test
-    fun `history loads a trip signal with its gaps preserved`() = runTest {
-        trips.series["trip-1" to "RPM"] =
-            SignalSeries("RPM", floatArrayOf(800f, 900f, Float.NaN, 1200f))
-        val vm = viewModel()
-
-        vm.onIntent(LiveIntent.ShowHistory(tripId = "trip-1", signalId = "RPM"))
-
-        val history = assertNotNull(vm.state.value.history)
-        assertEquals(2, history.segments.size)
-        assertTrue(history.segments.none { seg -> seg.any { it.second == 2 } })
-    }
 }
 
 private fun sample(key: MetricKey, value: Double, unit: ObdUnit? = null) = SensorSample(
@@ -398,32 +380,6 @@ private class FakeSettings : SettingsRepository {
     override suspend fun setAcquisitionSource(source: AcquisitionSource) = Unit
     override suspend fun setAutoDriveDetectSpeedKmh(kmh: Int) = Unit
     override suspend fun setBackgroundTracking(enabled: Boolean) = Unit
-}
-
-private class FakeTrips : TripRepository {
-    val series = mutableMapOf<Pair<String, String>, SignalSeries>()
-
-    override val isRecording: Boolean get() = false
-    override val activeTrip: StateFlow<com.bruni.carscan.core.data.ActiveTrip?> =
-        MutableStateFlow(null).asStateFlow()
-    override suspend fun series(tripId: String, signalId: String): SignalSeries? =
-        series[tripId to signalId]
-
-    override suspend fun start(vehicleId: String?, startedMs: Long, source: String): String = "trip-1"
-    override fun offer(sample: SensorSample) = Unit
-    override suspend fun stop(endedMs: Long) = Unit
-    override suspend fun trips(vehicleId: String): List<TripSummary> = emptyList()
-    override suspend fun allTrips(): List<TripSummary> = emptyList()
-    override suspend fun summary(tripId: String): TripSummary? = null
-    override suspend fun signalIds(tripId: String): List<String> = series.keys.map { it.second }
-    override suspend fun setStartLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
-    override suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?) = Unit
-    override suspend fun import(trip: TripSummary, series: List<SignalSeries>) = Unit
-    override suspend fun recoverStranded() = Unit
-    override suspend fun delete(tripId: String) = Unit
-    override suspend fun recordEvent(event: com.bruni.carscan.core.data.TripEvent) = Unit
-    override suspend fun events(tripId: String): List<com.bruni.carscan.core.data.TripEvent> = emptyList()
-    override suspend fun track(tripId: String): List<com.bruni.carscan.core.data.GpsPoint> = emptyList()
 }
 
 /** A real one, not a spy: `toggle` actually flips membership, so the state read-back means something. */

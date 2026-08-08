@@ -44,7 +44,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -66,18 +65,6 @@ import com.bruni.carscan.core.designsystem.generated.resources.dashboard_hud
 import com.bruni.carscan.core.designsystem.generated.resources.health_slowed_down
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.stringResource
-
-/** Stable handles for the smoke tests, and the only place they are spelled. */
-object DashboardTags {
-    const val GRID = "dashboard_grid"
-    const val ADD = "dashboard_add"
-    const val PICKER = "dashboard_picker"
-    const val EMPTY = "dashboard_empty"
-    const val HEALTH = "dashboard_health"
-
-    fun tile(id: String) = "dashboard_tile_$id"
-    fun offer(key: String) = "dashboard_offer_$key"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +96,6 @@ fun DashboardScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { onIntent(DashboardIntent.OpenPicker) },
-                modifier = Modifier.testTag(DashboardTags.ADD),
             ) {
                 Icon(Icons.Rounded.Add, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
@@ -142,8 +128,7 @@ fun DashboardScreen(
                         .padding(horizontal = 20.dp, vertical = 8.dp)
                         .clip(MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.error.copy(alpha = 0.12f))
-                        .padding(horizontal = 12.dp, vertical = 10.dp)
-                        .testTag(DashboardTags.HEALTH),
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
                 ) {
                     Icon(
                         Icons.Rounded.WarningAmber,
@@ -186,7 +171,6 @@ fun DashboardScreen(
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.testTag(DashboardTags.EMPTY),
                     )
                 }
             } else {
@@ -196,7 +180,7 @@ fun DashboardScreen(
                     contentPadding = PaddingValues(12.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.fillMaxSize().testTag(DashboardTags.GRID),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     // The key IS the tile id, and the snapshotFlow above reads it straight back
                     // out. Keying on the index would report a *position*, and the poller would be
@@ -212,7 +196,6 @@ fun DashboardScreen(
     if (state.pickerOpen) {
         ModalBottomSheet(
             onDismissRequest = { onIntent(DashboardIntent.ClosePicker) },
-            modifier = Modifier.testTag(DashboardTags.PICKER),
         ) {
             TilePickerSheet(state.available, onIntent)
         }
@@ -242,7 +225,6 @@ private fun TileCard(
     Card(
         modifier = Modifier
             .aspectRatio(1f)
-            .testTag(DashboardTags.tile(tile.id))
             .clickable { onIntent(DashboardIntent.TileTapped(tile.id)) },
         colors = CardDefaults.cardColors(containerColor = face),
     ) {
@@ -315,7 +297,6 @@ private fun TilePickerSheet(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag(DashboardTags.offer(offer.key.toString()))
                     .clickable { onIntent(DashboardIntent.Add(offer.key)) }
                     .padding(vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
