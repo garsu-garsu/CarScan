@@ -97,7 +97,9 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 
 ### M6 완료된 것
 - 설정 화면(수량별 단위·게이지 스타일·테마·화면 켜둠·기록 토글), About/라이선스 화면(**OBDb CC BY-SA 4.0 저작자표시 — 스토어 업로드 법적 관문**), 8개 로케일 신규 문자열 21개(파리티 게이트 통과), 수익화 엔타이틀먼트 모델(`:core:monetization` — 영구/구독/유예/보류/환불 규칙, 오프라인 정확성, 순수 리졸버), 데이터 위생 빌드 게이트.
-- **실제 AdMob/Play Billing 배선 완료(2026-07-16)** — 예전엔 여기 "보류(스토어 계정 필요)"라고 적혀 있었는데 그새 끝났다. `:platform:android-ads`가 `PlayBillingPort`·`AdMobInterstitialAdPort`·`AdMobAppOpenAdPort`·`AdMobRewardedAdPort`를 실제 구현으로 제공하고, `composeApp/src/androidMain/.../di/PlatformModule.android.kt`에서 전부 Koin에 바인딩됨. 배너 광고는 홈·연결·차고·주행기록 화면에, 전면·앱오픈 광고는 공용 빈도 제한(`FullScreenAdGate`) 하나로 묶임. 페이월 화면이 Play Billing 실가격을 그대로 보여줌. 실 AdMob 광고 단위 ID(퍼블리셔 pub-5820924146818119)는 gitignore된 `local.properties`에 있고, 디버그 빌드는 구글 테스트 ID를 씀. UMP 동의창 수집(`AdsConsent.gather()`)도 `MainActivity`에서 호출됨 — 단, **AdMob 콘솔에 GDPR 메시지 자체를 아직 설정 안 해서 동의창이 조용히 안 뜬다** (아래 "출시까지 남은 것" 참고).
+- **실제 AdMob/Play Billing 배선 완료(2026-07-16)** — 예전엔 여기 "보류(스토어 계정 필요)"라고 적혀 있었는데 그새 끝났다. `:platform:android-ads`가 `PlayBillingPort`·`AdMobInterstitialAdPort`·`AdMobAppOpenAdPort`를 실제 구현으로 제공하고, `composeApp/src/androidMain/.../di/PlatformModule.android.kt`에서 전부 Koin에 바인딩됨. 배너 광고는 홈·연결·차고·주행기록 화면에, 전면·앱오픈 광고는 공용 빈도 제한(`FullScreenAdGate`) 하나로 묶임. **보상형 광고는 2026-08-08에 제거** — `showRewardedAd()`를 부르는 곳이 한 군데도 없었다. 다시 넣으려면 포트·구현·Koin 바인딩·BuildConfig 필드를 함께 되살릴 것.
+
+**전면·앱오픈 광고는 스캐너 연결 중에는 뜨지 않는다**(2026-08-08). 연결됨 = 주행 중이고, 차 안에서 닫히지 않는 전면 광고에 갇히는 건 노출 하나 잃는 것보다 나쁘다. 조건은 호출부가 아니라 `FullScreenAdGate` 한 곳에 있다 — 전면·앱오픈 세 경로가 모두 그 게이트를 지난다. 배너는 그대로 나온다. 페이월 화면이 Play Billing 실가격을 그대로 보여줌. 실 AdMob 광고 단위 ID(퍼블리셔 pub-5820924146818119)는 gitignore된 `local.properties`에 있고, 디버그 빌드는 구글 테스트 ID를 씀. UMP 동의창 수집(`AdsConsent.gather()`)도 `MainActivity`에서 호출됨 — 단, **AdMob 콘솔에 GDPR 메시지 자체를 아직 설정 안 해서 동의창이 조용히 안 뜬다** (아래 "출시까지 남은 것" 참고).
 - **번역 품질**: de·es 자신 있음, pt-BR·pl 양호, ru·uk·ko 는 새로 만든 기술 용어에 원어민 검수 권장.
 
 ### 실기기 실행 — 첫 성공 (2026-07-15)
