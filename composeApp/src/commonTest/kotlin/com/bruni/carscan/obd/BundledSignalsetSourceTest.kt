@@ -183,6 +183,7 @@ private class FakeVehicleRepository(vararg vehicles: Pair<String, Vehicle>) : Ve
 private class FakeSignalsetProvider(vararg cachedJson: Pair<String, String>) : SignalsetProvider {
     private val byRepo = cachedJson.toMap()
 
-    override suspend fun cachedJson(repo: String): String? = byRepo[repo]
-    override suspend fun ensureAvailable(repo: String): SignalsetAvailability = SignalsetAvailability.AVAILABLE
+    override suspend fun cachedJson(repo: String, make: String?): String? = byRepo[repo]
+    override suspend fun ensureAvailable(repo: String, make: String?): SignalsetAvailability =
+        SignalsetAvailability.AVAILABLE
 }

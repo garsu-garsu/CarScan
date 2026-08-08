@@ -99,9 +99,11 @@ class ObdbFixtureGateTest {
      * [resolve] ambiguous for every command a vehicle defines and drop the whole corpus on
      * the floor. `ifEmpty` is the whole rule, and it matches the reference exactly.
      *
-     * **This is a gap in the app, not just in this test.** `EffectiveSignalset.of` composes
-     * `SAEJ1979 + vehicle` with no make fallback, so for any vehicle whose OBDb repo carries
-     * an empty signalset the app currently offers the standard mode-01 PIDs and nothing else.
+     * The app resolves it the same way, one layer lower: `SignalsetProvider.cachedJson` applies
+     * the fallback before the JSON ever reaches `EffectiveSignalset.of`, and
+     * `SignalsetProvider.ensureAvailable` caches the make's copy at pick time so the connect
+     * path can read it offline. This helper keeps its own copy of the rule because it works
+     * off vendored fixture files, with no provider and no cache.
      */
     private fun vehicleCommands(repo: String): List<ObdbCommand> =
         signalset(repo).commands.ifEmpty { signalset(repo.substringBefore('-')).commands }

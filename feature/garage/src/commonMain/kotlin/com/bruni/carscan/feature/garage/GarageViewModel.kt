@@ -59,7 +59,7 @@ class GarageViewModel(
             settings.setActiveVehicleId(vehicle.id)
 
             setState { copy(downloading = entry.obdbRepo, message = null) }
-            val availability = signalsets.ensureAvailable(entry.obdbRepo)
+            val availability = signalsets.ensureAvailable(entry.obdbRepo, entry.make)
             setState { copy(downloading = null) }
 
             when (availability) {

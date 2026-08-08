@@ -108,10 +108,14 @@ class FakeSignalsetProvider(
     /** Every repo passed to [ensureAvailable], in call order. */
     val ensureAvailableCalls = mutableListOf<String>()
 
-    override suspend fun cachedJson(repo: String): String? = null
+    /** Every make passed to [ensureAvailable], in call order. */
+    val ensureAvailableMakes = mutableListOf<String?>()
 
-    override suspend fun ensureAvailable(repo: String): SignalsetAvailability {
+    override suspend fun cachedJson(repo: String, make: String?): String? = null
+
+    override suspend fun ensureAvailable(repo: String, make: String?): SignalsetAvailability {
         ensureAvailableCalls += repo
+        ensureAvailableMakes += make
         return result
     }
 }

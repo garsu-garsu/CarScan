@@ -26,7 +26,9 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
  *
  * The vehicle half of the union comes from [SettingsRepository.settings]`.activeVehicleId` →
  * [VehicleRepository.byId] → `Vehicle.obdbRepo` → [SignalsetProvider.cachedJson] — a bundled asset
- * or, for the vehicles that only ship download-only, whatever was cached at pick time. No active
+ * or, for the vehicles that only ship download-only, whatever was cached at pick time. `Vehicle.make`
+ * goes along for the ride because most OBDb vehicle repos define no commands of their own and the
+ * provider has to fall back to the make's signalset; see [SignalsetProvider]. No active
  * vehicle, no `obdbRepo`, or a repo neither bundled nor cached all fall back to standard-only — a
  * signalset guessed wrong produces gauges that are confidently mislabelled, which is worse than no
  * gauges.
@@ -66,7 +68,8 @@ class BundledSignalsetSource(
         val obdbRepo = vehicle?.obdbRepo
 
         val vehicleSignalset = obdbRepo?.let { repo ->
-            provider.cachedJson(repo)?.let { json -> runCatching { SignalsetParser.parse(json) }.getOrNull() }
+            provider.cachedJson(repo, vehicle?.make)
+                ?.let { json -> runCatching { SignalsetParser.parse(json) }.getOrNull() }
         }
 
         return EffectiveSignalset.of(
