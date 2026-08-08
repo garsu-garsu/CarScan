@@ -31,7 +31,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
 
         // Test app id by default → debug never touches the real ad account.
         manifestPlaceholders["admobAppId"] = TEST_ADMOB_APP_ID
@@ -45,7 +45,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            // Compose Multiplatform resources live in assets/, not res/, so the resource shrinker
+            // cannot see them being used and would strip every string in the app. Code shrinking
+            // only.
+            isShrinkResources = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // The real app id ships only in the store (release) build.
             manifestPlaceholders["admobAppId"] = admobAppId
         }

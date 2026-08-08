@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
-    <!-- Grantable only via the OS's "Allow all the time" app-settings screen, not a runtime
-         dialog on API 30+ — see MainActivity's bluetoothPermissions() for why it is not
-         requested there. -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- Deliberately NO ACCESS_BACKGROUND_LOCATION. A foreground service typed `location` grants
+         the whole app while-in-use location for as long as it runs, which is exactly the window
+         trip recording needs. The extra permission would only buy location with no such service
+         running — which this app never does — and costs a Play review declaration plus a demo
+         video. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application>

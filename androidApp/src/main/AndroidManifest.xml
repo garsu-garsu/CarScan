@@ -18,8 +18,9 @@
     <!--
       Foreground GPS for the trip route + start/arrival address. Also what a BLE scan legally
       requires on API 26-30 (without it startScan returns an empty list with NO error). One
-      unrestricted declaration covers both. Background recording (screen off) adds
-      ACCESS_BACKGROUND_LOCATION in a later milestone.
+      unrestricted declaration covers both. Recording with the screen off needs nothing more:
+      TripTrackingService is a `location`-typed foreground service, which extends this grant for
+      as long as it runs — see its manifest for why ACCESS_BACKGROUND_LOCATION stays out.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
