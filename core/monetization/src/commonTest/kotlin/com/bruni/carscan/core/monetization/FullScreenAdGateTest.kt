@@ -11,8 +11,10 @@ class FullScreenAdGateTest {
 
     private var now = 0L
     private val clock = { now }
+    private var connected = false
 
-    private fun gate(config: AdCadenceConfig = AdCadenceConfig()) = FullScreenAdGate(clock, config)
+    private fun gate(config: AdCadenceConfig = AdCadenceConfig()) =
+        FullScreenAdGate(clock, config, isScannerConnected = { connected })
 
     @Test
     fun `inside the warmup window, shouldShow is false`() {
@@ -73,5 +75,31 @@ class FullScreenAdGateTest {
 
         now += 10_000L
         gate.shouldShow() shouldBe false // the app-open ad asks next — blocked by the shared gate
+    }
+
+    @Test
+    fun `a connected scanner blocks a full-screen ad the cadence would otherwise allow`() {
+        // The driving context: the phone is in a cradle in a moving car. A full-screen ad there —
+        // one of which shipped with no close button — is not a lost impression, it is a driver
+        // pressing Back four times on AdActivity.
+        val gate = gate()
+        now = 120_000L
+        connected = true
+
+        gate.shouldShow() shouldBe false
+    }
+
+    @Test
+    fun `once the scanner disconnects, the cadence decides again`() {
+        val gate = gate()
+        now = 120_000L
+        connected = true
+        gate.shouldShow() shouldBe false
+
+        connected = false
+
+        // The connection is a veto, not a counter: blocking during the drive must not have burned
+        // a session slot or restarted the interval.
+        gate.shouldShow() shouldBe true
     }
 }

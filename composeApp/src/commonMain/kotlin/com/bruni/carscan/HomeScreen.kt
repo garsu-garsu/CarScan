@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bluetooth
+import androidx.compose.material.icons.rounded.BluetoothConnected
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.Flip
@@ -42,11 +43,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bruni.carscan.core.data.ConnectionState
 import com.bruni.carscan.core.designsystem.ads.BannerAd
 import com.bruni.carscan.core.designsystem.generated.resources.Res
+import com.bruni.carscan.core.designsystem.generated.resources.adapter_unnamed
 import com.bruni.carscan.core.designsystem.generated.resources.app_name
 import com.bruni.carscan.core.designsystem.generated.resources.common_settings
 import com.bruni.carscan.core.designsystem.generated.resources.connect_title
+import com.bruni.carscan.core.designsystem.generated.resources.connection_state_connected
+import com.bruni.carscan.core.designsystem.generated.resources.connection_state_connecting
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_hud
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_title
 import com.bruni.carscan.core.designsystem.generated.resources.home_connect_hint
@@ -74,7 +79,13 @@ import org.jetbrains.compose.resources.stringResource
  * screen with no ViewModel or repository of its own.
  */
 @Composable
-fun HomeScreen(onOpen: (Route) -> Unit, activeVehicleName: String? = null, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    onOpen: (Route) -> Unit,
+    activeVehicleName: String? = null,
+    connection: ConnectionState = ConnectionState.DISCONNECTED,
+    connectedAdapterName: String? = null,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier.fillMaxSize()) {
         LazyVerticalGrid(
             // Adaptive, not a fixed two columns: a phone shows two, a tablet three or four, and the
@@ -106,7 +117,20 @@ fun HomeScreen(onOpen: (Route) -> Unit, activeVehicleName: String? = null, modif
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                ConnectHero(onClick = { onOpen(Route.Connect) })
+                ConnectHero(
+                    connection = connection,
+                    adapterName = connectedAdapterName,
+                    // Connected, the hero is no longer a call to connect — it is the way back to
+                    // the thing they connected *for*, so it opens the dashboard. Deliberately not
+                    // "disconnect": that is the one destructive action here, and putting it under
+                    // the largest touch target on the launcher, in a car, is a mis-tap that ends
+                    // the drive's recording. Disconnecting stays where the connection is managed.
+                    onClick = {
+                        onOpen(
+                            if (connection == ConnectionState.CONNECTED) Route.Dashboard else Route.Connect,
+                        )
+                    },
+                )
             }
 
             items(FEATURE_ENTRIES) { entry ->
@@ -161,9 +185,16 @@ private fun CurrentVehicleRow(vehicleName: String?, onClick: () -> Unit) {
 // The vivid gradient the hero fills itself with — the one place the screen turns up the colour.
 private val HeroGradient = Brush.linearGradient(listOf(Color(0xFF7C5CFF), Color(0xFF4C7BFF)))
 
-/** The primary action, filled in a vivid gradient so the eye lands here first. */
+/**
+ * The primary action, filled in a vivid gradient so the eye lands here first — and, once an
+ * adapter answers, the one place on the launcher that says so.
+ *
+ * Home used to read "connect a scanner" with live data streaming into the dashboard behind it,
+ * which meant the only way to find out whether you were connected was to open a data screen.
+ */
 @Composable
-private fun ConnectHero(onClick: () -> Unit) {
+private fun ConnectHero(connection: ConnectionState, adapterName: String?, onClick: () -> Unit) {
+    val connected = connection == ConnectionState.CONNECTED
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -180,18 +211,34 @@ private fun ConnectHero(onClick: () -> Unit) {
                     .background(Color.White.copy(alpha = 0.20f)),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(Icons.Rounded.Bluetooth, contentDescription = null, tint = Color.White)
+                Icon(
+                    if (connected) Icons.Rounded.BluetoothConnected else Icons.Rounded.Bluetooth,
+                    contentDescription = null,
+                    tint = Color.White,
+                )
             }
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
                 Text(
-                    text = stringResource(Res.string.connect_title),
+                    text = stringResource(
+                        when (connection) {
+                            ConnectionState.CONNECTED -> Res.string.connection_state_connected
+                            ConnectionState.CONNECTING -> Res.string.connection_state_connecting
+                            ConnectionState.DISCONNECTED -> Res.string.connect_title
+                        },
+                    ),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                 )
                 Text(
-                    text = stringResource(Res.string.home_connect_hint),
+                    // Connected, the second line is which scanner — the adapter advertises a name
+                    // and a user with two of them needs to know which one answered.
+                    text = if (connected) {
+                        adapterName ?: stringResource(Res.string.adapter_unnamed)
+                    } else {
+                        stringResource(Res.string.home_connect_hint)
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White.copy(alpha = 0.85f),
                 )

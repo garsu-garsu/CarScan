@@ -19,10 +19,18 @@ data class AdCadenceConfig(
  * [AdCadenceConfig.warmupMs] no matter which format asks first. [clock] is injected — tests
  * drive it explicitly instead of sleeping; production binds it to `System.currentTimeMillis()`.
  * Bind one instance as a Koin singleton so every caller shares the same session state.
+ *
+ * [isScannerConnected] is the driving context, and it is a hard veto rather than another term in
+ * the cadence. A connected scanner means the phone is in a cradle in a moving car, where a
+ * full-screen ad — one of which turned out to have no close button at all — is not a lost
+ * impression but a driver spending four back presses on `AdActivity` instead of watching the
+ * road. It is a supplier and not a `Boolean` because the answer changes between two calls to
+ * this gate. Banner ads are untouched; they cannot take the screen.
  */
 class FullScreenAdGate(
     private val clock: () -> Long,
     private val config: AdCadenceConfig = AdCadenceConfig(),
+    private val isScannerConnected: () -> Boolean = { false },
 ) {
     private val sessionStart: Long = clock()
     private var lastShownMs: Long? = null
@@ -34,7 +42,7 @@ class FullScreenAdGate(
         val warmedUp = now - sessionStart >= config.warmupMs
         val intervalElapsed = lastShownMs?.let { now - it >= config.minIntervalMs } ?: true
         val underCap = shownThisSession < config.maxPerSession
-        return warmedUp && intervalElapsed && underCap
+        return warmedUp && intervalElapsed && underCap && !isScannerConnected()
     }
 
     /** Call once an ad has actually been shown, so the next [shouldShow] respects the cadence. */

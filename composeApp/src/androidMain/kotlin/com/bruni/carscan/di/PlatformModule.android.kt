@@ -17,12 +17,14 @@ import com.bruni.carscan.core.monetization.EntitlementCache
 import com.bruni.carscan.core.monetization.FullScreenAdGate
 import com.bruni.carscan.core.monetization.InterstitialAdPort
 import com.bruni.carscan.core.monetization.RewardedAdPort
+import com.bruni.carscan.core.data.ConnectionState
 import com.bruni.carscan.core.data.GyroSource
 import com.bruni.carscan.core.data.LocationSource
 import com.bruni.carscan.core.data.ReverseGeocoder
 import com.bruni.carscan.core.transport.ble.BleTransportFactory
 import com.bruni.carscan.core.transport.spp.SppTransportFactory
 import com.bruni.carscan.core.data.SettingsRepository
+import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.platform.android.service.AndroidLoggingServiceController
 import com.bruni.carscan.platform.android.service.AndroidGyroSource
 import com.bruni.carscan.platform.android.service.AndroidReverseGeocoder
@@ -123,7 +125,17 @@ actual fun platformModule(): Module = module {
 
     // The one gate shared by every full-screen ad format (interstitial + app open) — see its
     // KDoc. A Koin singleton so both callers see the same session state.
-    single { FullScreenAdGate(clock = { System.currentTimeMillis() }) }
+    //
+    // The connection state reaches it as a supplier over the session repository's existing
+    // health flow: :core:monetization is pure KMP and must not learn what a scanner is, and the
+    // gate must read the answer *at the moment it is asked*, not at construction.
+    single {
+        val session: VehicleSessionRepository = get()
+        FullScreenAdGate(
+            clock = { System.currentTimeMillis() },
+            isScannerConnected = { session.health.value.connection == ConnectionState.CONNECTED },
+        )
+    }
     single<InterstitialAdPort> { AdMobInterstitialAdPort(androidContext()) }
     single<AppOpenAdPort> { AdMobAppOpenAdPort(androidContext()) }
 }

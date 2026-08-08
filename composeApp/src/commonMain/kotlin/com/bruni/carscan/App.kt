@@ -23,10 +23,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.bruni.carscan.core.data.AdapterRepository
+import com.bruni.carscan.core.data.ConnectionState
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
 import com.bruni.carscan.core.data.VehicleRepository
+import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.designsystem.ads.LocalAdsEnabled
 import com.bruni.carscan.core.designsystem.ads.LocalBannerAdUnitId
 import com.bruni.carscan.core.designsystem.gauge.GaugeStyleId
@@ -92,6 +95,17 @@ fun App(bannerAdUnitId: String? = null) {
     val vehicleRepository: VehicleRepository = koinInject()
     val activeVehicleName by produceState<String?>(initialValue = null, settings.activeVehicleId, vehicleRepository) {
         value = settings.activeVehicleId?.let { id -> vehicleRepository.byId(id)?.displayName }
+    }
+
+    // Home's hero, same treatment as the vehicle chip above: resolved here and handed down, so
+    // HomeScreen stays pure navigation. The connection is the session repository's existing health
+    // flow — the same one the connect screen reads — and the connected adapter is the last one
+    // remembered, which `connect()` stamps on every successful connection.
+    val session: VehicleSessionRepository = koinInject()
+    val health by session.health.collectAsStateWithLifecycle()
+    val adapterRepository: AdapterRepository = koinInject()
+    val connectedAdapterName by produceState<String?>(null, health.connection, adapterRepository) {
+        value = if (health.connection == ConnectionState.CONNECTED) adapterRepository.lastUsed()?.name else null
     }
 
     val entitlements: Entitlements = koinInject()
@@ -167,7 +181,7 @@ fun App(bannerAdUnitId: String? = null) {
                 bottomBar = { if (onTab) CarScanNavigationBar(navController, entry?.destination) },
             ) { padding ->
                 Surface(Modifier.fillMaxSize().padding(padding)) {
-                    CarScanNavHost(navController, activeVehicleName)
+                    CarScanNavHost(navController, activeVehicleName, health.connection, connectedAdapterName)
                 }
             }
         }
@@ -175,11 +189,21 @@ fun App(bannerAdUnitId: String? = null) {
 }
 
 @Composable
-private fun CarScanNavHost(navController: NavHostController, activeVehicleName: String?) {
+private fun CarScanNavHost(
+    navController: NavHostController,
+    activeVehicleName: String?,
+    connection: ConnectionState,
+    connectedAdapterName: String?,
+) {
     NavHost(navController = navController, startDestination = Route.Home) {
 
         composable<Route.Home> {
-            HomeScreen(onOpen = { route -> navController.navigate(route) }, activeVehicleName = activeVehicleName)
+            HomeScreen(
+                onOpen = { route -> navController.navigate(route) },
+                activeVehicleName = activeVehicleName,
+                connection = connection,
+                connectedAdapterName = connectedAdapterName,
+            )
         }
 
         composable<Route.Connect> {
