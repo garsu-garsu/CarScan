@@ -40,6 +40,17 @@
 -keep class com.bruni.carscan.nav.Route { *; }
 -keep class com.bruni.carscan.nav.Route$* { *; }
 
+# --- Room, via WorkManager, via AdMob ----------------------------------------------------------
+# This app stores nothing in Room — it uses SQLDelight. Room arrives transitively:
+# play-services-ads-api pulls androidx.work:work-runtime, whose WorkDatabase is a Room database,
+# and androidx.startup instantiates it in a ContentProvider before any of our code runs.
+#
+# Room finds its generated implementation by name — Class.forName(canonicalName + "_Impl") — so a
+# renamed or shrunk WorkDatabase_Impl is invisible to it. Without this the release build dies at
+# launch, every time, on "Failed to create an instance of androidx.work.impl.WorkDatabase", before
+# a single screen draws. Found on a device; no host test can see it.
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
+
 # --- Koin --------------------------------------------------------------------------------------
 # Constructor DSL resolves by KClass, so the classes it constructs must keep their identity as
 # ViewModels. Everything else in Koin is plain lambdas.

@@ -1,0 +1,9 @@
+# Connect sheet opens and offers a transport choice. No scan is started.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- tapOn: "어댑터 연결"
+- assertVisible: "연결 방식을 선택하세요"
+- back
+- assertVisible: "어댑터 연결"

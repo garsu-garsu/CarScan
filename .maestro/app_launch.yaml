@@ -1,0 +1,8 @@
+# App cold-launches and the home screen paints.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- assertVisible: "CarScan"
+- assertVisible: "내 차의 모든 센서, 실시간으로"
+- assertVisible: "어댑터 연결"

@@ -1,0 +1,12 @@
+# Monitoring (renamed from 실시간) opens with no adapter connected.
+# NOTE: no title header either - "모니터링" is only the bottom-nav label, so assert the
+# empty-state hint, which is the one thing this screen actually renders with no adapter.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- tapOn:
+    text: "^모니터링$"
+- assertVisible: "차트로 볼 신호를 선택하세요"
+- back
+- assertVisible: "어댑터 연결"

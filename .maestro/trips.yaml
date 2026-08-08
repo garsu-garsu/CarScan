@@ -1,0 +1,10 @@
+# Trip history opens; empty state is acceptable.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- tapOn:
+    text: "^주행 기록$"
+- assertVisible: "주행 기록"
+- back
+- assertVisible: "어댑터 연결"

@@ -1,0 +1,16 @@
+# Dashboard opens with no adapter connected: gauge tiles render, values show the no-reading dash.
+# NOTE: this screen has no title header, and "대시보드" also exists as a bottom-nav label,
+# so assert on the FAB/HUD chip instead - those are unique to the dashboard.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- tapOn:
+    text: "^대시보드$"
+- assertVisible: "게이지 추가"
+- assertVisible: "^HUD$"
+- assertVisible: "속도"
+- assertVisible: "엔진 회전수"
+- assertNotVisible: "게이지가 아직 없습니다. 하나 추가해 보세요."
+- back
+- assertVisible: "어댑터 연결"

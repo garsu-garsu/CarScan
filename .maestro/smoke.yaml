@@ -1,0 +1,25 @@
+# Critical path: launch -> every major screen reachable without an OBD adapter -> back to home.
+#
+# Running these:
+#   maestro --device R9TY509JV3R test .maestro/smoke.yaml
+#
+# Two gotchas, both learned the hard way:
+#  1. maestro full-matches the selector regex against the node text, it is NOT a substring
+#     match. "버전" will not match a node reading "버전 1.0.0" - write "버전 .*".
+#  2. maestro's JVM defaults its max heap to 1/4 of host RAM and dies with
+#     "insufficient memory ... G1 virtual space" when a Gradle build is running alongside.
+#     Cap it: MAESTRO_OPTS="-Xmx512m -XX:MaxMetaspaceSize=256m -XX:+UseSerialGC"
+#
+# The app does not set testTagsAsResourceId, so Compose testTags are invisible here.
+# Every selector below matches visible Korean text; the device locale must be Korean.
+appId: com.bruni.carscan
+---
+- runFlow: app_launch.yaml
+- runFlow: home.yaml
+- runFlow: garage.yaml
+- runFlow: dashboard.yaml
+- runFlow: monitoring.yaml
+- runFlow: trips.yaml
+- runFlow: settings.yaml
+- runFlow: about.yaml
+- runFlow: connect.yaml

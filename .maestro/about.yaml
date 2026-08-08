@@ -1,0 +1,18 @@
+# About screen: version + OBDb attribution + OSS licenses.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- tapOn:
+    text: "^설정$"
+- scrollUntilVisible:
+    element: "정보 및 라이선스"
+    direction: DOWN
+- tapOn: "정보 및 라이선스"
+# maestro full-matches the regex against the node text, so "버전" alone would not match "버전 1.0.0"
+- assertVisible: "버전 .*"
+- assertVisible: "CarScan"
+- assertVisible: "오픈소스 라이선스"
+- back
+- back
+- assertVisible: "어댑터 연결"

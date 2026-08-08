@@ -1,0 +1,18 @@
+# Every home tile is present.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- assertVisible: "어댑터 연결"
+- assertVisible:
+    text: "^대시보드$"
+- assertVisible:
+    text: "^모니터링$"
+- assertVisible:
+    text: "^HUD$"
+- assertVisible:
+    text: "^주행 기록$"
+- assertVisible:
+    text: "^차량$"
+- assertVisible:
+    text: "^설정$"

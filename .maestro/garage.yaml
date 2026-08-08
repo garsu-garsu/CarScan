@@ -1,0 +1,20 @@
+# Vehicle picker: parses the bundled OBDb catalog and renders a searchable grouped list.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- tapOn:
+    text: "^차량$"
+- assertVisible: "차고"
+- assertVisible: "제조사 또는 모델 검색"
+- assertNotVisible: "아직 선택 가능한 차량이 없습니다."
+# catalog actually parsed: first alphabetical make + one of its models
+- assertVisible: "Abarth"
+- assertVisible: "Abarth 500"
+- tapOn: "제조사 또는 모델 검색"
+- inputText: "Hyundai"
+- hideKeyboard
+- assertNotVisible: "일치하는 차량이 없습니다."
+- assertVisible: "Hyundai"
+- back
+- assertVisible: "어댑터 연결"

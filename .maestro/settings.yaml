@@ -1,0 +1,19 @@
+# Settings opens; units are at the top, appearance + about are further down the scroll.
+appId: com.bruni.carscan
+---
+- launchApp:
+    clearState: false
+- tapOn:
+    text: "^설정$"
+- assertVisible: "설정"
+- assertVisible: "프리미엄"
+- assertVisible: "속도"
+- scrollUntilVisible:
+    element: "테마"
+    direction: DOWN
+- assertVisible: "게이지 스타일"
+- scrollUntilVisible:
+    element: "정보 및 라이선스"
+    direction: DOWN
+- back
+- assertVisible: "어댑터 연결"
