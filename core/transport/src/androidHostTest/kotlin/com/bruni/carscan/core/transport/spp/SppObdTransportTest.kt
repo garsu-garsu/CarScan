@@ -5,7 +5,14 @@ import io.kotest.matchers.shouldBe
 import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -13,27 +20,51 @@ import kotlinx.coroutines.launch
 // of these tests is that only closing the socket ends that block. runTest's virtual clock
 // would skip ahead of the IO thread and time Turbine out spuriously.
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 
 private const val ADDRESS = "00:1D:A5:68:98:8B"
+private val TEST_TIMEOUT = 10.seconds
+
+/**
+ * A test on real threads, with a ceiling that actually holds.
+ *
+ * A pump stuck in `InputStream.read` cannot be cancelled — only closing the socket ends that
+ * block — so a `withTimeout` *inside* `runBlocking` does not help: `runBlocking` still waits
+ * for its stranded child, the Gradle test task never finishes, and `--continue` has nothing to
+ * continue past. Running the body in a scope `runBlocking` does not parent lets the timeout
+ * abandon the stuck thread (dispatcher threads are daemons) and report a failed test instead
+ * of hanging the build forever.
+ */
+private fun sppTest(body: suspend CoroutineScope.() -> Unit) = runBlocking {
+    val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    val running = scope.async { body() }
+    try {
+        withTimeout(TEST_TIMEOUT) { running.await() }
+    } catch (timeout: TimeoutCancellationException) {
+        throw AssertionError("Did not finish within $TEST_TIMEOUT — a pump is stuck in a blocking read.")
+    } finally {
+        scope.cancel()
+    }
+}
 
 class SppObdTransportTest {
 
     @Test
-    fun `writing before open fails with a clear error`() = runBlocking<Unit> {
+    fun `writing before open fails with a clear error`() = sppTest {
         val transport = SppObdTransport(ADDRESS, FakeBluetoothHost())
 
         assertFailsWith<SppNotOpenException> { transport.write("ATZ\r".toByteArray()) }
     }
 
     @Test
-    fun `collecting before open fails with a clear error`() = runBlocking<Unit> {
+    fun `collecting before open fails with a clear error`() = sppTest {
         val transport = SppObdTransport(ADDRESS, FakeBluetoothHost())
 
         assertFailsWith<SppNotOpenException> { transport.incoming.first() }
     }
 
     @Test
-    fun `open with Bluetooth turned off says so, instead of walking the ladder`() = runBlocking<Unit> {
+    fun `open with Bluetooth turned off says so, instead of walking the ladder`() = sppTest {
         val host = FakeBluetoothHost(enabled = false)
         val transport = SppObdTransport(ADDRESS, host)
 
@@ -42,7 +73,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `open connects through the ladder`() = runBlocking<Unit> {
+    fun `open connects through the ladder`() = sppTest {
         val host = FakeBluetoothHost()
         val transport = SppObdTransport(ADDRESS, host)
 
@@ -52,7 +83,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `incoming emits chunks exactly as they arrive, without looking for line boundaries`() = runBlocking<Unit> {
+    fun `incoming emits chunks exactly as they arrive, without looking for line boundaries`() = sppTest {
         // Framing on '>' belongs to :core:obd. The transport must not merge, split or
         // reorder what the radio handed it — a chunk holding half a line stays half a line.
         val host = FakeBluetoothHost()
@@ -74,7 +105,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `write hands the bytes to the socket`() = runBlocking<Unit> {
+    fun `write hands the bytes to the socket`() = sppTest {
         val host = FakeBluetoothHost()
         val transport = SppObdTransport(ADDRESS, host)
         transport.open()
@@ -86,7 +117,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `close is idempotent`() = runBlocking<Unit> {
+    fun `close is idempotent`() = sppTest {
         val host = FakeBluetoothHost()
         val transport = SppObdTransport(ADDRESS, host)
         transport.open()
@@ -99,7 +130,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `close terminates incoming`() = runBlocking<Unit> {
+    fun `close terminates incoming`() = sppTest {
         val host = FakeBluetoothHost()
         val transport = SppObdTransport(ADDRESS, host)
         transport.open()
@@ -116,7 +147,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `cancelling collection closes the socket`() = runBlocking<Unit> {
+    fun `cancelling collection closes the socket`() = sppTest {
         // A blocking RFCOMM read ignores thread interruption. If cancellation does not
         // close the socket, the read thread is stranded for the lifetime of the process.
         val host = FakeBluetoothHost()
@@ -133,7 +164,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `a second concurrent collector is rejected instead of silently stealing bytes`() = runBlocking<Unit> {
+    fun `a second concurrent collector is rejected instead of silently stealing bytes`() = sppTest {
         val host = FakeBluetoothHost()
         val transport = SppObdTransport(ADDRESS, host)
         transport.open()
@@ -153,7 +184,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `an adapter that hangs up ends incoming`() = runBlocking<Unit> {
+    fun `an adapter that hangs up ends incoming`() = sppTest {
         val host = FakeBluetoothHost()
         val transport = SppObdTransport(ADDRESS, host)
         transport.open()
@@ -167,7 +198,7 @@ class SppObdTransportTest {
     }
 
     @Test
-    fun `a dropped link surfaces as SppLinkLostException, not a bare IOException`() = runBlocking<Unit> {
+    fun `a dropped link surfaces as SppLinkLostException, not a bare IOException`() = sppTest {
         val host = FakeBluetoothHost()
         val transport = SppObdTransport(ADDRESS, host)
         transport.open()

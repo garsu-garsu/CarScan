@@ -32,6 +32,7 @@ class SppObdTransport internal constructor(
     private val connector = RfcommConnector(address, host)
     private val socket = AtomicReference<RfcommSocket?>(null)
     private val closed = AtomicBoolean(false)
+    private val collecting = AtomicBoolean(false)
 
     override suspend fun open() {
         if (closed.get()) throw SppNotOpenException()
@@ -47,9 +48,17 @@ class SppObdTransport internal constructor(
      * split across reads, and two responses can arrive in one. Framing on the `>` prompt is
      * :core:obd's job, and doing it here would break the moment a chunk boundary landed
      * mid-line — which is to say, on someone else's adapter, not the developer's.
+     *
+     * Single-consumer, enforced: a second collector would start a second pump on the same
+     * InputStream, and two pumps split the byte stream between them — each gets part of every
+     * response and the half-duplex prompt stream desyncs permanently, under load only.
      */
     override val incoming: Flow<ByteArray> = channelFlow {
         val socket = requireOpen()
+        check(collecting.compareAndSet(false, true)) {
+            "SppObdTransport($address).incoming already has a collector, and a second pump on " +
+                "one RFCOMM socket would steal half of every response from the first."
+        }
         launch(io) {
             val buffer = ByteArray(READ_BUFFER_BYTES)
             while (true) {
