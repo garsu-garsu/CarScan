@@ -6,7 +6,13 @@ class FixtureCase(val expected: Map<String, String>, val responseLines: List<Str
 /** One `tests/test_cases/{year}/commands/{id}.yaml`. */
 class FixtureFile(val commandId: String, val cases: List<FixtureCase>)
 
-private val KEY = Regex("^([A-Za-z_][A-Za-z0-9_.\\-]*):\\s*(.*)$")
+/**
+ * A mapping key. The leading character must accept a digit: OBDb names BMW's signals
+ * `3SERIES_EOT` and Ram's `1500_GEAR`, and an identifier-shaped pattern silently skipped
+ * all 2466 of them — the line simply did not match, so the value was never checked and
+ * the gate's own `checks` count hid the hole by matching what it had collected.
+ */
+private val KEY = Regex("^([A-Za-z0-9_][A-Za-z0-9_.\\-]*):\\s*(.*)$")
 
 /**
  * Reads the exact YAML subset OBDb's test cases use — and nothing else.

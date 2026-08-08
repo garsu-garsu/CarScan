@@ -28,18 +28,14 @@ import kotlin.test.assertTrue
  *
  * ## Why this is not simply `assertTrue(failures.isEmpty())`
  *
- * 159,577 of 161,612 expected values across 14 vehicles decode exactly. Of the 2,035 that
- * do not, all but 13 files' worth are places where OBDb's reference implementation does
- * something this decoder deliberately refuses to do. OBDb's reassembler
- * (`.schemas/python/can/can_frame.py`) **appends consecutive frames without checking the
- * sequence number**; its decoder (`signals.py`) **parses `nullmin`/`nullmax` but never
- * applies them**; and `command_registry.py` **deletes `rax` from every standard command**
- * before decoding, so it cannot filter on receive address at all. Matching it bit-for-bit
- * would mean adopting those behaviours.
- *
- * The exception is [EXTENDED_ADDRESSING_UNSUPPORTED] — 13 Toyota-Prius fixtures that are
- * perfectly intact and that we get wrong, because ISO-TP extended addressing is not
- * implemented. It is pinned in its own set, under its own name, for exactly that reason.
+ * 162,230 of 164,078 expected values across 14 vehicles decode exactly. Every one of the
+ * 1,848 that do not is either a capture that lost bytes on the wire, or a place where
+ * OBDb's reference implementation does something this decoder deliberately refuses to do.
+ * OBDb's reassembler (`.schemas/python/can/can_frame.py`) **appends consecutive frames
+ * without checking the sequence number**; its decoder (`signals.py`) **parses
+ * `nullmin`/`nullmax` but never applies them**; and `command_registry.py` **deletes `rax`
+ * from every standard command** before decoding, so it cannot filter on receive address at
+ * all. Matching it bit-for-bit would mean adopting those behaviours.
  *
  * So the assertions below are split by what they actually protect:
  *
@@ -145,7 +141,7 @@ class ObdbFixtureGateTest {
 
                 for ((i, case) in fixture.cases.withIndex()) {
                     cases++
-                    val intact = isWellFormed(case.responseLines)
+                    val intact = isWellFormed(case.responseLines, command.eax != null)
                     if (!intact) damagedCases++
 
                     val decoded = decodePipeline(case.responseLines, command, spec)
@@ -186,7 +182,7 @@ class ObdbFixtureGateTest {
 
         // The corpus itself, so a half-finished checkout cannot turn this into a test of nothing.
         assertEquals(5673, files, "vendored fixture count changed")
-        assertEquals(161_612, checks, "expected-value count changed")
+        assertEquals(164_078, checks, "expected-value count changed")
 
         // 1. No number may ever come out of a capture that lost bytes. This is the property
         //    the whole ISO-TP sequence check exists to provide, and OBDb's own reference
@@ -212,17 +208,15 @@ class ObdbFixtureGateTest {
         //    could hide behind it. So the files allowed to withhold anything are pinned, and
         //    pinned *by cause*: one more, in any repo, fails here.
         //
-        //    The three sets are kept apart on purpose. Only [CORRUPT_CAPTURES] is upstream's
-        //    fault. [EXTENDED_ADDRESSING_UNSUPPORTED] is OUR OPEN DEFECT, and folding it in
-        //    with the damaged captures would retire a real bug into a list of other people's
-        //    problems — which is the exact failure mode this whole test exists to prevent.
+        //    The two sets are kept apart on purpose: [CORRUPT_CAPTURES] lost bytes on the
+        //    wire, [ELM_ECHO_TRANSCRIPTS] are sound but carry the adapter's own chatter.
         assertEquals(
-            (CORRUPT_CAPTURES + EXTENDED_ADDRESSING_UNSUPPORTED + ELM_ECHO_TRANSCRIPTS).toSortedSet(),
+            (CORRUPT_CAPTURES + ELM_ECHO_TRANSCRIPTS).toSortedSet(),
             withheldFiles,
             "a fixture outside the known-withholding captures withheld a value",
         )
-        assertEquals(1873, damagedCases, "number of structurally damaged transcripts changed")
-        assertEquals(2000, withheldDamaged, "number of values withheld from damaged transcripts changed")
+        assertEquals(869, damagedCases, "number of structurally damaged transcripts changed")
+        assertEquals(1813, withheldDamaged, "number of values withheld from damaged transcripts changed")
     }
 
     /**
@@ -242,7 +236,7 @@ class ObdbFixtureGateTest {
      * mean reproducing the bug. We drop the buffer instead, and this predicate is how the
      * test proves that is what happened rather than assuming it.
      */
-    private fun isWellFormed(lines: List<String>): Boolean {
+    private fun isWellFormed(lines: List<String>, extendedAddressing: Boolean): Boolean {
         class Open(var remaining: Int, var nextSeq: Int)
 
         val open = HashMap<String, Open>()
@@ -250,7 +244,15 @@ class ObdbFixtureGateTest {
 
         for (line in lines) {
             val frame = parseElmLine(line) ?: return false
-            val b = frame.bytes
+            // Same one-byte skip [IsoTpReassembler] makes, and for the same reason: without
+            // it every reply to an `eax` command reads its address extension as a PCI, lands
+            // in the `else` below, and an intact transcript is filed as damaged — which is
+            // exactly how this defect stayed invisible.
+            val b = when {
+                !extendedAddressing -> frame.bytes
+                frame.bytes.isEmpty() -> return false
+                else -> frame.bytes.copyOfRange(1, frame.bytes.size)
+            }
             if (b.isEmpty()) return false
             val pci = b[0].toInt() and 0xFF
 
@@ -292,7 +294,7 @@ class ObdbFixtureGateTest {
 
         for (line in responseLines) {
             val frame = parseElmLine(line) ?: continue
-            for (message in reassembler.feed(frame)) {
+            for (message in reassembler.feed(frame, extendedAddressing = command.eax != null)) {
                 // The adapter does this in hardware with ATCRA; without it, a second ECU
                 // answering the same PID overwrites the reading from the one we addressed.
                 if (!acceptsReplyFrom(message.canId, command.rax)) continue
@@ -401,50 +403,6 @@ class ObdbFixtureGateTest {
         )
 
         /**
-         * **AN OPEN DEFECT IN THIS DECODER. These transcripts are not damaged.**
-         *
-         * Every one of these commands declares `eax: "2A"` — ISO-TP *extended addressing*,
-         * where the first byte after the CAN id is an address extension and the PCI starts at
-         * the byte after that. [IsoTpReassembler] does not implement it: it reads byte 0 as the
-         * PCI, so `7582A10076116002F2F` is taken as `0x2A` — a consecutive frame with sequence
-         * 10 — arrives with no buffer open, and is discarded. Every reply to an `eax` command
-         * is dropped, and [isWellFormed] is fooled the same way and calls the transcript
-         * damaged. It is not: `750.758.2116` decodes cleanly by hand once the `2A` is skipped.
-         *
-         *     7582A10076116002F2F  ->  ext 2A | 10 07 | 61 16 00 2F 2F
-         *     7582A212F0000000000  ->  ext 2A | 21    | 2F 00 …
-         *     message 61 16 00 2F 2F 2F 00, payload after the `61 16` echo: 00 2F 2F 2F 00
-         *
-         * `PRIUS_TT_FL_V1` is `len:8 min:-20 max:150 add:-40`, so raw `00` -> -40 clamped to
-         * -20 and raw `2F` (47) -> 7 — which is exactly `PRIUS_TT_FL_V1: -20`,
-         * `PRIUS_TT_FR_V1: 7` as the fixture expects. The bytes are all there; we throw them
-         * away.
-         *
-         * OBDb's reference gets this right: `CANFrame.from_line` consumes one byte as
-         * `extended_receive_address` before reading the type when extended addressing is on.
-         *
-         * `eax` is already modelled ([ObdbCommand.eax]) and already sent to the adapter as
-         * `ATCEA`, so this is a decode-side gap only. It fails safe — no wrong number is ever
-         * produced, the signals simply never appear — which is why it is pinned here rather
-         * than in [KNOWN_DIVERGENCES]: nothing about it is deliberate.
-         */
-        val EXTENDED_ADDRESSING_UNSUPPORTED = sortedSetOf(
-            "fixtures/Toyota-Prius/tests/test_cases/2016/commands/750.758.2116_e=2A,fc=1,f=-2023.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2016/commands/750.758.2130_e=2A,ta=2A,fc=1,f=-2023.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2017/commands/750.758.2116_e=2A,fc=1,f=-2023.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2017/commands/750.758.2130_e=2A,ta=2A,fc=1,f=-2023.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2019/commands/750.758.2116_e=2A,fc=1,f=-2023.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2019/commands/750.758.2130_e=2A,ta=2A,fc=1,f=-2023.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2022/commands/750.758.2130_e=2A,ta=2A,fc=1,f=-2023.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2024/commands/750.758.221004_e=2A,ta=2A,fc=1,f=2023-.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2024/commands/750.758.221005_e=2A,ta=2A,fc=1,f=2023-.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2024/commands/750.758.222021_e=2A,ta=2A,fc=1.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2025/commands/750.758.221004_e=2A,ta=2A,fc=1,f=2023-.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2025/commands/750.758.221005_e=2A,ta=2A,fc=1,f=2023-.yaml",
-            "fixtures/Toyota-Prius/tests/test_cases/2025/commands/750.758.222021_e=2A,ta=2A,fc=1.yaml",
-        )
-
-        /**
          * Sound transcripts that [isWellFormed] cannot certify, because OBDb recorded the
          * ELM327's own chatter alongside the frames.
          *
@@ -469,8 +427,7 @@ class ObdbFixtureGateTest {
          * reference. None is a decoder defect; each is a behaviour OBDb does not implement
          * and we do, or a fixture OBDb generated against data it has since corrected. Pinned
          * individually so that "we disagree with OBDb" can never become a place for a real
-         * bug to hide. (The one real defect found is pinned separately, in
-         * [EXTENDED_ADDRESSING_UNSUPPORTED].)
+         * bug to hide.
          *
          * **Receive-address filtering — 11 values.** `CLR_DIST` ×7, plus Ram-1500's
          * `LOAD_PCT`, `ECT`, `VSS`. These captures were taken with the adapter's receive

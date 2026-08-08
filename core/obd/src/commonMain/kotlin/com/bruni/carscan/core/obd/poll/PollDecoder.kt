@@ -36,7 +36,9 @@ internal class PollDecoder {
         val out = mutableListOf<SensorSample>()
         for (frame in frames) {
             if (!acceptsReplyFrom(frame.canId, command.rax)) continue
-            for (message in reassembler.feed(frame)) {
+            // `eax` is what ATCEA was set to for this command; a reply to it carries an
+            // address extension byte in front of the PCI.
+            for (message in reassembler.feed(frame, extendedAddressing = command.eax != null)) {
                 val payload = stripServiceEcho(message, spec) ?: continue
                 for (signal in command.signals) {
                     val value = SignalDecoder.decode(signal.fmt, payload) ?: continue

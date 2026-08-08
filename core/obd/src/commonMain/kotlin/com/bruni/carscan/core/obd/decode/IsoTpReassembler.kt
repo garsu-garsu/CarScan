@@ -34,9 +34,25 @@ class IsoTpReassembler {
      *
      * Returns a list rather than a nullable because that is what the caller wants to
      * flatMap over; a single frame can never complete more than one message.
+     *
+     * [extendedAddressing] says the frames carry an ISO-TP address extension: one byte
+     * between the CAN id and the PCI. It must come from the command's declared `eax` and
+     * must never be guessed from the bytes — a normal frame mistaken for an extended one
+     * is read one byte out of step and reassembles into a message that is the right length
+     * and entirely the wrong contents, which is far worse than today's failure of dropping
+     * an extended frame outright.
+     *
+     * The extension byte's *value* is not checked, because it is not `eax`. `eax` addresses
+     * the ECU on the way out; the reply carries the tester's address on the way back. BMW
+     * asks `618` with `eax: 18` and is answered `60D F1 05 …`, Toyota asks `750` with
+     * `eax: 2A` and is answered `758 2A 10 07 …`. One byte is skipped, not matched.
      */
-    fun feed(frame: RawFrame): List<IsoTpMessage> {
-        val b = frame.bytes
+    fun feed(frame: RawFrame, extendedAddressing: Boolean = false): List<IsoTpMessage> {
+        val b = when {
+            !extendedAddressing -> frame.bytes
+            frame.bytes.isEmpty() -> return emptyList()
+            else -> frame.bytes.copyOfRange(1, frame.bytes.size)
+        }
         if (b.isEmpty()) return emptyList()
 
         val pci = b[0].toInt() and 0xFF
