@@ -1,0 +1,8 @@
+command_id: 7E1.220304
+test_cases:
+- expected_values:
+    A6_DRIVE_TIME_SPORT: 8.8
+  response: '7E90462030416'
+- expected_values:
+    A6_DRIVE_TIME_SPORT: 19.6
+  response: '7E90462030431'

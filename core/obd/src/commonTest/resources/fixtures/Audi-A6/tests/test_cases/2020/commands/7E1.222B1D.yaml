@@ -1,0 +1,11 @@
+command_id: 7E1.222B1D
+test_cases:
+- expected_values:
+    A6_TIRE_RL_SPD: 0
+  response: 7E905622B1D0000
+- expected_values:
+    A6_TIRE_RL_SPD: 49.4
+  response: 7E905622B1D01EE
+- expected_values:
+    A6_TIRE_RL_SPD: 77.1
+  response: 7E905622B1D0303

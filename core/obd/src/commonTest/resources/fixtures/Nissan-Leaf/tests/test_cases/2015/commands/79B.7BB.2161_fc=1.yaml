@@ -1,0 +1,37 @@
+command_id: 79B.7BB.2161|fc=1
+test_cases:
+- expected_values:
+    LEAF_HVBAT_SOH: 73.22
+  response: |-
+    7BB100C6161140F1C9A
+    7BB21FF1CA41C9A03FF
+- expected_values:
+    LEAF_HVBAT_SOH: 73.27
+  response: |-
+    7BB100C616114181C9F
+    7BB21FF1CBD1C9F03FF
+- expected_values:
+    LEAF_HVBAT_SOH: 73.29
+  response: |-
+    7BB100C6161141B1CA1
+    7BB21FF1CAD1CA103FF
+- expected_values:
+    LEAF_HVBAT_SOH: 73.3
+  response: |-
+    7BB100C6161141B1CA2
+    7BB21FF1CBE1CA103FF
+- expected_values:
+    LEAF_HVBAT_SOH: 73.74
+  response: |-
+    7BB100C6161146E1CCE
+    7BB21FF1CC81CCD03FF
+- expected_values:
+    LEAF_HVBAT_SOH: 73.85
+  response: |-
+    7BB100C616114851CD9
+    7BB21FF1CC81CD903FF
+- expected_values:
+    LEAF_HVBAT_SOH: 73.91
+  response: |-
+    7BB100C616114901CDF
+    7BB21FF1CC81CDF03FF

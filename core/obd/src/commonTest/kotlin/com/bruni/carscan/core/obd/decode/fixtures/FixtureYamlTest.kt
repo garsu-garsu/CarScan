@@ -152,8 +152,24 @@ class FixtureYamlTest {
     fun `the vendored corpus is all there`() {
         // Guards against a half-finished checkout quietly turning the gate test into a
         // test of nothing.
-        val repos = listOf("Kia-EV6", "Hyundai-Ioniq-5", "Hyundai-Elantra", "Ford-F-150")
-        val counts = repos.associateWith { fixtureFiles("fixtures/$it/tests/test_cases").size }
-        assertEquals(mapOf("Kia-EV6" to 39, "Hyundai-Ioniq-5" to 61, "Hyundai-Elantra" to 574, "Ford-F-150" to 2141), counts)
+        val expected = mapOf(
+            "Kia-EV6" to 39,
+            "Hyundai-Ioniq-5" to 61,
+            "Hyundai-Elantra" to 574,
+            "Ford-F-150" to 2141,
+            "Hyundai-Sonata" to 383,
+            "Hyundai-Kona" to 190,
+            "Kia-Sorento" to 301,
+            "Kia-Niro" to 210,
+            "Kia-EV3" to 101,
+            "Toyota-Prius" to 319,
+            "Ram-1500" to 529,
+            "Nissan-Leaf" to 187,
+            "Audi-A6" to 312,
+            "BMW-3-Series" to 326,
+        )
+        val counts = expected.keys.associateWith { fixtureFiles("fixtures/$it/tests/test_cases").size }
+        assertEquals(expected, counts)
+        assertEquals(5673, counts.values.sum())
     }
 }
