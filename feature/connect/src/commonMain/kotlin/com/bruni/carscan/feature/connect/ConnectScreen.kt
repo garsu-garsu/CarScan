@@ -55,6 +55,7 @@ import com.bruni.carscan.core.designsystem.generated.resources.connect_change_me
 import com.bruni.carscan.core.designsystem.generated.resources.connect_choose_method
 import com.bruni.carscan.core.designsystem.generated.resources.connect_clone
 import com.bruni.carscan.core.designsystem.generated.resources.connect_connect
+import com.bruni.carscan.core.designsystem.generated.resources.connect_disconnect
 import com.bruni.carscan.core.designsystem.generated.resources.connect_genuine_stn
 import com.bruni.carscan.core.designsystem.generated.resources.connect_no_adapters
 import com.bruni.carscan.core.designsystem.generated.resources.connect_proceed
@@ -167,7 +168,12 @@ private fun LazyListScope.scanStep(
     }
 
     state.ready?.let { ready ->
-        item { ReadoutCard(ready, state.throughput, onProceed = { onIntent(ConnectIntent.Proceed) }) }
+        item { ReadoutCard(
+            ready,
+            state.throughput,
+            onProceed = { onIntent(ConnectIntent.Proceed) },
+            onDisconnect = { onIntent(ConnectIntent.Disconnect) },
+        ) }
     }
 
     state.connectingTo?.let { target ->
@@ -354,6 +360,7 @@ private fun ReadoutCard(
     ready: ReadyReadout,
     throughput: ThroughputAdvice?,
     onProceed: () -> Unit,
+    onDisconnect: () -> Unit,
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -407,6 +414,16 @@ private fun ReadoutCard(
                 modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
             ) {
                 Text(stringResource(Res.string.connect_proceed))
+            }
+
+            // Ending the drive is the one thing the user could not do from anywhere in the app.
+            // A TextButton rather than a second filled one: next to a full-width primary action,
+            // in a car, two equally loud buttons is how the wrong one gets pressed.
+            TextButton(
+                onClick = onDisconnect,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(Res.string.connect_disconnect))
             }
         }
     }

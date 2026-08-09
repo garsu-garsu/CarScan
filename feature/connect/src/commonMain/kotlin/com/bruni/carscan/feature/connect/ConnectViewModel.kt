@@ -72,13 +72,21 @@ class ConnectViewModel(
     }
 
     /**
-     * Ending the drive. The full-screen ad is purely additive here: it must never block or
-     * delay the disconnect itself, so it is evaluated and shown in its own launch rather than
-     * awaited before or after [ObdConnector.disconnect].
+     * Ending the drive.
+     *
+     * The ad is asked for **after** the link is down, not alongside it. [FullScreenAdGate]
+     * refuses while a scanner is connected — that is what keeps a full-screen ad off the
+     * windscreen mid-drive — so asking any earlier is asking during the drive, and the answer
+     * is always no. The drive has to be over for an end-of-drive ad to exist at all.
+     *
+     * It stays purely additive: it is the last thing in the launch, so nothing about showing
+     * it can delay the disconnect the user asked for.
      */
     private fun disconnect() {
-        scope.launch { connector.disconnect() }
-        maybeShowInterstitial()
+        scope.launch {
+            connector.disconnect()
+            maybeShowInterstitial()
+        }
     }
 
     private fun maybeShowInterstitial() {
