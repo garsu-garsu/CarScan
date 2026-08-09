@@ -142,41 +142,47 @@ class TripRepositoryTest {
             idleMs = 4_000,
             sampleCount = 60,
         )
-        val series = listOf(SignalSeries("VEHICLE_SPEED", FloatArray(60) { it.toFloat() }))
-
-        repo.import(trip, series)
-        repo.import(trip, series)
+        repo.import(trip)
+        repo.import(trip)
 
         assertEquals(1L, db.tripQueries.countAll().executeAsOne())
-        assertEquals(1L, db.tripSeriesQueries.countAll().executeAsOne())
 
         val restored = repo.summary(trip.id)!!
         assertEquals(1_200.0, restored.distanceM, 1e-6)
         assertEquals(88.0, restored.maxSpeedKmh, 1e-6)
-        assertEquals(60, repo.series(trip.id, "VEHICLE_SPEED")!!.values.size)
+        assertEquals(61_000L, restored.endedMs)
     }
 
+    /**
+     * The row may already exist — a partly-restored backup, or an overlapping one — in which
+     * case OR IGNORE leaves it alone and the totals still have to land. Whole-trip series
+     * restoration is `BackupService`'s, and lives in BackupServiceTest.
+     */
     @Test
-    fun `an imported trip longer than ten minutes comes back with every second intact`() = runTest {
+    fun `importing over an existing trip updates its totals and end`() = runTest {
         db.seedVehicle()
         val repo = repo(backgroundScope)
 
-        val values = FloatArray(2_000) { (it % 61).toFloat() } // spans four chunks
         val trip = TripSummary(
             id = "22222222-2222-4222-8222-222222222222",
-            vehicleId = VEHICLE, startedMs = 0, endedMs = 2_000_000,
+            vehicleId = VEHICLE, startedMs = 0, endedMs = null,
             distanceM = 0.0, fuelMl = 0.0, energyWh = 0.0,
-            maxSpeedKmh = 60.0, idleMs = 0, sampleCount = 2_000,
+            maxSpeedKmh = 0.0, idleMs = 0, sampleCount = 0,
         )
-        repo.import(trip, listOf(SignalSeries("VEHICLE_SPEED", values)))
-        repo.import(trip, listOf(SignalSeries("VEHICLE_SPEED", values)))
+        repo.import(trip)
+        repo.import(
+            trip.copy(
+                endedMs = 2_000_000, distanceM = 31_000.0, maxSpeedKmh = 104.0, sampleCount = 2_000,
+                startLat = 37.5665, startLon = 126.9780, startAddress = "서울",
+            ),
+        )
 
         assertEquals(1L, db.tripQueries.countAll().executeAsOne())
-        assertEquals(4L, db.tripSeriesQueries.countAll().executeAsOne())
-
-        val back = repo.series(trip.id, "VEHICLE_SPEED")!!.values
-        assertEquals(2_000, back.size)
-        for (i in values.indices) assertEquals(values[i], back[i], "second $i")
+        val restored = repo.summary(trip.id)!!
+        assertEquals(2_000_000L, restored.endedMs)
+        assertEquals(31_000.0, restored.distanceM, 1e-6)
+        assertEquals(104.0, restored.maxSpeedKmh, 1e-6)
+        assertEquals("서울", restored.startAddress)
     }
 
     // --- Deletion --------------------------------------------------------------

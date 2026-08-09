@@ -10,6 +10,6 @@ import org.koin.dsl.module
  * that grows an optional parameter later would fail at runtime, where Koin failures live.
  */
 val settingsModule: Module = module {
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), get()) }
     viewModel { PaywallViewModel(get(), get()) }
 }

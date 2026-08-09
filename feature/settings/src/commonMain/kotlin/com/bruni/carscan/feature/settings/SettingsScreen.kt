@@ -21,6 +21,8 @@ import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.DirectionsCar
 import androidx.compose.material.icons.rounded.FiberManualRecord
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Restore
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material.icons.rounded.Speed
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Straighten
@@ -42,6 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.ThemeMode
+import com.bruni.carscan.core.data.backup.BackupSink
+import com.bruni.carscan.core.data.backup.BackupSource
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.allStringResources
 import com.bruni.carscan.core.designsystem.generated.resources.settings_about
@@ -51,6 +55,8 @@ import com.bruni.carscan.core.designsystem.generated.resources.settings_acq_moni
 import com.bruni.carscan.core.designsystem.generated.resources.settings_acquisition_source
 import com.bruni.carscan.core.designsystem.generated.resources.settings_auto_drive_detect_speed
 import com.bruni.carscan.core.designsystem.generated.resources.settings_auto_reconnect
+import com.bruni.carscan.core.designsystem.generated.resources.settings_backup_export
+import com.bruni.carscan.core.designsystem.generated.resources.settings_backup_import
 import com.bruni.carscan.core.designsystem.generated.resources.settings_background_tracking
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style
 import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_classic_analog
@@ -79,12 +85,21 @@ import com.bruni.carscan.core.units.UnitId
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * [onExportFile] and [onImportFile] are not intents on purpose: they run while the platform still
+ * holds the file the user picked open, so they have to be suspending calls the file chooser's
+ * callback can await. See `rememberBackupLauncher`.
+ */
 @Composable
 fun SettingsScreen(
     state: SettingsState,
     onIntent: (SettingsIntent) -> Unit,
+    onExportFile: suspend (BackupSink) -> Unit,
+    onImportFile: suspend (BackupSource) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    BackupFlow(state.backup, onIntent, onExportFile, onImportFile)
+
     LazyColumn(
         modifier = modifier.fillMaxWidth().padding(horizontal = 20.dp),
         contentPadding = PaddingValues(top = 20.dp, bottom = 28.dp),
@@ -250,6 +265,22 @@ fun SettingsScreen(
                     label = stringResource(Res.string.settings_background_tracking),
                     checked = state.backgroundTracking,
                     onCheckedChange = { onIntent(SettingsIntent.SetBackgroundTracking(it)) },
+                )
+            }
+        }
+
+        item {
+            SettingsCard {
+                NavigationRow(
+                    icon = Icons.Rounded.Save,
+                    label = stringResource(Res.string.settings_backup_export),
+                    onClick = { onIntent(SettingsIntent.StartBackup(BackupMode.EXPORT)) },
+                )
+                RowDivider()
+                NavigationRow(
+                    icon = Icons.Rounded.Restore,
+                    label = stringResource(Res.string.settings_backup_import),
+                    onClick = { onIntent(SettingsIntent.StartBackup(BackupMode.IMPORT)) },
                 )
             }
         }

@@ -24,6 +24,8 @@ import com.bruni.carscan.core.data.VehicleCatalog
 import com.bruni.carscan.core.data.VehicleRepository
 import com.bruni.carscan.core.data.VehicleSessionRepository
 import com.bruni.carscan.core.data.VisibleSignals
+import com.bruni.carscan.core.data.backup.BackupService
+import com.bruni.carscan.core.data.backup.DefaultBackupService
 import com.bruni.carscan.core.database.createDatabase
 import com.bruni.carscan.db.CarScanDb
 import com.bruni.carscan.feature.connect.connectModule
@@ -85,6 +87,11 @@ fun appModule(): Module = module {
     single<TripRepository> { DefaultTripRepository(get(), get()) }
     single<VehicleRepository> { DefaultVehicleRepository(get()) }
     single<VehicleCatalog> { BundledVehicleCatalog() }
+
+    // Encrypted export/restore of everything the user cannot get back any other way. Reads the
+    // database, the preferences store and the bookmark store, so it is bound here rather than in
+    // :feature:settings, which sees none of them.
+    single<BackupService> { DefaultBackupService(get(), get(), get(), get()) }
 
     single<SignalsetCache> { DefaultSignalsetCache(get()) }
     // A plain HTTPS GET to raw.githubusercontent.com — nothing to do with the ktor-network raw TCP

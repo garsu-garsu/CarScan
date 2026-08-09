@@ -4,6 +4,10 @@ import com.bruni.carscan.core.common.mvi.MviViewModel
 import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
+import com.bruni.carscan.core.data.backup.BackupOutcome
+import com.bruni.carscan.core.data.backup.BackupService
+import com.bruni.carscan.core.data.backup.BackupSink
+import com.bruni.carscan.core.data.backup.BackupSource
 import com.bruni.carscan.core.units.Quantity
 import com.bruni.carscan.core.units.UnitId
 import kotlinx.coroutines.launch
@@ -11,10 +15,21 @@ import kotlinx.coroutines.launch
 /**
  * The settings screen. Every intent here is a straight pass-through to [SettingsRepository] —
  * [state] just mirrors what comes back out of it, so two screens open at once agree.
+ *
+ * Backup is the exception: [exportTo] and [importFrom] are called directly by the screen rather
+ * than through an intent, because they have to run while the platform still holds the picked file
+ * open. See `rememberBackupLauncher`.
  */
 class SettingsViewModel(
     private val settings: SettingsRepository,
+    private val backup: BackupService,
 ) : MviViewModel<SettingsState, SettingsIntent, SettingsEffect>(SettingsState()) {
+
+    /**
+     * Deliberately not in [SettingsState]: it lives only from the prompt to the moment the file
+     * is written or read, and UI state is the wrong place for a password.
+     */
+    private var password: String = ""
 
     init {
         settings.settings.collectIntoState { current ->
@@ -44,6 +59,9 @@ class SettingsViewModel(
         is SettingsIntent.SetAcquisitionSource -> setAcquisitionSource(intent.source)
         is SettingsIntent.SetAutoDriveDetectSpeedKmh -> setAutoDriveDetectSpeedKmh(intent.kmh)
         is SettingsIntent.SetBackgroundTracking -> setBackgroundTracking(intent.enabled)
+        is SettingsIntent.StartBackup -> setState { copy(backup = BackupStep.Password(intent.mode)) }
+        is SettingsIntent.ConfirmBackupPassword -> confirmPassword(intent.password)
+        SettingsIntent.DismissBackup -> dismissBackup()
         SettingsIntent.OpenAbout -> emitEffect(SettingsEffect.OpenAbout)
         SettingsIntent.OpenVehicle -> emitEffect(SettingsEffect.OpenGarage)
         SettingsIntent.OpenPremium -> emitEffect(SettingsEffect.OpenPaywall)
@@ -83,5 +101,38 @@ class SettingsViewModel(
 
     private fun setBackgroundTracking(enabled: Boolean) {
         scope.launch { settings.setBackgroundTracking(enabled) }
+    }
+
+    private fun confirmPassword(entered: String) {
+        val mode = (state.value.backup as? BackupStep.Password)?.mode ?: return
+        password = entered
+        setState { copy(backup = BackupStep.Picking(mode)) }
+    }
+
+    /** Also the way out of [BackupStep.Picking] — a cancelled file chooser reports nothing else. */
+    private fun dismissBackup() {
+        password = ""
+        setState { copy(backup = null) }
+    }
+
+    /**
+     * Runs while the platform holds the chosen file open — see the class KDoc. A file chooser
+     * that came back after the user dismissed the flow has nothing to write, so it is dropped.
+     */
+    suspend fun exportTo(sink: BackupSink) {
+        val mode = (state.value.backup as? BackupStep.Picking)?.mode ?: return
+        setState { copy(backup = BackupStep.Working(mode)) }
+        finish(mode, backup.export(sink, password))
+    }
+
+    suspend fun importFrom(source: BackupSource) {
+        val mode = (state.value.backup as? BackupStep.Picking)?.mode ?: return
+        setState { copy(backup = BackupStep.Working(mode)) }
+        finish(mode, backup.import(source, password))
+    }
+
+    private fun finish(mode: BackupMode, outcome: BackupOutcome) {
+        password = ""
+        setState { copy(backup = BackupStep.Done(mode, outcome)) }
     }
 }

@@ -1,8 +1,6 @@
 package com.bruni.carscan.core.data
 
-import com.bruni.carscan.core.database.SECONDS_PER_CHUNK
 import com.bruni.carscan.core.database.SampleWriter
-import com.bruni.carscan.core.database.aggregate
 import com.bruni.carscan.core.model.SensorSample
 import com.bruni.carscan.db.CarScanDb
 import com.bruni.carscan.db.Trip
@@ -115,10 +113,14 @@ interface TripRepository {
     suspend fun setEndLocation(tripId: String, lat: Double, lon: Double, address: String?)
 
     /**
-     * Restores a trip from a backup. **Idempotent**: importing the same trip twice
-     * leaves one trip, not two.
+     * Restores a trip's summary row from a backup. **Idempotent**: importing the same trip
+     * twice leaves one trip, not two.
+     *
+     * The trip's samples and route are restored separately, chunk by chunk, by `BackupService`
+     * — a whole-trip [SignalSeries] here would mean holding every second of a long drive in
+     * memory just to slice it back into the chunks it was already stored as.
      */
-    suspend fun import(trip: TripSummary, series: List<SignalSeries>)
+    suspend fun import(trip: TripSummary)
 
     suspend fun delete(tripId: String)
 
@@ -225,13 +227,12 @@ class DefaultTripRepository(
     }
 
     /**
-     * All of it in one transaction, and every write keyed on the trip's UUID:
-     * `INSERT OR IGNORE` for the trip (OR REPLACE would cascade-delete the series we
-     * are about to write) and `INSERT OR REPLACE` for the chunks, which nothing
-     * references. Import the same backup twice and the second pass overwrites the
-     * first with identical bytes.
+     * One transaction, every write keyed on the trip's UUID. `INSERT OR IGNORE` and not
+     * OR REPLACE, because REPLACE deletes the conflicting row first and the ON DELETE CASCADE
+     * would take the trip's already-restored series and route with it — the exact opposite of
+     * what a second import must do.
      */
-    override suspend fun import(trip: TripSummary, series: List<SignalSeries>) {
+    override suspend fun import(trip: TripSummary) {
         db.transaction {
             db.tripQueries.insertOrIgnore(
                 id = trip.id, vehicle_id = trip.vehicleId, started_ms = trip.startedMs,
@@ -257,29 +258,6 @@ class DefaultTripRepository(
                     end_lat = trip.endLat, end_lon = trip.endLon,
                     end_address = trip.endAddress, id = trip.id,
                 )
-            }
-
-            for (signal in series) {
-                var offset = 0
-                var chunkIndex = 0L
-                while (offset < signal.values.size) {
-                    val end = minOf(offset + SECONDS_PER_CHUNK, signal.values.size)
-                    val slice = signal.values.copyOfRange(offset, end)
-                    // Same aggregate function recording uses, so a restored trip's
-                    // statistics cannot silently differ from the backed-up one's.
-                    val agg = aggregate(slice)
-                    db.tripSeriesQueries.upsert(
-                        trip_id = trip.id,
-                        signal_id = signal.signalId,
-                        chunk_index = chunkIndex,
-                        t0_s = chunkIndex * SECONDS_PER_CHUNK,
-                        n = slice.size.toLong(),
-                        series = slice,
-                        min_v = agg?.min, max_v = agg?.max, avg_v = agg?.avg,
-                    )
-                    offset = end
-                    chunkIndex++
-                }
             }
         }
     }

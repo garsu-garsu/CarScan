@@ -33,7 +33,7 @@ class SettingsViewModelTest {
     @Test
     fun `state mirrors what is already in the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository(Settings(keepScreenOn = false, recordTrips = true))
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
         runCurrent()
 
         vm.state.value.keepScreenOn shouldBe false
@@ -43,7 +43,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetUnit reaches the repository, and the new unit comes back into state`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetUnit(Quantity.SPEED, UnitId.MPH))
         runCurrent()
@@ -54,7 +54,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetGaugeStyle reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetGaugeStyle("CLASSIC_ANALOG"))
         runCurrent()
@@ -65,7 +65,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetThemeMode reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetThemeMode(ThemeMode.DARK))
         runCurrent()
@@ -76,7 +76,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetKeepScreenOn reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetKeepScreenOn(false))
         runCurrent()
@@ -87,7 +87,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetRecordTrips reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetRecordTrips(true))
         runCurrent()
@@ -98,7 +98,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetAutoReconnect reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetAutoReconnect(false))
         runCurrent()
@@ -109,7 +109,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetAcquisitionSource reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetAcquisitionSource(AcquisitionSource.MONITORING))
         runCurrent()
@@ -120,7 +120,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetAutoDriveDetectSpeedKmh reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetAutoDriveDetectSpeedKmh(30))
         runCurrent()
@@ -131,7 +131,7 @@ class SettingsViewModelTest {
     @Test
     fun `SetBackgroundTracking reaches the repository`() = runTest(dispatcher) {
         val repo = FakeSettingsRepository()
-        val vm = SettingsViewModel(repo)
+        val vm = SettingsViewModel(repo, FakeBackupService())
 
         vm.onIntent(SettingsIntent.SetBackgroundTracking(true))
         runCurrent()
@@ -145,7 +145,7 @@ class SettingsViewModelTest {
      */
     @Test
     fun `the About row emits OpenAbout rather than navigating itself`() = runTest(dispatcher) {
-        val vm = SettingsViewModel(FakeSettingsRepository())
+        val vm = SettingsViewModel(FakeSettingsRepository(), FakeBackupService())
 
         vm.effect.test {
             vm.onIntent(SettingsIntent.OpenAbout)
@@ -155,7 +155,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `the Vehicle row emits OpenGarage rather than navigating itself`() = runTest(dispatcher) {
-        val vm = SettingsViewModel(FakeSettingsRepository())
+        val vm = SettingsViewModel(FakeSettingsRepository(), FakeBackupService())
 
         vm.effect.test {
             vm.onIntent(SettingsIntent.OpenVehicle)

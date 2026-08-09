@@ -304,7 +304,7 @@ private fun CarScanNavHost(
                 }
             }
 
-            SettingsScreen(state, viewModel::onIntent)
+            SettingsScreen(state, viewModel::onIntent, viewModel::exportTo, viewModel::importFrom)
         }
 
         composable<Route.About> { AboutScreen() }

@@ -30,6 +30,16 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 selectTrip:
 SELECT * FROM trip_gps WHERE trip_id = ? ORDER BY chunk_index;
 
+-- Backup export walks the route one chunk at a time. `selectTrip` decodes every BLOB of
+-- every chunk into memory at once — five arrays x 600 slots x 10 minutes of driving — which
+-- is exactly what an export of a long trip must not do. These two read the index list first
+-- (no BLOB at all) and then one chunk per iteration.
+selectChunkIndexes:
+SELECT chunk_index FROM trip_gps WHERE trip_id = ? ORDER BY chunk_index;
+
+selectChunk:
+SELECT * FROM trip_gps WHERE trip_id = ? AND chunk_index = ?;
+
 -- Seconds-since-start covered by this trip's route, or no row at all if none was
 -- recorded. Reads one row and no BLOB: recovery only needs to know how far the route
 -- got, not what it was.

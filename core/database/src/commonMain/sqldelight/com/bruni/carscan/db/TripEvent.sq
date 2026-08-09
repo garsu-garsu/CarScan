@@ -17,6 +17,13 @@ insert:
 INSERT INTO trip_event(id, trip_id, ts_ms, type, severity, lat, lon)
 VALUES (?, ?, ?, ?, ?, ?, ?);
 
+-- Restoring a backup. OR IGNORE on the event's UUID is what makes importing the same
+-- file twice leave one event rather than two — and the plain `insert` above would abort
+-- the whole restore transaction on the primary-key conflict instead.
+insertOrIgnore:
+INSERT OR IGNORE INTO trip_event(id, trip_id, ts_ms, type, severity, lat, lon)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
 selectForTrip:
 SELECT * FROM trip_event WHERE trip_id = ? ORDER BY ts_ms;
 

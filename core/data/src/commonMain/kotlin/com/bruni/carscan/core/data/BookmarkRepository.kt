@@ -30,28 +30,34 @@ class DefaultBookmarkRepository(
     override val bookmarks: Flow<Set<MetricKey>> = store.data.map { prefs ->
         // An unparseable/unknown entry — a newer build's key, or corruption — is skipped rather
         // than thrown: the same defensive pattern as Settings' enum fallbacks.
-        (prefs[BOOKMARKED_SIGNALS] ?: emptySet()).mapNotNull(::decode).toSet()
+        (prefs[BOOKMARKED_SIGNALS] ?: emptySet()).mapNotNull(::decodeMetricKey).toSet()
     }
 
     override suspend fun toggle(key: MetricKey) {
         // Read-modify-write inside the edit, so two toggles can't clobber each other — same
         // reasoning as DefaultSettingsRepository.setUnit.
         store.edit { prefs ->
-            val current = (prefs[BOOKMARKED_SIGNALS] ?: emptySet()).mapNotNull(::decode).toMutableSet()
+            val current = (prefs[BOOKMARKED_SIGNALS] ?: emptySet())
+                .mapNotNull(::decodeMetricKey).toMutableSet()
             if (!current.remove(key)) current.add(key)
-            prefs[BOOKMARKED_SIGNALS] = current.map(::encode).toSet()
+            prefs[BOOKMARKED_SIGNALS] = current.map(::encodeMetricKey).toSet()
         }
     }
 
     override suspend fun isBookmarked(key: MetricKey): Boolean = key in bookmarks.first()
 }
 
-private fun encode(key: MetricKey): String = when (key) {
+/**
+ * The persisted token for a starred signal. `internal` rather than private because a backup
+ * carries bookmarks, and the backup file must speak the same tokens DataStore holds — a second
+ * spelling of the same format is a divergence waiting to happen. See `BackupService`.
+ */
+internal fun encodeMetricKey(key: MetricKey): String = when (key) {
     is MetricKey.Metric -> "M:${key.metric.name}"
     is MetricKey.Signal -> "S:${key.signalId}"
 }
 
-private fun decode(token: String): MetricKey? = when {
+internal fun decodeMetricKey(token: String): MetricKey? = when {
     token.startsWith("M:") ->
         SuggestedMetric.entries.firstOrNull { it.name == token.removePrefix("M:") }?.let(MetricKey::Metric)
     token.startsWith("S:") -> MetricKey.Signal(token.removePrefix("S:"))

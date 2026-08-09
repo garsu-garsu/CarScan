@@ -4,6 +4,10 @@ import com.bruni.carscan.core.data.AcquisitionSource
 import com.bruni.carscan.core.data.Settings
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.ThemeMode
+import com.bruni.carscan.core.data.backup.BackupOutcome
+import com.bruni.carscan.core.data.backup.BackupService
+import com.bruni.carscan.core.data.backup.BackupSink
+import com.bruni.carscan.core.data.backup.BackupSource
 import com.bruni.carscan.core.monetization.BillingPort
 import com.bruni.carscan.core.monetization.Entitlements
 import com.bruni.carscan.core.monetization.Purchase
@@ -61,6 +65,29 @@ class FakeSettingsRepository(initial: Settings = Settings()) : SettingsRepositor
 
     override suspend fun setBackgroundTracking(enabled: Boolean) {
         state.value = state.value.copy(backgroundTracking = enabled)
+    }
+}
+
+/**
+ * Records what it was asked to do and answers with a scripted outcome. The real service needs a
+ * database, a preferences store and a cipher; the ViewModel only cares which of four answers came
+ * back and what it does with the password.
+ */
+class FakeBackupService(
+    private val outcome: BackupOutcome = BackupOutcome.OK,
+) : BackupService {
+    var exportedWith: String? = null
+    var importedWith: String? = null
+
+    override suspend fun export(sink: BackupSink, password: String): BackupOutcome {
+        exportedWith = password
+        sink.write("backup".encodeToByteArray())
+        return outcome
+    }
+
+    override suspend fun import(source: BackupSource, password: String): BackupOutcome {
+        importedWith = password
+        return outcome
     }
 }
 
