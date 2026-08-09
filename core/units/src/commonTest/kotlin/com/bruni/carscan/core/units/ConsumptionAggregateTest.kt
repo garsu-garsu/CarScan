@@ -88,8 +88,8 @@ class ConsumptionAggregateTest {
 
     /** Trips store `fuel_ml` and `distance_m`; this is the only bridge they need. */
     @Test
-    fun `an aggregate can be built from the integer millilitres and metres a trip stores`() {
-        val trip = ConsumptionAggregate.ofRaw(fuelMl = 25_000, distanceMetres = 400_000)
+    fun `an aggregate can be built from the millilitres and metres a trip stores`() {
+        val trip = ConsumptionAggregate.ofRaw(fuelMl = 25_000.0, distanceMetres = 400_000.0)
 
         assertEquals(25.0, trip.fuelLitres, 1e-9)
         assertEquals(400.0, trip.distanceKm, 1e-9)
@@ -105,5 +105,20 @@ class ConsumptionAggregateTest {
     fun `a zero-distance aggregate is NaN, not zero and not a crash`() {
         assertTrue(ConsumptionAggregate(fuelLitres = 0.5, distanceKm = 0.0).asL100km().isNaN())
         assertTrue(ConsumptionAggregate.EMPTY.asL100km().isNaN())
+    }
+
+    /**
+     * The other half of the same rule, and the one that actually ships: `fuel_ml` comes from the
+     * fuel-rate signal, which most vehicles do not expose and no EV ever will, so a perfectly real
+     * 400 km drive arrives here as 0 litres. Dividing gives 0.0 L/100km — a plausible number, not a
+     * dash — and the driver in Seoul, whose preferred unit is km/L, is shown `100 / 0`.
+     */
+    @Test
+    fun `no fuel reported over a real distance is NaN, not a free tank and not infinity`() {
+        val noFuelRateSignal = ConsumptionAggregate.ofRaw(fuelMl = 0.0, distanceMetres = 400_000.0)
+
+        assertTrue(noFuelRateSignal.asL100km().isNaN())
+        // 0 L / 400 km × 100 is 0.0, and this is what the converter makes of that zero.
+        assertTrue(convert.convert(0.0, UnitId.L_PER_100KM, UnitId.KM_PER_L).isInfinite())
     }
 }

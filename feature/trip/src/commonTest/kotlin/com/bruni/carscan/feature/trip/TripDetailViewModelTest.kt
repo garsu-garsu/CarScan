@@ -29,6 +29,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 
 class TripDetailViewModelTest {
 
@@ -80,6 +81,48 @@ class TripDetailViewModelTest {
             state.route,
         )
         assertEquals(HarshEventType.HARSH_BRAKE, state.events.single().type)
+    }
+
+    /**
+     * The header's consumption is `SUM(fuel) / SUM(distance)`, taken once at the end — never an
+     * average of per-second or per-chunk L/100km figures, which a ratio does not survive.
+     *
+     * This trip is the two-leg drive from `ConsumptionAggregateTest`: 10 L over 100 km in town,
+     * then 15 L over 300 km on the motorway. Averaging the two displayed figures gives
+     * (10 + 5) / 2 = 7.5 L/100km; the truth is 25 L / 400 km = 6.25. The wrong answer is 20% too
+     * thirsty and looks entirely reasonable on a phone.
+     */
+    @Test
+    fun `consumption is total fuel over total distance, not the mean of the legs`() = runTest {
+        trips.summaries["trip-1"] = TripSummary(
+            id = "trip-1", vehicleId = "veh-1", startedMs = 0, endedMs = 3_600_000,
+            distanceM = 400_000.0, fuelMl = 25_000.0, energyWh = 0.0, maxSpeedKmh = 120.0,
+            idleMs = 0, sampleCount = 3_600,
+        )
+        val vm = viewModel()
+
+        vm.onIntent(TripDetailIntent.Load("trip-1"))
+
+        assertEquals(6.25, vm.state.value.consumptionL100km!!, 1e-9)
+    }
+
+    /**
+     * Most cars have no fuel-rate signal and no EV has one, so `fuelMl` stays 0.0 over a real
+     * distance. That must leave the figure out of the header, not print "0.0 L/100km" — or, for a
+     * driver whose unit is km/L, "∞".
+     */
+    @Test
+    fun `a trip with no fuel reported shows no consumption at all`() = runTest {
+        trips.summaries["trip-1"] = TripSummary(
+            id = "trip-1", vehicleId = "veh-1", startedMs = 0, endedMs = 600_000,
+            distanceM = 12_000.0, fuelMl = 0.0, energyWh = 0.0, maxSpeedKmh = 80.0,
+            idleMs = 0, sampleCount = 600,
+        )
+        val vm = viewModel()
+
+        vm.onIntent(TripDetailIntent.Load("trip-1"))
+
+        assertNull(vm.state.value.consumptionL100km)
     }
 
     /** A trip still recording has no `endedMs` yet — the duration must not crash on that. */

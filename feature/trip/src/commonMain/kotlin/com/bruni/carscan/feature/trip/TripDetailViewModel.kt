@@ -3,6 +3,7 @@ package com.bruni.carscan.feature.trip
 import com.bruni.carscan.core.common.mvi.MviViewModel
 import com.bruni.carscan.core.data.SettingsRepository
 import com.bruni.carscan.core.data.TripRepository
+import com.bruni.carscan.core.units.ConsumptionAggregate
 import kotlinx.coroutines.launch
 
 /**
@@ -40,6 +41,12 @@ class TripDetailViewModel(
                     durationMs = summary?.endedMs?.let { it - (summary.startedMs) },
                     distanceM = summary?.distanceM ?: 0.0,
                     maxSpeedKmh = summary?.maxSpeedKmh ?: 0.0,
+                    // SUM(fuel) / SUM(distance), never an average of ratios — see
+                    // ConsumptionAggregate. NaN (nothing driven, or no fuel reported) drops the
+                    // figure from the header entirely.
+                    consumptionL100km = summary
+                        ?.let { ConsumptionAggregate.ofRaw(it.fuelMl, it.distanceM).asL100km() }
+                        ?.takeIf { !it.isNaN() },
                     startLat = summary?.startLat,
                     startLon = summary?.startLon,
                     endLat = summary?.endLat,

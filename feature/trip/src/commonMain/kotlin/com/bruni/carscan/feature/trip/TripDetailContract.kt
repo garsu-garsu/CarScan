@@ -12,6 +12,12 @@ data class TripDetailState(
     val durationMs: Long? = null,
     val distanceM: Double = 0.0,
     val maxSpeedKmh: Double = 0.0,
+    /**
+     * Total fuel over total distance, in L/100km — converted to the user's unit at draw time.
+     * Null when the trip has no fuel to divide (GPS-only, an EV, or a car with no fuel-rate
+     * signal), and the header simply leaves the figure out rather than print a plausible zero.
+     */
+    val consumptionL100km: Double? = null,
     val startLat: Double? = null,
     val startLon: Double? = null,
     val endLat: Double? = null,

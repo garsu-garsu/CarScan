@@ -56,7 +56,12 @@ internal fun TripDetailScreen(state: TripDetailState, modifier: Modifier = Modif
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = "${distanceReadout(state, units)} · ${durationText(state)} · ${maxSpeedReadout(state, units)}",
+                text = listOfNotNull(
+                    distanceReadout(state, units),
+                    durationText(state),
+                    maxSpeedReadout(state, units),
+                    consumptionReadout(state, units),
+                ).joinToString(" · "),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -122,6 +127,14 @@ private fun distanceReadout(state: TripDetailState, units: UnitReadout): String 
 @Composable
 private fun maxSpeedReadout(state: TripDetailState, units: UnitReadout): String =
     units.forValue(state.maxSpeedKmh, UnitId.KMH, decimals = 0).render()
+
+/**
+ * Null — the segment is dropped, not drawn as a dash — when the trip has no fuel figure. The label
+ * is the preferred unit's own (L/100km, km/L, mpg), which every locale already carries.
+ */
+@Composable
+private fun consumptionReadout(state: TripDetailState, units: UnitReadout): String? =
+    state.consumptionL100km?.let { units.forValue(it, UnitId.L_PER_100KM, decimals = 1).render() }
 
 /** "start address → arrival address", trimmed to whichever side is actually known. */
 private fun addressLine(state: TripDetailState): String? =

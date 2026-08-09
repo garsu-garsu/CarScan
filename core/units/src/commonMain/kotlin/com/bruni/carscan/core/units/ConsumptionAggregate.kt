@@ -23,9 +23,17 @@ data class ConsumptionAggregate(val fuelLitres: Double, val distanceKm: Double) 
      * Returns `NaN` when nothing has been driven yet. Not `0.0` — a car that has not moved has not
      * achieved 0 L/100km, and feeding that zero into a running total would understate every
      * average that follows it. The UI renders NaN as a dash.
+     *
+     * **No fuel is the same kind of unknown**, and it is the common one: `fuel_ml` is integrated
+     * from the fuel-rate signal, which plenty of vehicles simply do not expose — and an EV never
+     * will, its economy being [Quantity.ENERGY_CONSUMPTION], a different quantity entirely. Such a
+     * trip has a real distance and zero litres, and dividing gives `0.0 L/100km`, which is not a
+     * dash and not obviously wrong: it is a *plausible* number, and in km/L or mpg — where the
+     * conversion is `100 / value` — it becomes `∞`. Zero fuel over a real distance means the car
+     * never reported, never that it drank nothing.
      */
     fun asL100km(): Double =
-        if (distanceKm <= 0.0) Double.NaN else fuelLitres / distanceKm * 100.0
+        if (distanceKm <= 0.0 || fuelLitres <= 0.0) Double.NaN else fuelLitres / distanceKm * 100.0
 
     /** Aggregates are additive, so a range query over trips is a fold. */
     operator fun plus(other: ConsumptionAggregate): ConsumptionAggregate =
@@ -34,8 +42,8 @@ data class ConsumptionAggregate(val fuelLitres: Double, val distanceKm: Double) 
     companion object {
         val EMPTY = ConsumptionAggregate(fuelLitres = 0.0, distanceKm = 0.0)
 
-        /** From the integer millilitres and metres a trip row actually stores. */
-        fun ofRaw(fuelMl: Long, distanceMetres: Long): ConsumptionAggregate =
+        /** From the millilitres and metres a trip row actually stores (`REAL`, not integers). */
+        fun ofRaw(fuelMl: Double, distanceMetres: Double): ConsumptionAggregate =
             ConsumptionAggregate(
                 fuelLitres = fuelMl / 1_000.0,
                 distanceKm = distanceMetres / 1_000.0,
