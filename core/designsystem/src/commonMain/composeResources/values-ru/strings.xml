@@ -108,6 +108,11 @@
     <string name="dashboard_empty">Пока нет ни одного датчика. Добавьте первый.</string>
     <string name="dashboard_add_tile">Добавить датчик</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">Изменить</string>
+    <string name="dashboard_edit_done">Готово</string>
+    <string name="dashboard_edit_hint">Нажмите и удерживайте датчик, чтобы переместить</string>
+    <string name="dashboard_remove_tile">Удалить датчик</string>
+    <string name="dashboard_remove_confirm">Удалить этот датчик?</string>
 
     <string name="live_title">Мониторинг</string>
     <string name="trips_title">Поездки</string>
@@ -145,6 +150,10 @@
     <string name="settings_gauge_style">Стиль индикатора</string>
     <string name="settings_gauge_style_modern_arc">Современная дуга</string>
     <string name="settings_gauge_style_classic_analog">Классический аналоговый</string>
+    <string name="settings_gauge_style_semicircle">Полукруг</string>
+    <string name="settings_gauge_style_numeric">Только цифры</string>
+    <string name="settings_gauge_style_linear_bar_h">Горизонтальная шкала</string>
+    <string name="settings_gauge_style_linear_bar_v">Вертикальная шкала</string>
     <string name="settings_theme">Тема</string>
     <string name="settings_theme_system">Системная</string>
     <string name="settings_theme_light">Светлая</string>
@@ -220,4 +229,22 @@
     <string name="trip_event_harsh_start">Резкий старт</string>
     <string name="trip_event_harsh_stop">Резкая остановка</string>
     <string name="trip_event_harsh_corner">Резкий поворот</string>
+
+    <string name="settings_backup_export">Создать файл резервной копии</string>
+    <string name="settings_backup_import">Восстановить из резервной копии</string>
+    <string name="backup_password_label">Пароль</string>
+    <string name="backup_password_confirm_label">Повторите пароль</string>
+    <string name="backup_password_hint_export">Поездки, автомобили и настройки сохраняются в один файл, защищённый выбранным здесь паролем. Без него файл больше не открыть.</string>
+    <string name="backup_password_hint_import">Введите пароль, выбранный при создании резервной копии. Ничего на этом телефоне не удаляется — содержимое копии добавляется к нему.</string>
+    <string name="backup_password_too_short">Не менее 8 символов.</string>
+    <string name="backup_password_mismatch">Пароли не совпадают.</string>
+    <string name="backup_start">Начать</string>
+    <string name="backup_ok">ОК</string>
+    <string name="backup_working_export">Создаётся файл резервной копии. Это может занять некоторое время.</string>
+    <string name="backup_working_import">Идёт восстановление. Это может занять некоторое время.</string>
+    <string name="backup_success_export">Файл резервной копии сохранён.</string>
+    <string name="backup_success_import">Всё из резервной копии восстановлено.</string>
+    <string name="backup_error_wrong_password">Этот пароль не открывает файл. Введите пароль, выбранный при создании резервной копии.</string>
+    <string name="backup_error_unsupported_version">Эта копия создана более новой версией приложения. Обновите приложение и попробуйте снова.</string>
+    <string name="backup_error_failed">Не удалось прочитать или сохранить файл. Выберите другой файл или проверьте свободное место.</string>
 </resources>

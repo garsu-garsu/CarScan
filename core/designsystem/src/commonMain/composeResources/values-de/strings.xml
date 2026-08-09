@@ -109,6 +109,11 @@
     <string name="dashboard_empty">Noch keine Anzeigen. Fügen Sie die erste hinzu.</string>
     <string name="dashboard_add_tile">Anzeige hinzufügen</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">Bearbeiten</string>
+    <string name="dashboard_edit_done">Fertig</string>
+    <string name="dashboard_edit_hint">Anzeige gedrückt halten, um sie zu verschieben</string>
+    <string name="dashboard_remove_tile">Anzeige entfernen</string>
+    <string name="dashboard_remove_confirm">Diese Anzeige entfernen?</string>
 
     <string name="live_title">Überwachung</string>
     <string name="trips_title">Fahrten</string>
@@ -142,6 +147,10 @@
     <string name="settings_gauge_style">Anzeigestil</string>
     <string name="settings_gauge_style_modern_arc">Moderner Bogen</string>
     <string name="settings_gauge_style_classic_analog">Klassisch analog</string>
+    <string name="settings_gauge_style_semicircle">Halbkreis</string>
+    <string name="settings_gauge_style_numeric">Nur Zahlen</string>
+    <string name="settings_gauge_style_linear_bar_h">Waagerechter Balken</string>
+    <string name="settings_gauge_style_linear_bar_v">Senkrechter Balken</string>
     <string name="settings_theme">Design</string>
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_light">Hell</string>
@@ -217,4 +226,22 @@
     <string name="trip_event_harsh_start">Harter Start</string>
     <string name="trip_event_harsh_stop">Harter Stopp</string>
     <string name="trip_event_harsh_corner">Scharfe Kurve</string>
+
+    <string name="settings_backup_export">Sicherungsdatei erstellen</string>
+    <string name="settings_backup_import">Aus Sicherung wiederherstellen</string>
+    <string name="backup_password_label">Passwort</string>
+    <string name="backup_password_confirm_label">Passwort erneut eingeben</string>
+    <string name="backup_password_hint_export">Fahrten, Fahrzeuge und Einstellungen werden in einer Datei gespeichert und mit dem hier gewählten Passwort verschlüsselt. Ohne dieses Passwort lässt sich die Datei nie wieder öffnen.</string>
+    <string name="backup_password_hint_import">Geben Sie das Passwort ein, das beim Erstellen der Sicherung gewählt wurde. Auf diesem Telefon wird nichts gelöscht; der Inhalt der Sicherung kommt hinzu.</string>
+    <string name="backup_password_too_short">Mindestens 8 Zeichen verwenden.</string>
+    <string name="backup_password_mismatch">Die beiden Passwörter stimmen nicht überein.</string>
+    <string name="backup_start">Starten</string>
+    <string name="backup_ok">OK</string>
+    <string name="backup_working_export">Die Sicherungsdatei wird erstellt. Das kann einen Moment dauern.</string>
+    <string name="backup_working_import">Wird wiederhergestellt. Das kann einen Moment dauern.</string>
+    <string name="backup_success_export">Die Sicherungsdatei wurde gespeichert.</string>
+    <string name="backup_success_import">Alles aus der Sicherung wurde wiederhergestellt.</string>
+    <string name="backup_error_wrong_password">Mit diesem Passwort lässt sich die Datei nicht öffnen. Geben Sie das Passwort ein, das beim Erstellen der Sicherung gewählt wurde.</string>
+    <string name="backup_error_unsupported_version">Diese Sicherung stammt aus einer neueren Version der App. Aktualisieren Sie die App und versuchen Sie es erneut.</string>
+    <string name="backup_error_failed">Die Datei konnte nicht gelesen oder gespeichert werden. Wählen Sie eine andere Datei oder prüfen Sie den freien Speicher.</string>
 </resources>

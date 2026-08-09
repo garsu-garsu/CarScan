@@ -108,6 +108,11 @@
     <string name="dashboard_empty">Ще немає жодного датчика. Додайте перший.</string>
     <string name="dashboard_add_tile">Додати датчик</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">Змінити</string>
+    <string name="dashboard_edit_done">Готово</string>
+    <string name="dashboard_edit_hint">Натисніть і утримуйте датчик, щоб перемістити</string>
+    <string name="dashboard_remove_tile">Видалити датчик</string>
+    <string name="dashboard_remove_confirm">Видалити цей датчик?</string>
 
     <string name="live_title">Моніторинг</string>
     <string name="trips_title">Поїздки</string>
@@ -145,6 +150,10 @@
     <string name="settings_gauge_style">Стиль індикатора</string>
     <string name="settings_gauge_style_modern_arc">Сучасна дуга</string>
     <string name="settings_gauge_style_classic_analog">Класичний аналоговий</string>
+    <string name="settings_gauge_style_semicircle">Півколо</string>
+    <string name="settings_gauge_style_numeric">Лише цифри</string>
+    <string name="settings_gauge_style_linear_bar_h">Горизонтальна шкала</string>
+    <string name="settings_gauge_style_linear_bar_v">Вертикальна шкала</string>
     <string name="settings_theme">Тема</string>
     <string name="settings_theme_system">Системна</string>
     <string name="settings_theme_light">Світла</string>
@@ -220,4 +229,22 @@
     <string name="trip_event_harsh_start">Різкий старт</string>
     <string name="trip_event_harsh_stop">Різка зупинка</string>
     <string name="trip_event_harsh_corner">Різкий поворот</string>
+
+    <string name="settings_backup_export">Створити файл резервної копії</string>
+    <string name="settings_backup_import">Відновити з резервної копії</string>
+    <string name="backup_password_label">Пароль</string>
+    <string name="backup_password_confirm_label">Повторіть пароль</string>
+    <string name="backup_password_hint_export">Поїздки, автомобілі та налаштування зберігаються в один файл, захищений вибраним тут паролем. Без нього файл більше не відкрити.</string>
+    <string name="backup_password_hint_import">Введіть пароль, вибраний під час створення резервної копії. Нічого на цьому телефоні не видаляється — вміст копії додається до нього.</string>
+    <string name="backup_password_too_short">Щонайменше 8 символів.</string>
+    <string name="backup_password_mismatch">Паролі не збігаються.</string>
+    <string name="backup_start">Почати</string>
+    <string name="backup_ok">OK</string>
+    <string name="backup_working_export">Створюється файл резервної копії. Це може зайняти трохи часу.</string>
+    <string name="backup_working_import">Триває відновлення. Це може зайняти трохи часу.</string>
+    <string name="backup_success_export">Файл резервної копії збережено.</string>
+    <string name="backup_success_import">Усе з резервної копії відновлено.</string>
+    <string name="backup_error_wrong_password">Цей пароль не відкриває файл. Введіть пароль, вибраний під час створення резервної копії.</string>
+    <string name="backup_error_unsupported_version">Цю копію створено новішою версією застосунку. Оновіть застосунок і спробуйте ще раз.</string>
+    <string name="backup_error_failed">Не вдалося прочитати або зберегти файл. Виберіть інший файл або перевірте вільне місце.</string>
 </resources>

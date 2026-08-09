@@ -145,6 +145,11 @@
     <string name="dashboard_empty">No gauges yet. Add one to get started.</string>
     <string name="dashboard_add_tile">Add gauge</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">Edit</string>
+    <string name="dashboard_edit_done">Done</string>
+    <string name="dashboard_edit_hint">Press and hold a gauge to reorder</string>
+    <string name="dashboard_remove_tile">Remove gauge</string>
+    <string name="dashboard_remove_confirm">Remove this gauge?</string>
 
     <!-- Live chart -->
     <string name="live_title">Monitoring</string>
@@ -181,6 +186,10 @@
     <string name="settings_gauge_style">Gauge style</string>
     <string name="settings_gauge_style_modern_arc">Modern arc</string>
     <string name="settings_gauge_style_classic_analog">Classic analog</string>
+    <string name="settings_gauge_style_semicircle">Semicircle</string>
+    <string name="settings_gauge_style_numeric">Numbers only</string>
+    <string name="settings_gauge_style_linear_bar_h">Horizontal bar</string>
+    <string name="settings_gauge_style_linear_bar_v">Vertical bar</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_light">Light</string>
@@ -264,4 +273,22 @@
     <string name="trip_event_harsh_start">Harsh start</string>
     <string name="trip_event_harsh_stop">Harsh stop</string>
     <string name="trip_event_harsh_corner">Harsh cornering</string>
+
+    <string name="settings_backup_export">Create a backup file</string>
+    <string name="settings_backup_import">Restore from a backup</string>
+    <string name="backup_password_label">Password</string>
+    <string name="backup_password_confirm_label">Re-enter password</string>
+    <string name="backup_password_hint_export">Your drives, cars and settings are saved into one file, locked with the password you choose here. Without that password the file can never be opened again.</string>
+    <string name="backup_password_hint_import">Enter the password you chose when the backup was made. Nothing on this phone is deleted; whatever is in the backup is added to it.</string>
+    <string name="backup_password_too_short">Use at least 8 characters.</string>
+    <string name="backup_password_mismatch">The two passwords do not match.</string>
+    <string name="backup_start">Start</string>
+    <string name="backup_ok">OK</string>
+    <string name="backup_working_export">Creating the backup file. This can take a moment.</string>
+    <string name="backup_working_import">Restoring. This can take a moment.</string>
+    <string name="backup_success_export">The backup file has been saved.</string>
+    <string name="backup_success_import">Everything in the backup has been restored.</string>
+    <string name="backup_error_wrong_password">That password does not open this file. Enter the password you chose when the backup was made.</string>
+    <string name="backup_error_unsupported_version">This backup was made by a newer version of the app. Update the app and try again.</string>
+    <string name="backup_error_failed">The file could not be read or saved. Try another file, or check that there is enough space.</string>
 </resources>

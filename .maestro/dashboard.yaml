@@ -9,8 +9,17 @@ appId: com.bruni.carscan
     text: "^대시보드$"
 - assertVisible: "게이지 추가"
 - assertVisible: "^HUD$"
+- assertVisible: "^편집$"
 - assertVisible: "속도"
 - assertVisible: "엔진 회전수"
 - assertNotVisible: "게이지가 아직 없습니다. 하나 추가해 보세요."
+# Edit mode: entered only by tapping the chip, and it says so while you are in it.
+- tapOn:
+    text: "^편집$"
+- assertVisible: "게이지를 길게 눌러 순서를 바꾸세요"
+- assertNotVisible: "^HUD$"
+- tapOn:
+    text: "^완료$"
+- assertVisible: "^HUD$"
 - back
 - assertVisible: "어댑터 연결"

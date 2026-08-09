@@ -108,6 +108,11 @@
     <string name="dashboard_empty">Nie ma jeszcze żadnego wskaźnika. Dodaj pierwszy.</string>
     <string name="dashboard_add_tile">Dodaj wskaźnik</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">Edytuj</string>
+    <string name="dashboard_edit_done">Gotowe</string>
+    <string name="dashboard_edit_hint">Przytrzymaj wskaźnik, aby zmienić kolejność</string>
+    <string name="dashboard_remove_tile">Usuń wskaźnik</string>
+    <string name="dashboard_remove_confirm">Usunąć ten wskaźnik?</string>
 
     <string name="live_title">Monitorowanie</string>
     <string name="trips_title">Przejazdy</string>
@@ -145,6 +150,10 @@
     <string name="settings_gauge_style">Styl wskaźnika</string>
     <string name="settings_gauge_style_modern_arc">Nowoczesny łuk</string>
     <string name="settings_gauge_style_classic_analog">Klasyczny analogowy</string>
+    <string name="settings_gauge_style_semicircle">Półokrąg</string>
+    <string name="settings_gauge_style_numeric">Tylko liczby</string>
+    <string name="settings_gauge_style_linear_bar_h">Pasek poziomy</string>
+    <string name="settings_gauge_style_linear_bar_v">Pasek pionowy</string>
     <string name="settings_theme">Motyw</string>
     <string name="settings_theme_system">Systemowy</string>
     <string name="settings_theme_light">Jasny</string>
@@ -220,4 +229,22 @@
     <string name="trip_event_harsh_start">Gwałtowny start</string>
     <string name="trip_event_harsh_stop">Gwałtowny postój</string>
     <string name="trip_event_harsh_corner">Ostry zakręt</string>
+
+    <string name="settings_backup_export">Utwórz plik kopii zapasowej</string>
+    <string name="settings_backup_import">Przywróć z kopii zapasowej</string>
+    <string name="backup_password_label">Hasło</string>
+    <string name="backup_password_confirm_label">Powtórz hasło</string>
+    <string name="backup_password_hint_export">Przejazdy, pojazdy i ustawienia zostaną zapisane w jednym pliku, zabezpieczonym wybranym tutaj hasłem. Bez niego pliku nie da się już otworzyć.</string>
+    <string name="backup_password_hint_import">Wpisz hasło wybrane podczas tworzenia kopii. Nic w tym telefonie nie zostanie usunięte — zawartość kopii zostanie dodana.</string>
+    <string name="backup_password_too_short">Użyj co najmniej 8 znaków.</string>
+    <string name="backup_password_mismatch">Hasła nie są takie same.</string>
+    <string name="backup_start">Rozpocznij</string>
+    <string name="backup_ok">OK</string>
+    <string name="backup_working_export">Trwa tworzenie pliku kopii zapasowej. To może chwilę potrwać.</string>
+    <string name="backup_working_import">Trwa przywracanie. To może chwilę potrwać.</string>
+    <string name="backup_success_export">Plik kopii zapasowej został zapisany.</string>
+    <string name="backup_success_import">Przywrócono wszystko, co było w kopii.</string>
+    <string name="backup_error_wrong_password">To hasło nie otwiera tego pliku. Wpisz hasło wybrane podczas tworzenia kopii.</string>
+    <string name="backup_error_unsupported_version">Ta kopia została utworzona w nowszej wersji aplikacji. Zaktualizuj aplikację i spróbuj ponownie.</string>
+    <string name="backup_error_failed">Nie udało się odczytać ani zapisać pliku. Wybierz inny plik lub sprawdź ilość wolnego miejsca.</string>
 </resources>

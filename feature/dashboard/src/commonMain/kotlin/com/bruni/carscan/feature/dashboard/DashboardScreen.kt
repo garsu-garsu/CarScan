@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -24,15 +25,22 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ShowChart
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Flip
+import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.SpaceDashboard
 import androidx.compose.material.icons.rounded.WarningAmber
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -40,13 +48,19 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.bruni.carscan.core.designsystem.gauge.ClassicAnalogGauge
 import com.bruni.carscan.core.designsystem.gauge.Gauge
 import com.bruni.carscan.core.designsystem.gauge.GaugeRenderer
@@ -60,9 +74,21 @@ import com.bruni.carscan.core.designsystem.theme.GaugeThemes
 import com.bruni.carscan.core.designsystem.generated.resources.Res
 import com.bruni.carscan.core.designsystem.generated.resources.common_cancel
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_add_tile
+import com.bruni.carscan.core.designsystem.generated.resources.dashboard_edit
+import com.bruni.carscan.core.designsystem.generated.resources.dashboard_edit_done
+import com.bruni.carscan.core.designsystem.generated.resources.dashboard_edit_hint
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_empty
 import com.bruni.carscan.core.designsystem.generated.resources.dashboard_hud
+import com.bruni.carscan.core.designsystem.generated.resources.dashboard_remove_confirm
+import com.bruni.carscan.core.designsystem.generated.resources.dashboard_remove_tile
 import com.bruni.carscan.core.designsystem.generated.resources.health_slowed_down
+import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style
+import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_classic_analog
+import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_linear_bar_h
+import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_linear_bar_v
+import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_modern_arc
+import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_numeric
+import com.bruni.carscan.core.designsystem.generated.resources.settings_gauge_style_semicircle
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.stringResource
 
@@ -74,6 +100,14 @@ fun DashboardScreen(
     modifier: Modifier = Modifier,
 ) {
     val grid = rememberLazyGridState()
+    val drag = remember { TileDrag() }
+
+    // Which tile has its style sheet open, and which one is being asked about before it is
+    // removed. Both are transient and purely visual — they say nothing about the layout until
+    // the user commits — so they stay in the composition rather than in DashboardState. The
+    // reducer still owns every change to the layout itself.
+    var styleFor by remember { mutableStateOf<String?>(null) }
+    var removing by remember { mutableStateOf<String?>(null) }
 
     // The single most load-bearing line on this screen.
     //
@@ -105,16 +139,54 @@ fun DashboardScreen(
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
 
-            // Enter the windshield HUD. A full-screen driving mode, so it is a destination rather
-            // than a tab — the screen only asks; :composeApp navigates.
+            // The two things you can do to the dashboard as a whole: drive with it, or rearrange
+            // it. Editing is entered by tapping a labelled chip up here and nothing else — no
+            // long-press, no gesture anywhere on a gauge — because the person holding this phone
+            // is in a moving car and a pothole must not be able to rearrange their dashboard.
+            //
+            // While editing, the HUD chip goes away: it navigates off the screen mid-edit, and
+            // the row is instead used to say how reordering works, which is otherwise invisible.
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
             ) {
+                if (state.editing) {
+                    Text(
+                        text = stringResource(Res.string.dashboard_edit_hint),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f),
+                    )
+                } else {
+                    Spacer(Modifier.weight(1f))
+                    AssistChip(
+                        onClick = { onIntent(DashboardIntent.OpenHud) },
+                        label = { Text(stringResource(Res.string.dashboard_hud)) },
+                        leadingIcon = { Icon(Icons.Rounded.Flip, contentDescription = null) },
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+
                 AssistChip(
-                    onClick = { onIntent(DashboardIntent.OpenHud) },
-                    label = { Text(stringResource(Res.string.dashboard_hud)) },
-                    leadingIcon = { Icon(Icons.Rounded.Flip, contentDescription = null) },
+                    onClick = { onIntent(DashboardIntent.ToggleEditing) },
+                    label = {
+                        Text(
+                            stringResource(
+                                if (state.editing) {
+                                    Res.string.dashboard_edit_done
+                                } else {
+                                    Res.string.dashboard_edit
+                                },
+                            ),
+                        )
+                    },
+                    leadingIcon = {
+                        Icon(
+                            if (state.editing) Icons.Rounded.Done else Icons.Rounded.Edit,
+                            contentDescription = null,
+                        )
+                    },
                 )
             }
 
@@ -186,7 +258,25 @@ fun DashboardScreen(
                     // out. Keying on the index would report a *position*, and the poller would be
                     // told to promote whatever now happens to sit in slot three.
                     items(state.tiles, key = { it.id }) { tile ->
-                        TileCard(tile = tile, editing = state.editing, onIntent = onIntent)
+                        // Read in composition, so every visible tile recomposes when a drag
+                        // starts and again when it ends — twice per drag, not once per frame.
+                        // The offset a drag actually moves by never reaches composition at all;
+                        // see TileDrag.
+                        val dragging = drag.id == tile.id
+                        TileCard(
+                            tile = tile,
+                            editing = state.editing,
+                            dragging = dragging,
+                            drag = drag,
+                            grid = grid,
+                            onIntent = onIntent,
+                            onStyle = { styleFor = tile.id },
+                            onRemove = { removing = tile.id },
+                            // Everything else slides to its new slot. The dragged tile is placed
+                            // by the finger, and letting the animation have it too means the two
+                            // fight over the same pixels.
+                            modifier = if (dragging) Modifier else Modifier.animateItem(),
+                        )
                     }
                 }
             }
@@ -198,6 +288,44 @@ fun DashboardScreen(
             onDismissRequest = { onIntent(DashboardIntent.ClosePicker) },
         ) {
             TilePickerSheet(state.available, onIntent)
+        }
+    }
+
+    // A gauge is never one tap from gone. Edit mode already takes a deliberate tap to enter, but
+    // inside it the remove button sits on a 160dp tile among five others in a car that is moving,
+    // and a mis-hit that silently deletes the tile the user was reading is not recoverable —
+    // re-adding it loses its style and its place.
+    removing?.let { id ->
+        AlertDialog(
+            onDismissRequest = { removing = null },
+            title = { Text(stringResource(Res.string.dashboard_remove_confirm)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onIntent(DashboardIntent.Remove(id))
+                        removing = null
+                    },
+                ) {
+                    Text(stringResource(Res.string.dashboard_remove_tile))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { removing = null }) {
+                    Text(stringResource(Res.string.common_cancel))
+                }
+            },
+        )
+    }
+
+    styleFor?.let { id ->
+        ModalBottomSheet(onDismissRequest = { styleFor = null }) {
+            GaugeStyleSheet(
+                selected = state.tiles.firstOrNull { it.id == id }?.style,
+                onPick = { style ->
+                    onIntent(DashboardIntent.SetStyle(id, style))
+                    styleFor = null
+                },
+            )
         }
     }
 }
@@ -218,14 +346,43 @@ fun DashboardScreen(
 private fun TileCard(
     tile: TileState,
     editing: Boolean,
+    dragging: Boolean,
+    drag: TileDrag,
+    grid: LazyGridState,
     onIntent: (DashboardIntent) -> Unit,
+    onStyle: () -> Unit,
+    onRemove: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val face = tileFace(tile.style, MaterialTheme.colorScheme.surface)
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .aspectRatio(1f)
-            .clickable { onIntent(DashboardIntent.TileTapped(tile.id)) },
+            // Above the tiles it is being dragged over, not under them.
+            .zIndex(if (dragging) 1f else 0f)
+            // A draw-phase read: the drag offset changes every frame and must never invalidate
+            // the composition of a gauge that is also being fed live data.
+            .graphicsLayer {
+                if (dragging) {
+                    translationX = drag.offset.x
+                    translationY = drag.offset.y
+                    scaleX = LIFTED
+                    scaleY = LIFTED
+                }
+            }
+            .then(
+                if (editing) {
+                    Modifier.reorderable(tile.id, grid, drag) { from, to ->
+                        onIntent(DashboardIntent.Move(from, to))
+                    }
+                } else {
+                    // Tapping a gauge opens its live chart — but only outside edit mode, where
+                    // the tile's own two buttons are the only things that answer a tap. That is
+                    // also what keeps a long-press from ever competing with a click.
+                    Modifier.clickable { onIntent(DashboardIntent.TileTapped(tile.id)) }
+                },
+            ),
         colors = CardDefaults.cardColors(containerColor = face),
     ) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -241,17 +398,85 @@ private fun TileCard(
                 modifier = Modifier.fillMaxSize().padding(8.dp),
             )
 
+            // Full IconButtons rather than a bare glyph: 48dp is the smallest target a thumb can
+            // be asked to find in a car, and these two sit in opposite corners so that missing
+            // one cannot hit the other.
             if (editing) {
-                TextButton(
-                    onClick = { onIntent(DashboardIntent.Remove(tile.id)) },
-                    modifier = Modifier.align(Alignment.TopEnd),
-                ) {
-                    Text("×")
+                IconButton(onClick = onStyle, modifier = Modifier.align(Alignment.TopStart)) {
+                    Icon(
+                        Icons.Rounded.Palette,
+                        contentDescription = stringResource(Res.string.settings_gauge_style),
+                    )
+                }
+                IconButton(onClick = onRemove, modifier = Modifier.align(Alignment.TopEnd)) {
+                    Icon(
+                        Icons.Rounded.Close,
+                        contentDescription = stringResource(Res.string.dashboard_remove_tile),
+                    )
                 }
             }
         }
     }
 }
+
+/**
+ * The per-tile gauge style. Settings picks the app's default; this overrides it for one tile,
+ * which is the whole point of [LayoutCodec] persisting a style per tile.
+ *
+ * A plain [Column]: there are six styles and there will not be many more, and a lazy list here
+ * would only add a scroll container inside a sheet that already scrolls.
+ */
+@Composable
+private fun GaugeStyleSheet(
+    selected: GaugeStyleId?,
+    onPick: (GaugeStyleId) -> Unit,
+) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
+        Text(
+            text = stringResource(Res.string.settings_gauge_style),
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+
+        for (style in GaugeStyleId.entries) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onPick(style) }
+                    .padding(vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(styleLabel(style), modifier = Modifier.weight(1f))
+                if (style == selected) {
+                    Icon(
+                        Icons.Rounded.Check,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(20.dp))
+    }
+}
+
+@Composable
+private fun styleLabel(style: GaugeStyleId): String = stringResource(
+    when (style) {
+        GaugeStyleId.MODERN_ARC -> Res.string.settings_gauge_style_modern_arc
+        GaugeStyleId.CLASSIC_ANALOG -> Res.string.settings_gauge_style_classic_analog
+        GaugeStyleId.SEMICIRCLE -> Res.string.settings_gauge_style_semicircle
+        GaugeStyleId.NUMERIC -> Res.string.settings_gauge_style_numeric
+        GaugeStyleId.LINEAR_BAR_H -> Res.string.settings_gauge_style_linear_bar_h
+        GaugeStyleId.LINEAR_BAR_V -> Res.string.settings_gauge_style_linear_bar_v
+    },
+)
+
+/** How much a picked-up tile grows, so it reads as lifted off the grid. */
+private const val LIFTED = 1.05f
 
 /** Renderers are stateless, so one of each serves the whole grid. */
 private val MODERN_ARC: GaugeRenderer = ModernArcGauge()

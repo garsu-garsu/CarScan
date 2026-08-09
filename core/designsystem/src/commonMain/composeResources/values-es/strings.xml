@@ -108,6 +108,11 @@
     <string name="dashboard_empty">Aún no hay indicadores. Añade el primero.</string>
     <string name="dashboard_add_tile">Añadir indicador</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">Editar</string>
+    <string name="dashboard_edit_done">Listo</string>
+    <string name="dashboard_edit_hint">Mantén pulsado un indicador para reordenar</string>
+    <string name="dashboard_remove_tile">Quitar indicador</string>
+    <string name="dashboard_remove_confirm">¿Quitar este indicador?</string>
 
     <string name="live_title">Monitoreo</string>
     <string name="trips_title">Viajes</string>
@@ -141,6 +146,10 @@
     <string name="settings_gauge_style">Estilo del indicador</string>
     <string name="settings_gauge_style_modern_arc">Arco moderno</string>
     <string name="settings_gauge_style_classic_analog">Analógico clásico</string>
+    <string name="settings_gauge_style_semicircle">Semicírculo</string>
+    <string name="settings_gauge_style_numeric">Solo números</string>
+    <string name="settings_gauge_style_linear_bar_h">Barra horizontal</string>
+    <string name="settings_gauge_style_linear_bar_v">Barra vertical</string>
     <string name="settings_theme">Tema</string>
     <string name="settings_theme_system">Sistema</string>
     <string name="settings_theme_light">Claro</string>
@@ -216,4 +225,22 @@
     <string name="trip_event_harsh_start">Arranque brusco</string>
     <string name="trip_event_harsh_stop">Parada brusca</string>
     <string name="trip_event_harsh_corner">Curva brusca</string>
+
+    <string name="settings_backup_export">Crear archivo de copia de seguridad</string>
+    <string name="settings_backup_import">Restaurar desde una copia</string>
+    <string name="backup_password_label">Contraseña</string>
+    <string name="backup_password_confirm_label">Repetir contraseña</string>
+    <string name="backup_password_hint_export">Tus viajes, vehículos y ajustes se guardan en un solo archivo, protegido con la contraseña que elijas aquí. Sin ella el archivo no se podrá abrir nunca más.</string>
+    <string name="backup_password_hint_import">Introduce la contraseña que elegiste al crear la copia. No se borra nada de este teléfono: lo que hay en la copia se añade.</string>
+    <string name="backup_password_too_short">Usa al menos 8 caracteres.</string>
+    <string name="backup_password_mismatch">Las dos contraseñas no coinciden.</string>
+    <string name="backup_start">Empezar</string>
+    <string name="backup_ok">Aceptar</string>
+    <string name="backup_working_export">Creando el archivo de copia de seguridad. Puede tardar un momento.</string>
+    <string name="backup_working_import">Restaurando. Puede tardar un momento.</string>
+    <string name="backup_success_export">El archivo de copia de seguridad se ha guardado.</string>
+    <string name="backup_success_import">Se ha restaurado todo lo que había en la copia.</string>
+    <string name="backup_error_wrong_password">Esa contraseña no abre este archivo. Introduce la contraseña que elegiste al crear la copia.</string>
+    <string name="backup_error_unsupported_version">Esta copia se creó con una versión más nueva de la app. Actualiza la app e inténtalo de nuevo.</string>
+    <string name="backup_error_failed">No se pudo leer ni guardar el archivo. Prueba con otro archivo o comprueba el espacio disponible.</string>
 </resources>

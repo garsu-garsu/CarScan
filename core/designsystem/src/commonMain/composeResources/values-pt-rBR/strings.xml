@@ -108,6 +108,11 @@
     <string name="dashboard_empty">Nenhum medidor ainda. Adicione o primeiro.</string>
     <string name="dashboard_add_tile">Adicionar medidor</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">Editar</string>
+    <string name="dashboard_edit_done">Concluir</string>
+    <string name="dashboard_edit_hint">Toque e segure um medidor para reordenar</string>
+    <string name="dashboard_remove_tile">Remover medidor</string>
+    <string name="dashboard_remove_confirm">Remover este medidor?</string>
 
     <string name="live_title">Monitoramento</string>
     <string name="trips_title">Viagens</string>
@@ -141,6 +146,10 @@
     <string name="settings_gauge_style">Estilo do medidor</string>
     <string name="settings_gauge_style_modern_arc">Arco moderno</string>
     <string name="settings_gauge_style_classic_analog">Analógico clássico</string>
+    <string name="settings_gauge_style_semicircle">Semicírculo</string>
+    <string name="settings_gauge_style_numeric">Somente números</string>
+    <string name="settings_gauge_style_linear_bar_h">Barra horizontal</string>
+    <string name="settings_gauge_style_linear_bar_v">Barra vertical</string>
     <string name="settings_theme">Tema</string>
     <string name="settings_theme_system">Sistema</string>
     <string name="settings_theme_light">Claro</string>
@@ -216,4 +225,22 @@
     <string name="trip_event_harsh_start">Partida brusca</string>
     <string name="trip_event_harsh_stop">Parada brusca</string>
     <string name="trip_event_harsh_corner">Curva brusca</string>
+
+    <string name="settings_backup_export">Criar arquivo de backup</string>
+    <string name="settings_backup_import">Restaurar de um backup</string>
+    <string name="backup_password_label">Senha</string>
+    <string name="backup_password_confirm_label">Repetir senha</string>
+    <string name="backup_password_hint_export">Suas viagens, veículos e configurações são salvos em um único arquivo, protegido pela senha escolhida aqui. Sem ela o arquivo não poderá mais ser aberto.</string>
+    <string name="backup_password_hint_import">Digite a senha escolhida quando o backup foi criado. Nada neste telefone é apagado: o que está no backup é adicionado.</string>
+    <string name="backup_password_too_short">Use pelo menos 8 caracteres.</string>
+    <string name="backup_password_mismatch">As duas senhas não coincidem.</string>
+    <string name="backup_start">Começar</string>
+    <string name="backup_ok">OK</string>
+    <string name="backup_working_export">Criando o arquivo de backup. Pode levar um momento.</string>
+    <string name="backup_working_import">Restaurando. Pode levar um momento.</string>
+    <string name="backup_success_export">O arquivo de backup foi salvo.</string>
+    <string name="backup_success_import">Tudo o que estava no backup foi restaurado.</string>
+    <string name="backup_error_wrong_password">Essa senha não abre este arquivo. Digite a senha escolhida quando o backup foi criado.</string>
+    <string name="backup_error_unsupported_version">Este backup foi criado por uma versão mais nova do app. Atualize o app e tente de novo.</string>
+    <string name="backup_error_failed">Não foi possível ler ou salvar o arquivo. Tente outro arquivo ou verifique o espaço disponível.</string>
 </resources>

@@ -104,6 +104,11 @@
     <string name="dashboard_empty">게이지가 아직 없습니다. 하나 추가해 보세요.</string>
     <string name="dashboard_add_tile">게이지 추가</string>
     <string name="dashboard_hud">HUD</string>
+    <string name="dashboard_edit">편집</string>
+    <string name="dashboard_edit_done">완료</string>
+    <string name="dashboard_edit_hint">게이지를 길게 눌러 순서를 바꾸세요</string>
+    <string name="dashboard_remove_tile">게이지 삭제</string>
+    <string name="dashboard_remove_confirm">이 게이지를 삭제할까요?</string>
 
     <string name="live_title">모니터링</string>
     <string name="trips_title">주행 기록</string>
@@ -135,6 +140,10 @@
     <string name="settings_gauge_style">게이지 스타일</string>
     <string name="settings_gauge_style_modern_arc">모던 아크</string>
     <string name="settings_gauge_style_classic_analog">클래식 아날로그</string>
+    <string name="settings_gauge_style_semicircle">반원형</string>
+    <string name="settings_gauge_style_numeric">숫자만</string>
+    <string name="settings_gauge_style_linear_bar_h">가로 막대</string>
+    <string name="settings_gauge_style_linear_bar_v">세로 막대</string>
     <string name="settings_theme">테마</string>
     <string name="settings_theme_system">시스템</string>
     <string name="settings_theme_light">라이트</string>
@@ -198,4 +207,22 @@
     <string name="trip_event_harsh_start">급출발</string>
     <string name="trip_event_harsh_stop">급정지</string>
     <string name="trip_event_harsh_corner">급회전</string>
+
+    <string name="settings_backup_export">백업 파일 만들기</string>
+    <string name="settings_backup_import">백업에서 복원</string>
+    <string name="backup_password_label">암호</string>
+    <string name="backup_password_confirm_label">암호 다시 입력</string>
+    <string name="backup_password_hint_export">주행 기록과 차량, 설정을 파일 하나에 담아 저장합니다. 여기서 정한 암호로 잠기며, 암호를 잊으면 이 파일은 다시 열 수 없습니다.</string>
+    <string name="backup_password_hint_import">백업 파일을 만들 때 정한 암호를 입력하세요. 지금 이 휴대폰에 있는 기록은 지워지지 않고, 백업에 있는 내용이 더해집니다.</string>
+    <string name="backup_password_too_short">8자 이상 입력하세요.</string>
+    <string name="backup_password_mismatch">두 암호가 서로 다릅니다.</string>
+    <string name="backup_start">시작</string>
+    <string name="backup_ok">확인</string>
+    <string name="backup_working_export">백업 파일을 만드는 중입니다. 잠시만 기다려 주세요.</string>
+    <string name="backup_working_import">복원하는 중입니다. 잠시만 기다려 주세요.</string>
+    <string name="backup_success_export">백업 파일을 저장했습니다.</string>
+    <string name="backup_success_import">백업에 있던 내용을 모두 복원했습니다.</string>
+    <string name="backup_error_wrong_password">암호가 맞지 않아 파일을 열 수 없습니다. 백업 파일을 만들 때 정한 암호를 입력하세요.</string>
+    <string name="backup_error_unsupported_version">더 새로운 버전의 앱에서 만든 백업 파일입니다. 앱을 업데이트한 뒤 다시 시도하세요.</string>
+    <string name="backup_error_failed">파일을 읽거나 저장하지 못했습니다. 다른 파일을 고르거나 저장 공간이 충분한지 확인하세요.</string>
 </resources>
