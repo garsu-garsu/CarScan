@@ -4,7 +4,9 @@
 > 세션이 끊기거나(토큰 한도 등) 새 세션에서 재개할 때의 단일 진실 공급원.
 > 전체 설계는 `C:\Users\Mureung\.claude\plans\lucky-forging-pascal.md`.
 
-**마지막 갱신**: 2026-08-08 / **M0~M7 사실상 완료**. 실제 AdMob 광고(배너·전면·앱오픈·리워드)와 실제 Play Billing 결제(실가격 페이월)가 Koin에 완전히 배선됨(2026-07-16). 모니터링 화면 리디자인, GPS 전용 주행기록, 백그라운드 주행 추적(옵트인), 급가속 감지, 트립 상세 지도(2026-07-17)까지 완료. 오늘 R8 축소를 켜고(APK 21.3MB→5.7MB) 백그라운드 위치 권한을 제거해 출시 빌드 형태를 갖췄다. 남은 것은 코드가 아니라 **스토어·설정 작업** — 아래 "출시까지 남은 것" 참고 — 과 실기기 검증.
+**마지막 갱신**: 2026-08-28 / **M0~M7 완료, 전체 테스트 초록, CI/CD 붙음**. 1차 목표는 **Play 내부 테스트 배포 + 그 빌드로 실차 테스트**.
+
+이전 갱신(2026-08-08) / **M0~M7 사실상 완료**. 실제 AdMob 광고(배너·전면·앱오픈·리워드)와 실제 Play Billing 결제(실가격 페이월)가 Koin에 완전히 배선됨(2026-07-16). 모니터링 화면 리디자인, GPS 전용 주행기록, 백그라운드 주행 추적(옵트인), 급가속 감지, 트립 상세 지도(2026-07-17)까지 완료. 오늘 R8 축소를 켜고(APK 21.3MB→5.7MB) 백그라운드 위치 권한을 제거해 출시 빌드 형태를 갖췄다. 남은 것은 코드가 아니라 **스토어·설정 작업** — 아래 "출시까지 남은 것" 참고 — 과 실기기 검증.
 
 ---
 
@@ -54,24 +56,24 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 | **M7** 주행기록: 목록/출처 필터, GPS 전용 트립, 백그라운드 추적(옵트인), 급가속 감지, 트립 상세 지도 | ✅ (2026-07-17) | |
 | **출시 준비** R8 축소(21.3MB→5.7MB), 백그라운드 위치 권한 제거 | ✅ (2026-08-08) | |
 | **출시 준비** 서명 키·Play Console 상품·개인정보처리방침 등 | 🔶 진행 중 | 아래 "출시까지 남은 것" |
-| **M7** 실기기 검증 | ⬜ 다음 | DTC·안드로이드 오토는 **제외** |
+| **CI/CD** GitHub Actions | ✅ (2026-08-28) | `ci.yml` (push/PR → check + assembleDebug) · `release.yml` (수동/태그 → 서명 AAB) |
+| **M7** 실기기 검증 | ⬜ 다음 | 내부 테스트 빌드로 실차 테스트. DTC·안드로이드 오토는 **제외** |
 
-**총 907개 테스트(20개 모듈), 실패 2 + 무한 정지 1. 재현된 변이 40건 이상.** (2026-08-08 실측)
+**총 967개 테스트(20개 모듈), 실패 0 · 에러 0. 재현된 변이 40건 이상.** (2026-08-28 실측, `./gradlew check -x lint` BUILD SUCCESSFUL)
 
-> ⚠️ **`:core:transport` 가 초록이 아니다.** 오래 "실패 0"이라고 적혀 있었지만 지금은 아니다. 셋 다
-> 조용한 머신에서 `--rerun-tasks` 로 재현했으므로 부하 탓이 아니다. 오늘 작업(1.0.0·R8·매니페스트)은
-> 코틀린 코드를 한 줄도 건드리지 않았으므로 **이 셋은 7/15 이후 45개 커밋 어딘가에서 들어온 기존 문제**다.
+> ✅ **2026-08-28: `:core:transport` 는 초록이다.** 위 세 건은 더 이상 재현되지 않는다.
+> `--rerun-tasks` 로 전체 재실행 → **104/104 통과, 26초.**
 >
-> - `BleObdTransportTest > a reply that arrives before the consumer collects is not lost`
->   → `TurbineAssertionError: No value produced in 3s`. **이건 계약 위반이다** — 아래 "정정된 오류"의
->   "구독 전에 도착한 바이트가 조용히 버려진다"가 바로 이 증상이고, BLE 구현이 그걸 지키는지 확인하라고
->   적어둔 그 항목이다.
-> - `BleObdTransportTest > open subscribes to notifications before it returns` → `expected:<1> but was:<0>`
-> - `SppObdTransportTest > a second concurrent collector is rejected instead of silently stealing bytes`
->   → **영원히 안 끝난다.** 스레드 덤프상 `SppObdTransportTest.kt:136` 의 `runBlocking` 에서 31분 파킹.
->   `runBlocking` 에 타임아웃이 없어서 테스트 태스크 자체가 안 끝나고, `--continue` 도 소용없다.
->   **CI를 붙이면 CI가 통째로 멈춘다.** 전체 스위트를 돌리려면 지금은
->   `-x :core:transport:testAndroidHostTest` 로 제외해야 한다.
+> - BLE 두 건은 커밋 `6663477`(open() 안에서 알림 구독 + 리더 도착 전 바이트 버퍼링)이 이미 고쳤다.
+>   즉 문서에 "계약 위반"이라고 적어둔 진단은 **틀렸다** — 프로덕션 코드는 계약을 지키고 있었다.
+> - 다만 `FakePeripheral` 에 **진짜 데이터 레이스가 남아 있었다.** `observationsStarted`/`observing`
+>   이 평범한 `var` 인데 `connect()` 가 돌려준 스코프(=`Dispatchers.Default`)에서 쓰이고 테스트
+>   스레드에서 읽혔다. 보고된 두 증상(`expected:<1> but was:<0>`, 구독 전 도착으로 알림 유실)이 정확히
+>   이 레이스의 두 얼굴이다. 페이크 스코프를 `Dispatchers.Unconfined` 로 바꿔 단일 스레드로 만들어
+>   결정론적으로 고쳤다.
+> - SPP 무한 정지: `sppTest` 하네스에 이미 `withTimeout(10s)` 가 있고 `runBlocking` 이 부모가 아닌
+>   스코프에서 본문을 돌린다. 12/12 통과. 그래도 CI 잡에 `timeout-minutes` 를 둬서 어떤 종류의
+>   멈춤도 30분을 못 넘기게 했다.
 
 ### M7 완료된 것 / 다음
 - **완료(스켈레톤 B)**: `:feature:garage` 차량 선택 화면(설정→"차량" 행 진입, 선택 시 Vehicle 행 기록 + activeVehicleId 설정), 큐레이션 4종 번들 에셋(Kia-EV6·Ioniq-5·Elantra·Ford-F-150, OBDb main에서 실시간 페치·커밋 SHA 고정·BY-SA 저작자표시), `BundledSignalsetSource` 확장(선택 차량 → 표준∪차종 신호셋 union, **forever-cache 제거로 차량 변경 시 옛 신호셋 반환 버그 차단**), 카탈로그·VehicleRepository DI 배선. 다운스트림(대시보드 타일 피커·poller)은 이미 union을 소비하므로 코드 변경 0.
@@ -116,13 +118,76 @@ Apple 타깃은 **macOS 호스트에서만** 등록된다(`build-logic/.../Build
 **아직 남은 실물 검증**: 실제 ELM327 어댑터 연결·실차 신호 수신은 아직(스캔·UI·DB는 실기기 확인됨). iOS는 여전히 한 번도 컴파일된 적 없다(macOS 필요).
 
 ### 남은 기술 부채 (M5/M6에서 처리)
-- **로케일 인식 숫자 포매터가 없다.** `commonMain`에 없고 `String.format`은 `java.*`라 iOS에서 안 된다. 지금 게이지 숫자의 소수점은 `.` 하드코딩. **8개 로케일 중 6개(ru/de/pl/pt-BR/es/uk)가 쉼표를 쓴다.** `:core:units`에 expect/actual 포매터 필요. 반드시 반올림 의미론을 유지할 것.
+- ~~로케일 인식 숫자 포매터가 없다~~ → **해결됨.** `:core:units`의 `NumberFormatter`(expect/actual) + `:core:designsystem`의 `LocalNumberFormatter` 가 이미 있다. 이 항목은 오래 남아 있던 낡은 기록이다.
 - `dout`(진단 세션 복원) 미구현 — OBDb에 쓰는 차종이 있는지 확인 필요.
 - `:core:obd`의 `PollerHealth` → `:core:data`의 `SessionHealth` 매핑을 `:composeApp` Koin 모듈에서 바인딩해야 함 (M5).
 - iOS는 여전히 **한 번도 컴파일된 적 없음**.
 
 ### 지금 막힌 것
 없음.
+
+---
+
+## CI/CD (2026-08-28 신규)
+
+`.github/workflows/` 두 개. 로컬 Windows 빌드와 달리 **리눅스 러너에서 매번 처음부터** 돈다.
+
+- **`ci.yml`** — main push / PR 마다: `./gradlew check -x lint` (967개 테스트 + OBDb 데이터 위생 게이트 + DB 스키마 마이그레이션 검증) → `:androidApp:assembleDebug` → 디버그 APK 를 아티팩트로 올림. 시크릿 **필요 없음**: `local.properties` 가 없으면 두 빌드 파일 다 구글 공개 테스트 ID 로 폴백하므로 CI 가 실계정 광고를 건드릴 일이 없다. 실패 시 테스트 리포트 자동 업로드.
+  - `timeout-minutes: 30` — 예전에 SPP 테스트가 블로킹 read 에서 영원히 멈췄던 적이 있다. GitHub 기본 타임아웃은 **6시간**이라 없으면 그대로 태운다.
+  - **lint 는 일부러 제외** — 이 프로젝트에서 한 번도 돌린 적이 없어서, 켜면 첫 초록 빌드가 무관한 이유로 깨진다. 기존 지적사항 정리 후 별도 스텝으로 켤 것.
+  - `gradlew` 의 실행 비트가 git 인덱스에 없어서(`100644`) 리눅스에서 `Permission denied` 가 났을 것 — `git update-index --chmod=+x gradlew` 로 고쳐 커밋했다.
+
+- **`release.yml`** — 수동 실행(Actions → Run workflow) 또는 `v*` 태그 push: 시크릿에서 `local.properties` + 업로드 키스토어 복원 → `check` → `:androidApp:bundleRelease` → **서명된 AAB** 를 아티팩트로. 태그면 GitHub Release 에도 첨부. 잡 끝에 키스토어·비밀번호 파일 삭제.
+  - **`versionCode` 를 CI 가 넘긴다** (`-PversionCode=${{ github.run_number }}`). Play 는 이미 본 versionCode 를 거부하므로 내부 테스트를 올릴 때마다 새 번호가 필요하다. 로컬 빌드는 그대로 1.
+  - Play 자동 업로드 스텝은 **`PLAY_SERVICE_ACCOUNT_JSON` 시크릿이 있을 때만** 돈다. 없으면 조용히 건너뛰고 AAB 는 아티팩트로 받으면 된다. **첫 업로드는 어차피 콘솔에서 수동으로 해야 한다** — 그게 Play 앱 서명 등록 + 내부 테스트 트랙 생성 절차다.
+  - 필요한 시크릿 목록은 `release.yml` 상단 주석에 전부 적어놨다.
+
+### 인앱 자동 업데이트 (2026-08-28 신규)
+
+`:androidApp` 의 `InAppUpdate.kt` — Play In-App Updates(`com.google.android.play:app-update-ktx`)의
+**IMMEDIATE(강제) 플로우**. 사용자를 항상 최신 빌드로 올린다.
+
+- **`onCreate` 가 아니라 `onResume` 에서 돈다.** 두 가지를 한 번에 처리해야 해서다:
+  `DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS`(업데이트 도중 앱을 백그라운드로 보낸 사용자 — 구글 문서가
+  콕 집어 말하는, 다들 빼먹는 부분)와 `UPDATE_AVAILABLE`(시트를 닫아버린 사용자). 시트를 닫으면 바로
+  `onResume` 이 다시 떠서 다시 뜬다 = 업데이트 말고는 빠져나갈 길이 없다. **덜 강하게 하려면 이
+  `UPDATE_AVAILABLE` 조건 하나만 빼면 된다.**
+- **포트/인터페이스 없이 `:androidApp` 에 직접 뒀다.** 광고·결제와 달리 이걸 부르는 건 액티비티가
+  포그라운드로 돌아오는 순간 하나뿐이고, feature 모듈은 존재 자체를 알 필요가 없다. `:androidApp` 은
+  iOS 경로에 아예 없으므로 격리는 모듈 그래프가 이미 해준다.
+- **Play 로 설치한 빌드가 아니면 아무 일도 안 일어난다.** 사이드로드/`adb install` 빌드에서는
+  `appUpdateInfo` 태스크가 실패하고 리스너가 안 불릴 뿐이다(크래시 없음). 즉 **실차 테스트에 쓰는
+  디버그 빌드에서는 확인이 불가능하고**, 검증하려면 Play 로 깐 빌드 + 더 높은 versionCode 가 트랙에
+  이미 올라가 있어야 한다.
+- **iOS 는 대응 API 가 없다.** 애플이 강제 업데이트 수단을 제공하지 않는다. 유일한 방법은
+  `itunes.apple.com/lookup` 으로 스토어 버전을 조회해 직접 비교 후 App Store 로 보내는 것인데,
+  지금은 번들 ID 도 App Store 등록도 없어서 조회 결과가 빈 배열이고, iOS 는 한 번도 컴파일된 적이
+  없다. **iOS 가 실제로 빌드되는 시점에 붙일 것.**
+
+---
+
+---
+
+## 1차 목표: Play 내부 테스트 배포 → 그 빌드로 실차 테스트
+
+여기까지가 지금의 목표선이다. 정식 출시(프로덕션)에 필요한 것들 중 **내부 테스트에는 필요 없는 것**이 꽤 있다.
+
+**내부 테스트에 반드시 필요한 것**
+1. **업로드 키스토어** — 없으면 AAB 서명 자체가 안 된다. 만든 뒤 base64 로 GitHub 시크릿에 넣으면 `release.yml` 이 알아서 쓴다.
+2. **AAB 로 빌드** — 신규 앱은 APK 를 안 받는다. (`release.yml` 이 이미 `bundleRelease`)
+3. **첫 AAB 를 콘솔에서 수동 업로드** → 내부 테스트 트랙 생성 + 테스터 이메일 목록 등록.
+4. **Google Maps API 키** — 없으면 트립 상세 지도가 빈 타일(크래시는 안 남). 실차 테스트에서 경로가 보여야 하니 사실상 필수.
+5. **Play Console 인앱 상품 3종**(`carscan_lifetime` / `carscan_sub_monthly` / `carscan_sub_yearly`) — 없으면 페이월이 가격을 못 받아온다. 내부 테스트에서 결제 흐름을 보려면 필요.
+
+**내부 테스트에서는 나중으로 미뤄도 되는 것**
+- 개인정보처리방침 URL, 데이터 안전 양식, 스토어 등록정보·스크린샷 — 프로덕션 심사용. (다만 콘솔이 일부는 미리 요구할 수 있으니 순서는 콘솔 화면을 보고 판단)
+- AdMob GDPR 동의 메시지 — 내부 테스터가 한국이면 동의창 자체가 안 뜨는 게 정상.
+
+**내부 테스트 빌드로 확인할 실차 항목** (아직 한 번도 검증 안 된 것들)
+- 실제 ELM327 어댑터 연결(BLE / 블루투스 클래식 / Wi-Fi 각각) + 실차 신호 수신 — **프로토콜 스택 전체가 아직 픽스처로만 검증됨.**
+- 스로틀 거버너가 실제로 몇 qps 를 내는지, "정직한 숫자" UI 가 맞는 값을 보여주는지.
+- R8 난독화 깨짐 (런타임에만 드러난다).
+- `TripTrackingService` 강제 종료 후 sticky 재시작 시 `ForegroundServiceStartNotAllowedException`.
 
 ---
 

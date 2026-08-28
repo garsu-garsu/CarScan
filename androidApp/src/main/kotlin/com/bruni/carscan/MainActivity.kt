@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bruni.carscan.platform.android.ads.AdsConsent
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.bruni.carscan.platform.android.ads.BuildConfig
 
 class MainActivity : ComponentActivity() {
@@ -24,6 +25,16 @@ class MainActivity : ComponentActivity() {
     private val requestPermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
 
+    /**
+     * The result is ignored for the same reason as above: there is nothing useful to do with it.
+     * A cancelled update is re-offered by [InAppUpdate] on the very next `onResume`, and a failed
+     * one leaves the app on the version it already had.
+     */
+    private val updateFlow =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {}
+
+    private val inAppUpdate by lazy { InAppUpdate(AppUpdateManagerFactory.create(this), updateFlow) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPermissions.launch(bluetoothPermissions())
@@ -33,6 +44,15 @@ class MainActivity : ComponentActivity() {
         // form to. Non-blocking and defensive by design — see AdsConsent's KDoc — so a slow or
         // failed consent update never delays anything on screen.
         AdsConsent.gather(this)
+    }
+
+    /**
+     * Every resume, not just cold start — see [InAppUpdate]. `onResume` is also what fires when
+     * the update sheet itself closes, which is what makes the update unavoidable.
+     */
+    override fun onResume() {
+        super.onResume()
+        inAppUpdate.enforce()
     }
 }
 

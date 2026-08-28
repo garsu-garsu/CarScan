@@ -50,6 +50,9 @@ playServicesAds = "25.4.0"
 playServicesLocation = "21.3.0"
 playServicesMaps = "19.0.0"
 userMessagingPlatform = "4.0.0"
+# Play In-App Updates. Separate artifact from the old monolithic play-core, which is the one
+# AGP 9 / API 33+ rejects — this is the split replacement and the only supported route.
+playAppUpdate = "2.1.0"
 
 # --- AndroidX process lifecycle (:androidApp only) --------------------------
 # ON_START/ON_STOP for the *whole app*, not one Activity — what the app-open ad
@@ -116,6 +119,7 @@ play-services-ads = { module = "com.google.android.gms:play-services-ads", versi
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "userMessagingPlatform" }
+play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "playAppUpdate" }
 
 # --- Gradle plugin artifacts — for build-logic's classpath only ------------
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
