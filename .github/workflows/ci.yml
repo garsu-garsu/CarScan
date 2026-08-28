@@ -1,0 +1,66 @@
+name: CI
+
+# Every push to main and every PR. Nothing here needs a secret: `local.properties` is
+# gitignored and absent on CI, and both build files that read it fall back to Google's public
+# test ids, so a CI build never touches the real ad account.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A second push to the same branch makes the first run pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # A ceiling that holds. `:core:transport` once had a test that parked in a blocking read
+    # forever; without this the job would have burned six hours before anyone noticed.
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Gradle 9 needs 17+. Kotlin's toolchain would fetch its own JDK anyway, but the daemon
+      # itself runs on this one.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # `check` is the whole gate: 967 tests across 20 modules, plus
+      # :core:vehicle:verifyNoSignalDataInSource (the CC BY-SA hygiene check) and
+      # :core:database's schema-migration verification. Apple targets are not registered on a
+      # Linux host, so this is Android + common only — see build-logic/.../BuildHost.kt.
+      #
+      # Lint is excluded deliberately: it has never been run on this project, so turning it on
+      # here would fail the first green build for reasons unrelated to the change that triggered
+      # it. Enable it as its own step once the existing findings are triaged.
+      - name: Test
+        run: ./gradlew check -x lint --stacktrace
+
+      # Compiling is not packaging. The one bug that got furthest into this project
+      # (CMP-9547 — Compose resources silently missing from the APK) was invisible to every
+      # host test and only showed up in a packaged artifact.
+      - name: Assemble debug APK
+        run: ./gradlew :androidApp:assembleDebug --stacktrace
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/build/reports/tests/**'
+          retention-days: 7
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: carscan-debug-apk
+          path: androidApp/build/outputs/apk/debug/*.apk
+          retention-days: 14

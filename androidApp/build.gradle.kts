@@ -42,8 +42,11 @@ android {
         applicationId = "com.bruni.carscan"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0.0"
+        // Play refuses an upload whose versionCode it has already seen, so every internal-test
+        // build needs a fresh one. CI passes the run number (`-PversionCode=…`); a local build
+        // gets 1 and never has to think about it.
+        versionCode = (providers.gradleProperty("versionCode").orNull ?: "1").toInt()
+        versionName = providers.gradleProperty("versionName").orNull ?: "1.0.0"
 
         // Test app id by default → debug never touches the real ad account.
         manifestPlaceholders["admobAppId"] = TEST_ADMOB_APP_ID
@@ -97,6 +100,12 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Play In-App Updates. Lives here rather than behind a port in :core:*, because the only
+    // thing that triggers it is the Activity coming back to the foreground, and MainActivity is
+    // the only thing that needs to know it exists. Android-only by construction: :androidApp is
+    // not on the iOS path at all.
+    implementation(libs.play.app.update.ktx)
 
     // ON_START/ON_STOP for the whole app's process, not one Activity — what AppOpenAdManager
     // needs to tell a real foreground return apart from a screen rotation.
