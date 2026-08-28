@@ -11,6 +11,7 @@ import com.juul.kable.Peripheral
 import com.juul.kable.State
 import com.juul.kable.WriteType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -111,7 +112,16 @@ internal class FakePeripheral(
         if (observing) radio.send(bytes)
     }
 
-    override val scope: CoroutineScope = CoroutineScope(Job())
+    /**
+     * Unconfined on purpose. `BleObdTransport.open()` launches its observation in the scope
+     * `connect()` hands back, so anything else here would run [observe]'s body on a background
+     * thread while the test reads [observationsStarted] and [observing] from its own — a data
+     * race whose two symptoms are exactly the two flaky failures this fake used to produce: a
+     * notification dropped because `observing` was still stale-false, and `observationsStarted`
+     * read as 0 after `open()` returned. Unconfined runs the whole observation inline on the
+     * caller's thread, so the fake is single-threaded and the tests are deterministic.
+     */
+    override val scope: CoroutineScope = CoroutineScope(Job() + Dispatchers.Unconfined)
     override val state = MutableStateFlow<State>(State.Disconnected())
     override val services = MutableStateFlow<List<DiscoveredService>?>(null)
 
